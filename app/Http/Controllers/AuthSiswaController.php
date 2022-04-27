@@ -12,7 +12,7 @@ class AuthSiswaController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:siswa', ['except' => ['login','register']]);
+        $this->middleware('auth:siswa', ['except' => ['login', 'register']]);
     }
 
     public function login(Request $request)
@@ -21,36 +21,37 @@ class AuthSiswaController extends Controller
             'email' => 'required|',
             'password' => 'required|string',
         ]);
-        $email=$request->email;
-            // $credentials = $request->only('email', 'password');
-            $credentials = [
-                'email' => $email,
-                'password' => $request->password,
-            ];
-            // dd($credentials);
-            if ($token = $this->guard()->attempt($credentials)) {
-                return $this->respondWithToken($token);
-            }
-            $credentials = [
-                'username' => $email,
-                'password' => $request->password,
-            ];
-            if ($token = $this->guard()->attempt($credentials)) {
-                return $this->respondWithToken($token);
-            }
-            $credentials = [
-                'nomeridentitas' => $email,
-                'password' => $request->password,
-            ];
-            if ($token = $this->guard()->attempt($credentials)) {
-                return $this->respondWithToken($token);
-            }
+        $email = $request->email;
+        // $credentials = $request->only('email', 'password');
+        $credentials = [
+            'email' => $email,
+            'password' => $request->password,
+        ];
+        // dd($credentials);
+        if ($token = $this->guard()->attempt($credentials)) {
+            return $this->respondWithToken($token);
+        }
+        $credentials = [
+            'username' => $email,
+            'password' => $request->password,
+        ];
+        if ($token = $this->guard()->attempt($credentials)) {
+            return $this->respondWithToken($token);
+        }
+        $credentials = [
+            'nomeridentitas' => $email,
+            'password' => $request->password,
+        ];
+        if ($token = $this->guard()->attempt($credentials)) {
+            return $this->respondWithToken($token);
+        }
 
 
-            return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
-    public function register(Request $request){
+    public function register(Request $request)
+    {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -116,12 +117,13 @@ class AuthSiswaController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
-            'access_token' => $token,
+            'token' => $token,
+            'code' => 200,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 1  //auto logout after 1 hour (default)
+            'expires_in' => $this->guard()->factory()->getTTL() * 24  //auto logout after 1 hour (default)
         ]);
     }
-        /**
+    /**
      * Get the guard to be used during authentication.
      *
      * @return \Illuminate\Contracts\Auth\Guard
@@ -130,5 +132,4 @@ class AuthSiswaController extends Controller
     {
         return Auth::guard('siswa');
     }
-
 }

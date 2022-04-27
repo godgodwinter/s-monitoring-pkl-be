@@ -24,7 +24,7 @@ class adminTapelController extends Controller
     {
         //set validation
         $validator = Validator::make($request->all(), [
-            'nama'   => 'required|unique:tapel,nama',
+            'nama'   => 'required',
         ]);
         //response error validation
         if ($validator->fails()) {
