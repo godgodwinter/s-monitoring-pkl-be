@@ -11,16 +11,18 @@ class adminTapelController extends Controller
 {
     public function index(Request $request)
     {
-        $items=tapel::where('prefix','label')
-        ->orderBy('nama','asc')
+        $items=tapel::orderBy('nama','asc')
         ->get();
-        // return view('pages.admin.label.index',compact('items','request','pages'));
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
     }
 
     public function store(Request $request)
     {
             $request->validate([
-                'nama'=>'required',
+                'nama'=>'required|unique:tapel,nama',
             ],
             [
                 'nama.required'=>'Nama harus diisi',
@@ -31,12 +33,19 @@ class adminTapelController extends Controller
                        'created_at'=>date("Y-m-d H:i:s"),
                        'updated_at'=>date("Y-m-d H:i:s")
                 ));
-    // return redirect()->route('admin.label')->with('status','Data berhasil tambahkan!')->with('tipe','success')->with('icon','fas fa-feather');
+
+                return response()->json([
+                    'success'    => true,
+                    'message'    => 'Data berhasil ditambahkan!',
+                ], 200);
     }
 
     public function edit(tapel $item)
     {
-        // return view('pages.admin.label.edit',compact('pages','item'));
+        return response()->json([
+            'success'    => true,
+            'data'    => $item,
+        ], 200);
     }
     public function update(tapel $item,Request $request)
     {
@@ -47,7 +56,6 @@ class adminTapelController extends Controller
         [
             'nama.required'=>'nama harus diisi',
         ]);
-
             tapel::where('id',$item->id)
             ->update([
                 'nama'     =>   $request->nama,
@@ -55,13 +63,18 @@ class adminTapelController extends Controller
             ]);
 
 
-
-    // return redirect()->route('admin.label')->with('status','Data berhasil diubah!')->with('tipe','success')->with('icon','fas fa-feather');
+            return response()->json([
+                'success'    => true,
+                'message'    => 'Data berhasil di update!',
+            ], 200);
     }
     public function destroy(tapel $item){
 
         tapel::destroy($item->id);
-        // return redirect()->route('admin.label')->with('status','Data berhasil dihapus!')->with('tipe','warning')->with('icon','fas fa-feather');
+        return response()->json([
+            'success'    => true,
+            'message'    => 'Data berhasil di hapus!',
+        ], 200);
 
     }
 }
