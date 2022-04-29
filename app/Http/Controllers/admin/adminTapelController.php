@@ -25,17 +25,18 @@ class adminTapelController extends Controller
         //set validation
         $validator = Validator::make($request->all(), [
             'nama'   => 'required',
+            'status'   => 'required',
         ]);
         //response error validation
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
         if ($request->status == 'Aktif') {
-            $getTapel = tapel::where('status', 'Aktif')->get();
+            $getTapel = tapel::get();
             foreach ($getTapel as $d) {
                 tapel::where('id', $d->id)
                     ->update([
-                        'status'     =>   null,
+                        'status'     =>   'Nonaktif',
                         'updated_at' => date("Y-m-d H:i:s")
                     ]);
             }
@@ -69,6 +70,7 @@ class adminTapelController extends Controller
         //set validation
         $validator = Validator::make($request->all(), [
             'nama'   => 'required',
+            'status'   => 'required',
         ]);
         //response error validation
         if ($validator->fails()) {
@@ -76,11 +78,11 @@ class adminTapelController extends Controller
         }
 
         if ($request->status == 'Aktif') {
-            $getTapel = tapel::where('status', 'Aktif')->get();
+            $getTapel = tapel::get();
             foreach ($getTapel as $d) {
                 tapel::where('id', $d->id)
                     ->update([
-                        'status'     =>   null,
+                        'status'     =>   'Nonaktif',
                         'updated_at' => date("Y-m-d H:i:s")
                     ]);
             }

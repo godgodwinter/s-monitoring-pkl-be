@@ -53,13 +53,13 @@ class AuthSiswaController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:3',
         ]);
 
         $user = Siswa::create([
-            'name' => $request->name,
+            'nama' => $request->nama,
             'email' => $request->email,
             'username' => $request->username,
             'nomeridentitas' => $request->nomeridentitas,

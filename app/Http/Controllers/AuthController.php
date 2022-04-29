@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Fungsi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -120,7 +121,8 @@ class AuthController extends Controller
             'token' => $token,
             'code' => 200,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 24  //auto logout after 1 hour (default)
+            'expires_in' => $this->guard()->factory()->getTTL() * 1,  //auto logout after 1 hour (default)
+            'tapel_aktif' => Fungsi::app_tapel_aktif(),
         ]);
     }
     /**

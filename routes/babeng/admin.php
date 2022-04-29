@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\adminKelasController;
+use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
@@ -28,4 +29,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin/kelas/{item}', [adminKelasController::class, 'edit'])->name('admin.kelas.edit');
     Route::put('/admin/kelas/{item}', [adminKelasController::class, 'update'])->name('admin.kelas.update');
     Route::delete('/admin/kelas/{item}', [adminKelasController::class, 'destroy'])->name('admin.kelas.destroy');
+
+    Route::get('/admin/siswa', [adminSiswaController::class, 'index'])->name('admin.siswa');
+    Route::post('/admin/siswa/store', [adminSiswaController::class, 'store'])->name('admin.siswa.store');
+    Route::get('/admin/siswa/{item}', [adminSiswaController::class, 'edit'])->name('admin.siswa.edit');
+    Route::put('/admin/siswa/{item}', [adminSiswaController::class, 'update'])->name('admin.siswa.update');
+    Route::delete('/admin/siswa/{item}', [adminSiswaController::class, 'destroy'])->name('admin.siswa.destroy');
+    Route::put('/admin/siswa/{item}/generatepassword', [adminSiswaController::class, 'generatepassword'])->name('admin.siswa.generatepassword');
 });

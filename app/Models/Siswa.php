@@ -28,11 +28,18 @@ class Siswa extends Authenticatable implements JWTSubject
 
 
     protected $fillable = [
-        'name',
+        'nama',
         'email',
         'username',
         'nomeridentitas',
         'password',
+        'agama',
+        'tempatlahir',
+        'tgllahir',
+        'alamat',
+        'jk',
+        'telp',
+        'kelas_id',
     ];
 
 

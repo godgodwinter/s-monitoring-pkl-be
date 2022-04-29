@@ -200,11 +200,11 @@ class Fungsi
     {
         $jmltapel = tapel::where('status', true)->count();
         if ($jmltapel > 0) {
-            $tapel = tapel::where('status', true)->first();
+            $tapel = tapel::where('status', true)->orderBy('created_at', 'desc')->first();
             $data = $tapel->nama;
         } else {
 
-            $tapel = tapel::first();
+            $tapel = tapel::orderBy('created_at', 'desc')->first();
             $data = $tapel->nama;
         }
         return $data;
