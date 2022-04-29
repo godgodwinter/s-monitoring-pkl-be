@@ -36,4 +36,5 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/admin/siswa/{item}', [adminSiswaController::class, 'update'])->name('admin.siswa.update');
     Route::delete('/admin/siswa/{item}', [adminSiswaController::class, 'destroy'])->name('admin.siswa.destroy');
     Route::put('/admin/siswa/{item}/generatepassword', [adminSiswaController::class, 'generatepassword'])->name('admin.siswa.generatepassword');
+    Route::post('/admin/siswa/generatepasswordall', [adminSiswaController::class, 'generatepasswordall'])->name('admin.siswa.generatepasswordall');
 });

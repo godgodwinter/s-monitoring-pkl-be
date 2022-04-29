@@ -131,4 +131,27 @@ class adminSiswaController extends Controller
             'password' => $pass,
         ], 200);
     }
+
+    public function generatepasswordall(Request $request)
+    {
+        $faker = Faker::create('id_ID');
+
+
+        $pass = 123;
+        $getSiswa = siswa::get();
+        foreach ($getSiswa as $item) {
+            siswa::where('id', $item->id)
+                ->update([
+                    'password' => Hash::make($pass),
+                    'updated_at' => date("Y-m-d H:i:s")
+                ]);
+        }
+
+
+        return response()->json([
+            'success'    => true,
+            'message'    => 'Data berhasil di update!',
+            'password' => $pass,
+        ], 200);
+    }
 }
