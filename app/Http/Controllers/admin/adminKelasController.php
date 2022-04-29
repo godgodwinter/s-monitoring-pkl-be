@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\kelas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class adminKelasController extends Controller
 {
@@ -25,6 +28,8 @@ class adminKelasController extends Controller
         //set validation
         $validator = Validator::make($request->all(), [
             'tingkatan'   => 'required',
+            'jurusan'   => 'required',
+            'suffix'   => 'required',
         ]);
         //response error validation
         if ($validator->fails()) {
@@ -60,7 +65,9 @@ class adminKelasController extends Controller
 
         //set validation
         $validator = Validator::make($request->all(), [
-            'nama'   => 'required',
+            'tingkatan'   => 'required',
+            'jurusan'   => 'required',
+            'suffix'   => 'required',
         ]);
         //response error validation
         if ($validator->fails()) {
@@ -68,7 +75,9 @@ class adminKelasController extends Controller
         }
         kelas::where('id', $item->id)
             ->update([
-                'nama'     =>   $request->nama,
+                'tingkatan'     =>   $request->tingkatan,
+                'jurusan'     =>   $request->jurusan,
+                'suffix'     =>   $request->suffix,
                 'updated_at' => date("Y-m-d H:i:s")
             ]);
 
