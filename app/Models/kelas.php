@@ -8,21 +8,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class kelas extends Model
 {
-        public $table = "kelas";
+    public $table = "kelas";
 
-        use SoftDeletes;
-        use HasFactory;
+    use SoftDeletes;
+    use HasFactory;
 
-        protected $fillable = [
-            'tingkatan',
-            'jurusan',
-            'suffix',
-            'tapel_id',
-        ];
+    protected $fillable = [
+        'tingkatan',
+        'jurusan',
+        'suffix',
+        'tapel_id',
+    ];
 
-        public function tapel()
-        {
-            return $this->belongsTo('App\Models\tapel');
-        }
-
+    public function tapel()
+    {
+        return $this->belongsTo('App\Models\tapel');
+    }
 }

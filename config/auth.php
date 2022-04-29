@@ -41,12 +41,12 @@ return [
         //     'provider' => 'users',
         // ],
         'api' => [
-                'driver' => 'jwt',
-                'provider' => 'users',
+            'driver' => 'jwt',
+            'provider' => 'users',
         ],
         'siswa' => [
-                'driver' => 'jwt',
-                'provider' => 'siswa',
+            'driver' => 'jwt',
+            'provider' => 'siswa',
         ],
     ],
 
@@ -102,7 +102,7 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
-            'expire' => 60,
+            'expire' => 60, //expired token at jwt.php
             'throttle' => 60,
         ],
         'siswa' => [

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('tapel', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nama');
+            $table->boolean('is_active')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });
