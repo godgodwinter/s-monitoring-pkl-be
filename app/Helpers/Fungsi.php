@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\tapel;
 use Illuminate\Support\Facades\DB;
 
 class Fungsi
@@ -191,6 +192,20 @@ class Fungsi
             $data = $settings->app_namapendek;
         } else {
             $data = "Judul Aplikasi";
+        }
+        return $data;
+    }
+
+    public static function app_tapel_aktif()
+    {
+        $jmltapel = tapel::where('status', true)->count();
+        if ($jmltapel > 0) {
+            $tapel = tapel::where('status', true)->first();
+            $data = $tapel->nama;
+        } else {
+
+            $tapel = tapel::first();
+            $data = $tapel->nama;
         }
         return $data;
     }

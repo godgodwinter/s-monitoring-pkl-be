@@ -30,10 +30,21 @@ class adminTapelController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
+        if ($request->status == 'Aktif') {
+            $getTapel = tapel::where('status', 'Aktif')->get();
+            foreach ($getTapel as $d) {
+                tapel::where('id', $d->id)
+                    ->update([
+                        'status'     =>   null,
+                        'updated_at' => date("Y-m-d H:i:s")
+                    ]);
+            }
+        }
 
         DB::table('tapel')->insert(
             array(
                 'nama'     =>   $request->nama,
+                'status'     =>   $request->status,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s")
             )
@@ -63,9 +74,22 @@ class adminTapelController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
+
+        if ($request->status == 'Aktif') {
+            $getTapel = tapel::where('status', 'Aktif')->get();
+            foreach ($getTapel as $d) {
+                tapel::where('id', $d->id)
+                    ->update([
+                        'status'     =>   null,
+                        'updated_at' => date("Y-m-d H:i:s")
+                    ]);
+            }
+        }
+
         tapel::where('id', $item->id)
             ->update([
                 'nama'     =>   $request->nama,
+                'status'     =>   $request->status,
                 'updated_at' => date("Y-m-d H:i:s")
             ]);
 

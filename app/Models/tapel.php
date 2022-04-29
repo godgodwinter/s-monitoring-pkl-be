@@ -8,27 +8,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class tapel extends Model
 {
-        public $table = "tapel";
+    public $table = "tapel";
 
-        use SoftDeletes;
-        use HasFactory;
+    use SoftDeletes;
+    use HasFactory;
 
-        protected $fillable = [
-            'nama',
-        ];
+    protected $fillable = [
+        'nama',
+        'status',
+    ];
 
-        // public function transaksidetail()
-        // {
-        //     return $this->hasMany('App\Models\transaksidetail');
-        // }
+    // public function transaksidetail()
+    // {
+    //     return $this->hasMany('App\Models\transaksidetail');
+    // }
 
     // public function getPhotoAttribute($value){
 
     //     return url('storage/'.$value);
     // }
-        // public function users()
-        // {
-        //     return $this->belongsTo('App\Models\User');
-        // }
+    // public function users()
+    // {
+    //     return $this->belongsTo('App\Models\User');
+    // }
 
 }

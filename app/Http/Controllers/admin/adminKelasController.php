@@ -41,7 +41,7 @@ class adminKelasController extends Controller
                 'tingkatan'     =>   $request->tingkatan,
                 'jurusan'     =>   $request->jurusan,
                 'suffix'     =>   $request->suffix,
-                'tapel_id'     =>   $request->suffix,
+                'tapel_id'     =>   Fungsi::app_tapel_aktif(),
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s")
             )
