@@ -18,6 +18,7 @@ class tempatpkl extends Model
         'alamat',
         'telp',
         'penanggungjawab',
+        'kuota',
         'tapel_id',
     ];
 

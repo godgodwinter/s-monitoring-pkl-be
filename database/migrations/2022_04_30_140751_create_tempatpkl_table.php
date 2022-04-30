@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('alamat')->nullable();
             $table->string('telp')->nullable();
             $table->string('penanggungjawab')->nullable();
+            $table->integer('kuota')->default(1);
             $table->string('tapel_id')->nullable();
             // $table->string('pembimbinglapangan_id')->nullable();
             $table->softDeletes();

@@ -39,6 +39,7 @@ class adminTempatPklController extends Controller
                 'alamat'     =>   $request->alamat,
                 'telp'     =>   $request->telp,
                 'penanggungjawab'     =>   $request->penanggungjawab,
+                'kuota'     =>   $request->kuota,
                 'tapel_id'     =>   Fungsi::app_tapel_aktif(),
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s")
@@ -75,6 +76,7 @@ class adminTempatPklController extends Controller
                 'alamat'     =>   $request->alamat,
                 'telp'     =>   $request->telp,
                 'penanggungjawab'     =>   $request->penanggungjawab,
+                'kuota'     =>   $request->kuota,
                 'updated_at' => date("Y-m-d H:i:s")
             ]);
 
