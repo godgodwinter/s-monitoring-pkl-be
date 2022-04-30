@@ -28,7 +28,7 @@ class adminSiswaController extends Controller
         //set validation
         $validator = Validator::make($request->all(), [
             'nama'   => 'required',
-            'email'   => 'required',
+            // 'email'   => 'required',
         ]);
         //response error validation
         if ($validator->fails()) {
@@ -38,8 +38,8 @@ class adminSiswaController extends Controller
         DB::table('siswa')->insert(
             array(
                 'nama'     =>   $request->nama,
-                'email'     =>   $request->email,
-                'username'     =>   $request->username,
+                // 'email'     =>   $request->email,
+                // 'username'     =>   $request->username,
                 'nomeridentitas'     =>   $request->nomeridentitas,
                 // 'password'     =>   $request->password,
                 'agama'     =>   $request->agama,
@@ -73,7 +73,7 @@ class adminSiswaController extends Controller
         //set validation
         $validator = Validator::make($request->all(), [
             'nama'   => 'required',
-            'email'   => 'required',
+            // 'email'   => 'required',
         ]);
         //response error validation
         if ($validator->fails()) {
@@ -82,8 +82,8 @@ class adminSiswaController extends Controller
         siswa::where('id', $item->id)
             ->update([
                 'nama'     =>   $request->nama,
-                'email'     =>   $request->email,
-                'username'     =>   $request->username,
+                // 'email'     =>   $request->email,
+                // 'username'     =>   $request->username,
                 'nomeridentitas'     =>   $request->nomeridentitas,
                 // 'password'     =>   $request->password,
                 'agama'     =>   $request->agama,

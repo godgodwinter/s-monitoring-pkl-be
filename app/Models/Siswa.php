@@ -40,6 +40,7 @@ class Siswa extends Authenticatable implements JWTSubject
         'jk',
         'telp',
         'kelas_id',
+        'status_login', //Aktif/Nonaktif login
     ];
 
 

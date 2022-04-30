@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('siswa', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nama');
-            $table->string('email')->unique();
+            $table->string('email')->nullable();
             $table->string('username')->nullable();
             $table->string('nomeridentitas')->nullable();
             $table->timestamp('email_verified_at')->nullable();
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('jk')->nullable();
             $table->string('telp')->nullable();
             $table->string('kelas_id')->nullable();
+            $table->string('status_login')->nullable()->default('Aktif'); //Aktif/Nonaktif login
             $table->softDeletes();
             $table->timestamps();
         });

@@ -201,11 +201,11 @@ class Fungsi
         $jmltapel = tapel::where('status', true)->count();
         if ($jmltapel > 0) {
             $tapel = tapel::where('status', true)->orderBy('created_at', 'desc')->first();
-            $data = $tapel->nama;
+            $data = $tapel->id;
         } else {
 
             $tapel = tapel::orderBy('created_at', 'desc')->first();
-            $data = $tapel->nama;
+            $data = $tapel->id;
         }
         return $data;
     }

@@ -16,10 +16,12 @@ class adminKelasController extends Controller
         $items = kelas::orderBy('tingkatan', 'asc')
             ->orderBy('jurusan', 'asc')
             ->orderBy('suffix', 'asc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
             ->get();
         return response()->json([
             'success'    => true,
             'data'    => $items,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
 
