@@ -41,7 +41,7 @@ class adminSiswaController extends Controller
                 // 'email'     =>   $request->email,
                 // 'username'     =>   $request->username,
                 'nomeridentitas'     =>   $request->nomeridentitas,
-                // 'password'     =>   $request->password,
+                'password'     =>   Hash::make(123),
                 'agama'     =>   $request->agama,
                 'tempatlahir'     =>   $request->tempatlahir,
                 'tgllahir'     =>   $request->tgllahir,

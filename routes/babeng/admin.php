@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\adminKelasController;
 use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
+use App\Http\Controllers\admin\adminTempatPklController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,4 +38,11 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/admin/siswa/{item}', [adminSiswaController::class, 'destroy'])->name('admin.siswa.destroy');
     Route::put('/admin/siswa/{item}/generatepassword', [adminSiswaController::class, 'generatepassword'])->name('admin.siswa.generatepassword');
     Route::post('/admin/siswa/generatepasswordall', [adminSiswaController::class, 'generatepasswordall'])->name('admin.siswa.generatepasswordall');
+
+
+    Route::get('/admin/tempatpkl', [adminTempatPklController::class, 'index'])->name('admin.tempatpkl');
+    Route::post('/admin/tempatpkl/store', [adminTempatPklController::class, 'store'])->name('admin.tempatpkl.store');
+    Route::get('/admin/tempatpkl/{item}', [adminTempatPklController::class, 'edit'])->name('admin.tempatpkl.edit');
+    Route::put('/admin/tempatpkl/{item}', [adminTempatPklController::class, 'update'])->name('admin.tempatpkl.update');
+    Route::delete('/admin/tempatpkl/{item}', [adminTempatPklController::class, 'destroy'])->name('admin.tempatpkl.destroy');
 });

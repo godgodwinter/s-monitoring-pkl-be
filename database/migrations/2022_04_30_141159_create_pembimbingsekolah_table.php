@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('siswa', function (Blueprint $table) {
+        Schema::create('pembimbingsekolah', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('nama');
             $table->string('email')->nullable();
@@ -28,8 +28,9 @@ return new class extends Migration
             $table->text('alamat')->nullable();
             $table->string('jk')->nullable();
             $table->string('telp')->nullable();
-            $table->string('kelas_id')->nullable();
             $table->string('status_login')->nullable()->default('Aktif'); //Aktif/Nonaktif login
+            $table->string('status_data')->nullable()->default('Aktif'); //Aktif/Nonaktif Sembunyikan atau sudah tidak digunakan pada tapel saat ini
+            // $table->string('tapel_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -42,6 +43,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('siswa');
+        Schema::dropIfExists('pembimbingsekolah');
     }
 };

@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kelas', function (Blueprint $table) {
+        Schema::create('tempatpkl', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('tingkatan');
-            $table->string('jurusan');
-            $table->string('suffix');
+            $table->string('nama');
+            $table->text('alamat')->nullable();
+            $table->string('telp')->nullable();
+            $table->string('penanggungjawab')->nullable();
             $table->string('tapel_id')->nullable();
+            // $table->string('pembimbinglapangan_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kelas');
+        Schema::dropIfExists('tempatpkl');
     }
 };
