@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\adminKelasController;
+use App\Http\Controllers\admin\adminPembimbingLapanganController;
 use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
 use App\Http\Controllers\admin\adminTempatPklController;
@@ -45,4 +46,13 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin/tempatpkl/{item}', [adminTempatPklController::class, 'edit'])->name('admin.tempatpkl.edit');
     Route::put('/admin/tempatpkl/{item}', [adminTempatPklController::class, 'update'])->name('admin.tempatpkl.update');
     Route::delete('/admin/tempatpkl/{item}', [adminTempatPklController::class, 'destroy'])->name('admin.tempatpkl.destroy');
+
+
+    Route::get('/admin/pembimbinglapangan', [adminPembimbingLapanganController::class, 'index'])->name('admin.pembimbinglapangan');
+    Route::post('/admin/pembimbinglapangan/store', [adminPembimbingLapanganController::class, 'store'])->name('admin.pembimbinglapangan.store');
+    Route::get('/admin/pembimbinglapangan/{item}', [adminPembimbingLapanganController::class, 'edit'])->name('admin.pembimbinglapangan.edit');
+    Route::put('/admin/pembimbinglapangan/{item}', [adminPembimbingLapanganController::class, 'update'])->name('admin.pembimbinglapangan.update');
+    Route::delete('/admin/pembimbinglapangan/{item}', [adminPembimbingLapanganController::class, 'destroy'])->name('admin.pembimbinglapangan.destroy');
+    Route::put('/admin/pembimbinglapangan/{item}/generatepassword', [adminPembimbingLapanganController::class, 'generatepassword'])->name('admin.pembimbinglapangan.generatepassword');
+    Route::post('/admin/pembimbinglapangan/generatepasswordall', [adminPembimbingLapanganController::class, 'generatepasswordall'])->name('admin.pembimbinglapangan.generatepasswordall');
 });
