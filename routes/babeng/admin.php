@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\adminKelasController;
 use App\Http\Controllers\admin\adminPembimbingLapanganController;
+use App\Http\Controllers\admin\adminPembimbingSekolahController;
 use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
 use App\Http\Controllers\admin\adminTempatPklController;
@@ -55,4 +56,13 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/admin/pembimbinglapangan/{item}', [adminPembimbingLapanganController::class, 'destroy'])->name('admin.pembimbinglapangan.destroy');
     Route::put('/admin/pembimbinglapangan/{item}/generatepassword', [adminPembimbingLapanganController::class, 'generatepassword'])->name('admin.pembimbinglapangan.generatepassword');
     Route::post('/admin/pembimbinglapangan/generatepasswordall', [adminPembimbingLapanganController::class, 'generatepasswordall'])->name('admin.pembimbinglapangan.generatepasswordall');
+
+
+    Route::get('/admin/pembimbingsekolah', [adminPembimbingSekolahController::class, 'index'])->name('admin.pembimbingsekolah');
+    Route::post('/admin/pembimbingsekolah/store', [adminPembimbingSekolahController::class, 'store'])->name('admin.pembimbingsekolah.store');
+    Route::get('/admin/pembimbingsekolah/{item}', [adminPembimbingSekolahController::class, 'edit'])->name('admin.pembimbingsekolah.edit');
+    Route::put('/admin/pembimbingsekolah/{item}', [adminPembimbingSekolahController::class, 'update'])->name('admin.pembimbingsekolah.update');
+    Route::delete('/admin/pembimbingsekolah/{item}', [adminPembimbingSekolahController::class, 'destroy'])->name('admin.pembimbingsekolah.destroy');
+    Route::put('/admin/pembimbingsekolah/{item}/generatepassword', [adminPembimbingSekolahController::class, 'generatepassword'])->name('admin.pembimbingsekolah.generatepassword');
+    Route::post('/admin/pembimbingsekolah/generatepasswordall', [adminPembimbingSekolahController::class, 'generatepasswordall'])->name('admin.pembimbingsekolah.generatepasswordall');
 });
