@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('siswa_id')->nullable();
             $table->string('tgl_daftar')->nullable();
-            $table->string('status')->nullable();
+            $table->string('status')->nullable(); //Belum Daftar/ Proses Daftar / Sedang Prakerin / Telah Selesai
             $table->string('tapel_id')->nullable();
             $table->softDeletes();
             $table->timestamps();

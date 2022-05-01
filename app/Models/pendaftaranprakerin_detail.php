@@ -18,6 +18,7 @@ class pendaftaranprakerin_detail extends Model
         'status', // Disetujui / Ditolak / Menunggu
         'keterangan',
         'tgl_pengajuan',
+        'tgl_konfirmasi',
         'pendaftaranprakerin_id',
     ];
 

@@ -80,4 +80,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin/pendaftaranprakerin_detail/{item}', [adminPendaftaranPrakerinDetailController::class, 'edit'])->name('admin.pendaftaranprakerin_detail.edit');
     Route::put('/admin/pendaftaranprakerin_detail/{item}', [adminPendaftaranPrakerinDetailController::class, 'update'])->name('admin.pendaftaranprakerin_detail.update');
     Route::delete('/admin/pendaftaranprakerin_detail/{item}', [adminPendaftaranPrakerinDetailController::class, 'destroy'])->name('admin.pendaftaranprakerin_detail.destroy');
+
+    Route::post('/admin/pendaftaranprakerin/{data}/pendaftaranprakerin_detail/{item}/ubahstatus', [adminPendaftaranPrakerinDetailController::class, 'ubahstatus'])->name('admin.pendaftaranprakerin_detail.ubahstatus');
 });

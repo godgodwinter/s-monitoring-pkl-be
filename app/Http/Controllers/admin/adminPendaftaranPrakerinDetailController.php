@@ -93,4 +93,36 @@ class adminPendaftaranPrakerinDetailController extends Controller
             'message'    => 'Data berhasil di hapus!',
         ], 200);
     }
+
+    public function ubahstatus(pendaftaranprakerin $data, pendaftaranprakerin_detail $item, Request $request)
+    {
+        //set validation
+        $validator = Validator::make($request->all(), [
+            'status'   => 'required',
+        ]);
+        //response error validation
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        pendaftaranprakerin_detail::where('id', $item->id)
+            ->update([
+                'status'     =>   $request->status, //Disetujui / Ditolak / Menunggu
+                'tgl_konfirmasi'     =>   date('Y-m-d'),
+                'updated_at' => date("Y-m-d H:i:s")
+            ]);
+
+        if ($request->status == 'Disetujui') {
+            pendaftaranprakerin::where('id', $data->id)
+                ->update([
+                    'status'     =>   $request->status, //Belum Daftar/ Proses Daftar / Sedang Prakerin / Telah Selesai
+                    'updated_at' => date("Y-m-d H:i:s")
+                ]);
+        }
+
+        return response()->json([
+            'success'    => true,
+            'message'    => 'Status berhasil diubah!',
+        ], 200);
+    }
 }

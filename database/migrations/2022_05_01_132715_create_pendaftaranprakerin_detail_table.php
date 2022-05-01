@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('pendaftaranprakerin_detail', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('tempatpkl_id')->nullable();
-            $table->string('status')->nullable();
+            $table->string('status')->nullable(); //Disetujui / Ditolak / Menunggu
             $table->string('keterangan')->nullable();
             $table->string('tgl_pengajuan')->nullable();
+            $table->string('tgl_konfirmasi')->nullable();
             $table->string('pendaftaranprakerin_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
