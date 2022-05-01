@@ -44,10 +44,10 @@ class Siswa extends Authenticatable implements JWTSubject
     ];
 
 
-    // public function language()
-    // {
-    //     return $this->hasMany(language::class,'parrent_id','id');
-    // }
+    public function kelas()
+    {
+        return $this->belongsTo(kelas::class, 'kelas_id', 'id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

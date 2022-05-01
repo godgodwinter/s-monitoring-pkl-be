@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\adminKelasController;
 use App\Http\Controllers\admin\adminPembimbingLapanganController;
 use App\Http\Controllers\admin\adminPembimbingSekolahController;
+use App\Http\Controllers\admin\adminPendaftaranPrakerinController;
 use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
 use App\Http\Controllers\admin\adminTempatPklController;
@@ -65,4 +66,11 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/admin/pembimbingsekolah/{item}', [adminPembimbingSekolahController::class, 'destroy'])->name('admin.pembimbingsekolah.destroy');
     Route::put('/admin/pembimbingsekolah/{item}/generatepassword', [adminPembimbingSekolahController::class, 'generatepassword'])->name('admin.pembimbingsekolah.generatepassword');
     Route::post('/admin/pembimbingsekolah/generatepasswordall', [adminPembimbingSekolahController::class, 'generatepasswordall'])->name('admin.pembimbingsekolah.generatepasswordall');
+
+
+    Route::get('/admin/pendaftaranprakerin', [adminPendaftaranPrakerinController::class, 'index'])->name('admin.pendaftaranprakerin');
+    Route::post('/admin/pendaftaranprakerin/store', [adminPendaftaranPrakerinController::class, 'store'])->name('admin.pendaftaranprakerin.store');
+    Route::get('/admin/pendaftaranprakerin/{item}', [adminPendaftaranPrakerinController::class, 'edit'])->name('admin.pendaftaranprakerin.edit');
+    Route::put('/admin/pendaftaranprakerin/{item}', [adminPendaftaranPrakerinController::class, 'update'])->name('admin.pendaftaranprakerin.update');
+    Route::delete('/admin/pendaftaranprakerin/{item}', [adminPendaftaranPrakerinController::class, 'destroy'])->name('admin.pendaftaranprakerin.destroy');
 });
