@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\adminKelasController;
 use App\Http\Controllers\admin\adminPembimbingLapanganController;
 use App\Http\Controllers\admin\adminPembimbingSekolahController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinController;
+use App\Http\Controllers\admin\adminPendaftaranPrakerinDetailController;
 use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
 use App\Http\Controllers\admin\adminTempatPklController;
@@ -73,4 +74,10 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin/pendaftaranprakerin/{item}', [adminPendaftaranPrakerinController::class, 'edit'])->name('admin.pendaftaranprakerin.edit');
     Route::put('/admin/pendaftaranprakerin/{item}', [adminPendaftaranPrakerinController::class, 'update'])->name('admin.pendaftaranprakerin.update');
     Route::delete('/admin/pendaftaranprakerin/{item}', [adminPendaftaranPrakerinController::class, 'destroy'])->name('admin.pendaftaranprakerin.destroy');
+
+    Route::get('/admin/pendaftaranprakerin/{data}/pendaftaranprakerin_detail', [adminPendaftaranPrakerinDetailController::class, 'index'])->name('admin.pendaftaranprakerin_detail');
+    Route::post('/admin/pendaftaranprakerin/{data}/pendaftaranprakerin_detail/store', [adminPendaftaranPrakerinDetailController::class, 'store'])->name('admin.pendaftaranprakerin_detail.store');
+    Route::get('/admin/pendaftaranprakerin_detail/{item}', [adminPendaftaranPrakerinDetailController::class, 'edit'])->name('admin.pendaftaranprakerin_detail.edit');
+    Route::put('/admin/pendaftaranprakerin_detail/{item}', [adminPendaftaranPrakerinDetailController::class, 'update'])->name('admin.pendaftaranprakerin_detail.update');
+    Route::delete('/admin/pendaftaranprakerin_detail/{item}', [adminPendaftaranPrakerinDetailController::class, 'destroy'])->name('admin.pendaftaranprakerin_detail.destroy');
 });
