@@ -48,6 +48,10 @@ class Siswa extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(kelas::class, 'kelas_id', 'id');
     }
+    public function pendaftaranprakerin()
+    {
+        return $this->hasMany(pendaftaranprakerin::class, 'siswa_id', 'id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

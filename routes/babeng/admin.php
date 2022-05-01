@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\adminPembimbingLapanganController;
 use App\Http\Controllers\admin\adminPembimbingSekolahController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinDetailController;
+use App\Http\Controllers\admin\adminPendaftaranPrakerinListController;
 use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
 use App\Http\Controllers\admin\adminTempatPklController;
@@ -82,4 +83,9 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/admin/pendaftaranprakerin_detail/{item}', [adminPendaftaranPrakerinDetailController::class, 'destroy'])->name('admin.pendaftaranprakerin_detail.destroy');
 
     Route::post('/admin/pendaftaranprakerin/{data}/pendaftaranprakerin_detail/{item}/ubahstatus', [adminPendaftaranPrakerinDetailController::class, 'ubahstatus'])->name('admin.pendaftaranprakerin_detail.ubahstatus');
+
+    //pendaftaranprakerin List
+    Route::get('/admin/pendaftaranpkl/list/menunggu', [adminPendaftaranPrakerinListController::class, 'menunggu'])->name('admin.pendaftaranprakerin.list.menunggu');
+    Route::get('/admin/pendaftaranpkl/list/disetujui', [adminPendaftaranPrakerinListController::class, 'disetujui'])->name('admin.pendaftaranprakerin.list.disetujui');
+    Route::get('/admin/pendaftaranpkl/list/getall', [adminPendaftaranPrakerinListController::class, 'getall'])->name('admin.pendaftaranprakerin.list.getall');
 });
