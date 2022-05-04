@@ -86,6 +86,7 @@ Route::middleware('auth:api')->group(function () {
 
     //pendaftaranprakerin List
     Route::get('/admin/pendaftaranpkl/list/menunggu', [adminPendaftaranPrakerinListController::class, 'menunggu'])->name('admin.pendaftaranprakerin.list.menunggu');
+    Route::get('/admin/pendaftaranpkl/list/belumdaftar', [adminPendaftaranPrakerinListController::class, 'belumdaftar'])->name('admin.pendaftaranprakerin.list.belumdaftar');
     Route::get('/admin/pendaftaranpkl/list/disetujui', [adminPendaftaranPrakerinListController::class, 'disetujui'])->name('admin.pendaftaranprakerin.list.disetujui');
     Route::get('/admin/pendaftaranpkl/list/getall', [adminPendaftaranPrakerinListController::class, 'getall'])->name('admin.pendaftaranprakerin.list.getall');
     Route::get('/admin/pendaftaranpkl/list/subsidebardata', [adminPendaftaranPrakerinListController::class, 'subsidebardata'])->name('admin.pendaftaranprakerin.list.subsidebardata');

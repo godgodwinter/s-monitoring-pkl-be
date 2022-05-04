@@ -19,6 +19,32 @@ class adminPendaftaranPrakerinListController extends Controller
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
+    public function belumdaftar(Request $request)
+    {
+        $items = Siswa::with('pendaftaranprakerin')
+            ->whereDoesntHave('pendaftaranprakerin')
+            ->get();
+
+        // $datas = catatanpengembangandirisiswa::with('siswa')
+        // ->where('sekolah_id', $sekolah_id)
+        // ->whereHas('siswa', function ($query) {
+        //     global $request;
+        //     $query->where('siswa.nama', 'like', "%" . $request->cari . "%");
+        // })
+        // ->orWhereHas('kelas', function ($query) {
+        //     global $request;
+        //     $query->where('kelas.nama', 'like', "%" . $request->cari . "%");
+        // })
+        // ->where('sekolah_id', $sekolah_id)
+        // ->orWhere('idedanimajinasi', 'like', "%" . $request->cari . "%")
+        // ->where('sekolah_id', $sekolah_id)
+        // ->paginate(Fungsi::paginationjml());
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
     public function menunggu(Request $request)
     {
         $items = pendaftaranprakerin::with('siswa')->where('status', 'Proses Daftar')
@@ -43,7 +69,9 @@ class adminPendaftaranPrakerinListController extends Controller
     {
         $items = [
             'siswa' => siswa::count(),
-            'belumdaftar' => 0,
+            'belumdaftar' => Siswa::with('pendaftaranprakerin')
+                ->whereDoesntHave('pendaftaranprakerin')
+                ->count(),
             'menunggu' => pendaftaranprakerin::where('status', 'Proses Daftar')->count(),
             'disetujui' => pendaftaranprakerin::where('status', 'Disetujui')->count(),
             'sedangpkl' => 0,

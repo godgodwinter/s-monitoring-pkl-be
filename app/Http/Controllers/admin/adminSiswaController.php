@@ -15,7 +15,7 @@ class adminSiswaController extends Controller
 {
     public function index(Request $request)
     {
-        $items = Siswa::orderBy('nama', 'asc')
+        $items = Siswa::with('kelas')->orderBy('nama', 'asc')
             ->get();
         return response()->json([
             'success'    => true,
@@ -62,6 +62,7 @@ class adminSiswaController extends Controller
 
     public function edit(siswa $item)
     {
+        $item = Siswa::with('kelas')->find($item->id);
         return response()->json([
             'success'    => true,
             'data'    => $item,
