@@ -127,7 +127,13 @@ class adminSiswaController extends Controller
             $getKelasNow = kelas::where('tapel_id', Fungsi::app_tapel_aktif())->get();
 
             foreach ($getKelasNow as $k) {
-                kelasdetail::where('id', $k->id)->forceDelete();
+                // $feed = kelasdetail::where('siswa_id', $item->id)
+                //     ->where('kelas_id', $k->id)
+                //     ->first();
+                // $feed->forceDelete();
+                // kelasdetail::destroy($k->id);
+                kelasdetail::where('siswa_id', $item->id)
+                    ->where('kelas_id', $k->id)->forceDelete();
             }
 
             // remove
