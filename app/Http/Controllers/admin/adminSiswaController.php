@@ -4,6 +4,8 @@ namespace App\Http\Controllers\admin;
 
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
+use App\Models\kelas;
+use App\Models\kelasdetail;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,8 +17,19 @@ class adminSiswaController extends Controller
 {
     public function index(Request $request)
     {
-        $items = Siswa::with('kelas')->orderBy('nama', 'asc')
+        $items = Siswa::with('kelasdetail')->orderBy('nama', 'asc')
+            ->whereHas('kelasdetail', function ($query) {
+                $query->whereHas('kelas', function ($query) {
+                    $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
+                });
+            })
             ->get();
+
+        // ->whereHas('siswa', function ($query) {
+        //     global $request;
+        //     $query->where('siswa.nama', 'like', "%" . $request->cari . "%");
+        // })
+
         return response()->json([
             'success'    => true,
             'data'    => $items,
@@ -35,7 +48,7 @@ class adminSiswaController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        DB::table('siswa')->insert(
+        $siswa_id = DB::table('siswa')->insertGetId(
             array(
                 'nama'     =>   $request->nama,
                 // 'email'     =>   $request->email,
@@ -48,6 +61,15 @@ class adminSiswaController extends Controller
                 'alamat'     =>   $request->alamat,
                 'jk'     =>   $request->jk,
                 'telp'     =>   $request->telp,
+                // 'kelas_id'     =>   $request->kelas_id,
+                'created_at' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s")
+            )
+        );
+
+        kelasdetail::insert(
+            array(
+                'siswa_id'     =>   $siswa_id,
                 'kelas_id'     =>   $request->kelas_id,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s")
@@ -62,7 +84,7 @@ class adminSiswaController extends Controller
 
     public function edit(siswa $item)
     {
-        $item = Siswa::with('kelas')->find($item->id);
+        $item = Siswa::with('kelasdetail')->find($item->id);
         return response()->json([
             'success'    => true,
             'data'    => $item,
@@ -93,10 +115,31 @@ class adminSiswaController extends Controller
                 'alamat'     =>   $request->alamat,
                 'jk'     =>   $request->jk,
                 'telp'     =>   $request->telp,
-                'kelas_id'     =>   $request->kelas_id,
+                // 'kelas_id'     =>   $request->kelas_id,
                 'updated_at' => date("Y-m-d H:i:s")
             ]);
 
+        $periksa = kelasdetail::where('siswa_id', $item->id)
+            ->where('kelas_id', $request->kelas_id)
+            ->count();
+        if ($periksa < 1) {
+            //select kelas where tapel id
+            $getKelasNow = kelas::where('tapel_id', Fungsi::app_tapel_aktif())->get();
+
+            foreach ($getKelasNow as $k) {
+                kelasdetail::where('id', $k->id)->forceDelete();
+            }
+
+            // remove
+            kelasdetail::insert(
+                array(
+                    'siswa_id'     =>   $item->id,
+                    'kelas_id'     =>   $request->kelas_id,
+                    'created_at' => date("Y-m-d H:i:s"),
+                    'updated_at' => date("Y-m-d H:i:s")
+                )
+            );
+        }
 
         return response()->json([
             'success'    => true,

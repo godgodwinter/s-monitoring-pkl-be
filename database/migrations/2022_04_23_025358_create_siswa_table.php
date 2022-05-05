@@ -28,7 +28,7 @@ return new class extends Migration
             $table->text('alamat')->nullable();
             $table->string('jk')->nullable();
             $table->string('telp')->nullable();
-            $table->string('kelas_id')->nullable();
+            // $table->string('kelas_id')->nullable(); ganti di kelasdetail
             $table->string('status_login')->nullable()->default('Aktif'); //Aktif/Nonaktif login
             $table->softDeletes();
             $table->timestamps();

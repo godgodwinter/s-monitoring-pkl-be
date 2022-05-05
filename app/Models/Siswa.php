@@ -39,15 +39,20 @@ class Siswa extends Authenticatable implements JWTSubject
         'alamat',
         'jk',
         'telp',
-        'kelas_id',
+        // 'kelas_id',
         'status_login', //Aktif/Nonaktif login
     ];
 
 
-    public function kelas()
+    // public function kelas()
+    // {
+    //     return $this->belongsTo(kelas::class, 'kelas_id', 'id');
+    // }
+    public function kelasdetail()
     {
-        return $this->belongsTo(kelas::class, 'kelas_id', 'id');
+        return $this->belongsTo(kelasdetail::class, 'id', 'siswa_id')->with('kelas');
     }
+
     public function pendaftaranprakerin()
     {
         return $this->belongsTo(pendaftaranprakerin::class, 'id', 'siswa_id');
