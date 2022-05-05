@@ -163,11 +163,12 @@ class adminSiswaController extends Controller
     }
     public function generatepassword(siswa $item, Request $request)
     {
-        $faker = Faker::create('id_ID');
+        // $faker = Faker::create('id_ID');
 
 
         // $pass = $faker->password(6, 6, $requireNumeric = true, $requireLowercase = true, $requireUppercase = true, $requireSpecial = false, $customCharacters = '');
-        $pass = $faker->regexify('[A-Za-z0-9]{6}');
+        // $pass = $faker->regexify('[A-Za-z0-9]{6}');
+        $pass = 123;
         siswa::where('id', $item->id)
             ->update([
                 'password' => Hash::make($pass),
