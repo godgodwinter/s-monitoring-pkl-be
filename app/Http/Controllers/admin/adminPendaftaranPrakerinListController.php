@@ -49,6 +49,7 @@ class adminPendaftaranPrakerinListController extends Controller
     public function menunggu(Request $request)
     {
         $items = pendaftaranprakerin::with('siswa')->where('status', 'Proses Daftar')
+            ->orderBy('created_at', 'desc')
             ->get();
         return response()->json([
             'success'    => true,
@@ -59,6 +60,7 @@ class adminPendaftaranPrakerinListController extends Controller
     public function disetujui(Request $request)
     {
         $items = pendaftaranprakerin::with('siswa')->where('status', 'Disetujui')
+            ->orderBy('created_at', 'desc')
             ->get();
         return response()->json([
             'success'    => true,
