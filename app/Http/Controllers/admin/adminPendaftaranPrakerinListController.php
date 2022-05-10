@@ -22,6 +22,7 @@ class adminPendaftaranPrakerinListController extends Controller
     public function belumdaftar(Request $request)
     {
         $items = Siswa::with('pendaftaranprakerin')
+            ->with('kelasdetail')
             ->whereDoesntHave('pendaftaranprakerin')
             ->get();
 
@@ -86,6 +87,21 @@ class adminPendaftaranPrakerinListController extends Controller
         return response()->json([
             'success'    => true,
             'data'    => $items,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
+    public function periksaid($id)
+    {
+        $periksa = "Belum Daftar";
+        $jmlData = pendaftaranprakerin::where('siswa_id', $id)->count();
+        if ($jmlData > 0) {
+            $getData = pendaftaranprakerin::where('siswa_id', $id)->first();
+            $periksa = $getData->status;
+        }
+        return response()->json([
+            'success'    => true,
+            'id'    => $id,
+            'data'    => $periksa,
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }

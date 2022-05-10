@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('tgl_pengajuan')->nullable();
             $table->string('tgl_konfirmasi')->nullable();
             $table->string('pendaftaranprakerin_id')->nullable();
+            $table->string('pembimbinglapangan_id')->nullable();
+            $table->string('pembimbingsekolah_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

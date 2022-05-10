@@ -16,7 +16,7 @@ class pendaftaranprakerin extends Model
     protected $fillable = [
         'siswa_id',
         'tgl_daftar',
-        'status', //Belum Daftar/ Proses Daftar / Sedang Prakerin / Telah Selesai
+        'status', //Belum Daftar/ Proses Daftar / Menunggu / Sedang Prakerin / Telah Selesai
         'tapel_id',
     ];
 

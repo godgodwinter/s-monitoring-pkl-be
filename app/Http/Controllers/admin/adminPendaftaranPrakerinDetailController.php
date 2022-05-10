@@ -46,6 +46,12 @@ class adminPendaftaranPrakerinDetailController extends Controller
             )
         );
 
+        // pendaftaranprakerin::where('id', $data->id)
+        //     ->update([
+        //         'status'     =>   'Menunggu',
+        //         'updated_at' => date("Y-m-d H:i:s")
+        //     ]);
+
         return response()->json([
             'success'    => true,
             'message'    => 'Data berhasil ditambahkan!',
@@ -72,6 +78,9 @@ class adminPendaftaranPrakerinDetailController extends Controller
         }
         pendaftaranprakerin_detail::where('id', $item->id)
             ->update([
+                'tempatpkl_id'     =>   $request->tempatpkl_id,
+                'pembimbinglapangan_id'     =>   $request->pembimbinglapangan_id,
+                'pembimbingsekolah_id'     =>   $request->pembimbingsekolah_id,
                 'tempatpkl_id'     =>   $request->tempatpkl_id,
                 'keterangan'     =>   $request->keterangan,
                 'tgl_pengajuan'     =>   $request->tgl_pengajuan,

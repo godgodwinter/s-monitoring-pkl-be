@@ -85,6 +85,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/admin/pendaftaranprakerin/{data}/pendaftaranprakerin_detail/{item}/ubahstatus', [adminPendaftaranPrakerinDetailController::class, 'ubahstatus'])->name('admin.pendaftaranprakerin_detail.ubahstatus');
 
     //pendaftaranprakerin List
+    Route::get('/admin/pendaftaranpkl/list/periksaid/{id}', [adminPendaftaranPrakerinListController::class, 'periksaid'])->name('admin.pendaftaranprakerin.list.periksaid');
     Route::get('/admin/pendaftaranpkl/list/menunggu', [adminPendaftaranPrakerinListController::class, 'menunggu'])->name('admin.pendaftaranprakerin.list.menunggu');
     Route::get('/admin/pendaftaranpkl/list/belumdaftar', [adminPendaftaranPrakerinListController::class, 'belumdaftar'])->name('admin.pendaftaranprakerin.list.belumdaftar');
     Route::get('/admin/pendaftaranpkl/list/disetujui', [adminPendaftaranPrakerinListController::class, 'disetujui'])->name('admin.pendaftaranprakerin.list.disetujui');

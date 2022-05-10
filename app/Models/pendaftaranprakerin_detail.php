@@ -20,6 +20,8 @@ class pendaftaranprakerin_detail extends Model
         'tgl_pengajuan',
         'tgl_konfirmasi',
         'pendaftaranprakerin_id',
+        'pembimbinglapangan_id',
+        'pembimbingsekolah_id',
     ];
 
     public function pendaftaranprakerin()
@@ -29,6 +31,14 @@ class pendaftaranprakerin_detail extends Model
     public function tempatpkl()
     {
         return $this->belongsTo('App\Models\tempatpkl');
+    }
+    public function pembimbinglapangan()
+    {
+        return $this->belongsTo('App\Models\pembimbinglapangan');
+    }
+    public function pembimbingsekolah()
+    {
+        return $this->belongsTo('App\Models\pembimbingsekolah');
     }
 
 
