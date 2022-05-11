@@ -196,6 +196,52 @@ class Fungsi
         return $data;
     }
 
+
+    public static function pendaftaranpkl()
+    {
+        $settings = DB::table('settings')->first();
+        if ($settings != null) {
+            $data = $settings->pendaftaranpkl;
+        } else {
+            $data = "Aktif";
+        }
+        return $data;
+    }
+
+    public static function login_siswa()
+    {
+        $settings = DB::table('settings')->first();
+        if ($settings != null) {
+            $data = $settings->login_siswa;
+        } else {
+            $data = "Aktif";
+        }
+        return $data;
+    }
+
+    public static function login_pembimbingsekolah()
+    {
+        $settings = DB::table('settings')->first();
+        if ($settings != null) {
+            $data = $settings->login_pembimbingsekolah;
+        } else {
+            $data = "Aktif";
+        }
+        return $data;
+    }
+
+    public static function login_pembimbinglapangan()
+    {
+        $settings = DB::table('settings')->first();
+        if ($settings != null) {
+            $data = $settings->login_pembimbinglapangan;
+        } else {
+            $data = "Aktif";
+        }
+        return $data;
+    }
+
+
     public static function app_tapel_aktif()
     {
         $jmltapel = tapel::where('status', true)->count();
@@ -206,6 +252,19 @@ class Fungsi
 
             $tapel = tapel::orderBy('created_at', 'desc')->first();
             $data = $tapel->id;
+        }
+        return $data;
+    }
+    public static function app_tapel_aktif_nama()
+    {
+        $jmltapel = tapel::where('status', true)->count();
+        if ($jmltapel > 0) {
+            $tapel = tapel::where('status', true)->orderBy('created_at', 'desc')->first();
+            $data = $tapel->nama;
+        } else {
+
+            $tapel = tapel::orderBy('created_at', 'desc')->first();
+            $data = $tapel->nama;
         }
         return $data;
     }

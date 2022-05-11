@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\adminPembimbingSekolahController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinDetailController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinListController;
+use App\Http\Controllers\admin\adminSettingsController;
 use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
 use App\Http\Controllers\admin\adminTempatPklController;
@@ -22,6 +23,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/admin/auth/logout', [AuthController::class, 'logout'])->name('admin.auth.logout');
     Route::post('/admin/auth/refresh', [AuthController::class, 'refresh'])->name('admin.auth.refresh');
     Route::post('/admin/auth/me', [AuthController::class, 'me'])->name('admin.auth.me');
+
+    Route::get('/admin/settings/get', [adminSettingsController::class, 'index'])->name('admin.settings.get');
 
 
     Route::get('/admin/tapel', [adminTapelController::class, 'index'])->name('admin.tapel');
