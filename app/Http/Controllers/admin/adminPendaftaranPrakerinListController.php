@@ -128,17 +128,19 @@ class adminPendaftaranPrakerinListController extends Controller
     public function periksaid($id)
     {
         $periksa = "Belum Daftar";
-        $jmlData = pendaftaranprakerin::where('siswa_id', $id)->count();
+        $jmlData = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('siswa_id', $id)->count();
+        $tgl_pengajuan = null;
         if ($jmlData > 0) {
             $getData = pendaftaranprakerin::where('siswa_id', $id)->first();
             $periksa = $getData->status;
+            $tgl_pengajuan = $getData->pendaftaranprakerin_detail ? $getData->pendaftaranprakerin_detail[0]->tgl_pengajuan : '';
         }
         $getTempatpkl = null;
         $getPembimbinglapangan = null;
         $getPembimbingSekolah = null;
         $getDataDetail = null;
-        if ($periksa == 'Menunggu') {
-            $getDataDetail = pendaftaranprakerin_detail::where('pendaftaranprakerin_id', $getData->id)->first();
+        if ($periksa == 'Menunggu' or $periksa == 'Disetujui' or $periksa == 'Ditolak') {
+            $getDataDetail = pendaftaranprakerin_detail::where('pendaftaranprakerin_id', $getData->id)->orderBy('updated_at', 'desc')->first();
             $getTempatpkl = $getDataDetail->tempatpkl ? $getDataDetail->tempatpkl : null;
             $getPembimbinglapangan = $getDataDetail->pembimbinglapangan ? $getDataDetail->pembimbinglapangan : null;
             $getPembimbingSekolah = $getDataDetail->pembimbingsekolah ? $getDataDetail->pembimbingsekolah : null;
@@ -147,6 +149,7 @@ class adminPendaftaranPrakerinListController extends Controller
             'success'    => true,
             'id'    => $id,
             'data'    => $periksa,
+            'tgl_pengajuan'    => $tgl_pengajuan,
             // 'detail' => $getDataDetail,
             'tempatpkl' => $getTempatpkl,
             'pembimbinglapangan' => $getPembimbinglapangan,
