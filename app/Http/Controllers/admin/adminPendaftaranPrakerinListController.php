@@ -17,6 +17,11 @@ class adminPendaftaranPrakerinListController extends Controller
     public function getall(Request $request)
     {
         $items = Siswa::with('pendaftaranprakerin')
+            ->whereHas('kelasdetail', function ($query) {
+                $query->whereHas('kelas', function ($query) {
+                    $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
+                });
+            })
             ->get();
         return response()->json([
             'success'    => true,
@@ -45,6 +50,11 @@ class adminPendaftaranPrakerinListController extends Controller
         $items = Siswa::with('pendaftaranprakerin')
             ->with('kelasdetail')
             ->whereDoesntHave('pendaftaranprakerin')
+            ->whereHas('kelasdetail', function ($query) {
+                $query->whereHas('kelas', function ($query) {
+                    $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
+                });
+            })
             ->get();
 
         // $datas = catatanpengembangandirisiswa::with('siswa')
@@ -71,6 +81,7 @@ class adminPendaftaranPrakerinListController extends Controller
     {
         $items = pendaftaranprakerin::with('siswa')->where('status', 'Proses Daftar')
             ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
             ->get();
         return response()->json([
             'success'    => true,
@@ -82,6 +93,7 @@ class adminPendaftaranPrakerinListController extends Controller
     {
         $items = pendaftaranprakerin::with('siswa')->where('status', 'Menunggu')
             ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
             ->get();
         return response()->json([
             'success'    => true,
@@ -93,6 +105,7 @@ class adminPendaftaranPrakerinListController extends Controller
     {
         $items = pendaftaranprakerin::with('siswa')->where('status', 'Disetujui')
             ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
             ->get();
         return response()->json([
             'success'    => true,
@@ -103,13 +116,21 @@ class adminPendaftaranPrakerinListController extends Controller
     public function subsidebardata(Request $request)
     {
         $items = [
-            'siswa' => siswa::count(),
+            'siswa' => siswa::with('kelasdetail')
+                ->whereHas('kelasdetail', function ($query) {
+                    $query->whereHas('kelas', function ($query) {
+                        $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
+                    });
+                })->count(),
             'belumdaftar' => Siswa::with('pendaftaranprakerin')
                 ->whereDoesntHave('pendaftaranprakerin')
                 ->count(),
-            'prosesdaftar' => pendaftaranprakerin::where('status', 'Proses Daftar')->count(),
-            'menunggu' => pendaftaranprakerin::where('status', 'Menunggu')->count(),
-            'disetujui' => pendaftaranprakerin::where('status', 'Disetujui')->count(),
+            'prosesdaftar' => pendaftaranprakerin::where('status', 'Proses Daftar')
+                ->where('tapel_id', Fungsi::app_tapel_aktif())->count(),
+            'menunggu' => pendaftaranprakerin::where('status', 'Menunggu')
+                ->where('tapel_id', Fungsi::app_tapel_aktif())->count(),
+            'disetujui' => pendaftaranprakerin::where('status', 'Disetujui')
+                ->where('tapel_id', Fungsi::app_tapel_aktif())->count(),
             'sedangpkl' => 0,
             'telahselesai' => 0,
         ];
@@ -133,7 +154,7 @@ class adminPendaftaranPrakerinListController extends Controller
         if ($jmlData > 0) {
             $getData = pendaftaranprakerin::where('siswa_id', $id)->first();
             $periksa = $getData->status;
-            $tgl_pengajuan = $getData->pendaftaranprakerin_detail ? $getData->pendaftaranprakerin_detail[0]->tgl_pengajuan : '';
+            $tgl_pengajuan = count($getData->pendaftaranprakerin_detail) > 0 ? $getData->pendaftaranprakerin_detail[0]->tgl_pengajuan : '';
         }
         $getTempatpkl = null;
         $getPembimbinglapangan = null;

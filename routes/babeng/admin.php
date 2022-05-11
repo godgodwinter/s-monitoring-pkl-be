@@ -47,6 +47,9 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/admin/siswa/{item}/generatepassword', [adminSiswaController::class, 'generatepassword'])->name('admin.siswa.generatepassword');
     Route::post('/admin/siswa/generatepasswordall', [adminSiswaController::class, 'generatepasswordall'])->name('admin.siswa.generatepasswordall');
 
+    Route::get('/admin/siswa/getall', [adminSiswaController::class, 'getall'])->name('admin.siswa.getall');
+    Route::post('/admin/siswa/{item}/addtotapelaktif', [adminSiswaController::class, 'addtotapelaktif'])->name('admin.siswa.addtotapelaktif');
+
 
     Route::get('/admin/tempatpkl', [adminTempatPklController::class, 'index'])->name('admin.tempatpkl');
     Route::post('/admin/tempatpkl/store', [adminTempatPklController::class, 'store'])->name('admin.tempatpkl.store');

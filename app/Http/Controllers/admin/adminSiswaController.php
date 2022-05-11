@@ -36,6 +36,22 @@ class adminSiswaController extends Controller
         ], 200);
     }
 
+    public function getall(Request $request)
+    {
+        $items = Siswa::with('kelasdetail')->orderBy('nama', 'asc')
+            ->get();
+
+        // ->whereHas('siswa', function ($query) {
+        //     global $request;
+        //     $query->where('siswa.nama', 'like', "%" . $request->cari . "%");
+        // })
+
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         //set validation
@@ -203,6 +219,57 @@ class adminSiswaController extends Controller
             'success'    => true,
             'message'    => 'Data berhasil di update!',
             'password' => $pass,
+        ], 200);
+    }
+    public function addtotapelaktif(siswa $item, Request $request)
+    {
+        // dd($request->kelas_id);
+        // 1. periksa apakah siswa_id sudah ada di tapel aktif
+        $periksaSiswa = Siswa::with('kelasdetail')->orderBy('nama', 'asc')
+            ->whereHas('kelasdetail', function ($query) {
+                $query->whereHas('kelas', function ($query) {
+                    $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
+                });
+            })
+            ->where('id', $item->id)
+            ->count();
+        // jika sudah maka skip
+        // jika belum maka insert
+        if ($periksaSiswa < 1) {
+
+            $periksa = kelasdetail::where('siswa_id', $item->id)
+                ->where('kelas_id', $request->kelas_id)
+                ->count();
+            if ($periksa < 1) {
+                //select kelas where tapel id
+                $getKelasNow = kelas::where('tapel_id', Fungsi::app_tapel_aktif())->get();
+
+                foreach ($getKelasNow as $k) {
+                    // $feed = kelasdetail::where('siswa_id', $item->id)
+                    //     ->where('kelas_id', $k->id)
+                    //     ->first();
+                    // $feed->forceDelete();
+                    // kelasdetail::destroy($k->id);
+                    kelasdetail::where('siswa_id', $item->id)
+                        ->where('kelas_id', $k->id)->forceDelete();
+                }
+
+                // remove
+                kelasdetail::insert(
+                    array(
+                        'siswa_id'     =>   $item->id,
+                        'kelas_id'     =>   $request->kelas_id,
+                        'created_at' => date("Y-m-d H:i:s"),
+                        'updated_at' => date("Y-m-d H:i:s")
+                    )
+                );
+            }
+        }
+        $item = Siswa::with('kelasdetail')->find($item->id);
+        return response()->json([
+            'success'    => true,
+            'data'    => 'Data Berhasil ditambahkan',
+            'siswa'    => $item,
         ], 200);
     }
 }

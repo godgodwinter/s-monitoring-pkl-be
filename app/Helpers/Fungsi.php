@@ -244,9 +244,9 @@ class Fungsi
 
     public static function app_tapel_aktif()
     {
-        $jmltapel = tapel::where('status', true)->count();
+        $jmltapel = tapel::where('status', 'Aktif')->count();
         if ($jmltapel > 0) {
-            $tapel = tapel::where('status', true)->orderBy('created_at', 'desc')->first();
+            $tapel = tapel::where('status', 'Aktif')->orderBy('created_at', 'desc')->first();
             $data = $tapel->id;
         } else {
 
@@ -257,9 +257,9 @@ class Fungsi
     }
     public static function app_tapel_aktif_nama()
     {
-        $jmltapel = tapel::where('status', true)->count();
+        $jmltapel = tapel::where('status', 'Aktif')->count();
         if ($jmltapel > 0) {
-            $tapel = tapel::where('status', true)->orderBy('created_at', 'desc')->first();
+            $tapel = tapel::where('status', 'Aktif')->orderBy('created_at', 'desc')->first();
             $data = $tapel->nama;
         } else {
 
