@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Fungsi;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -55,7 +56,7 @@ class Siswa extends Authenticatable implements JWTSubject
 
     public function pendaftaranprakerin()
     {
-        return $this->belongsTo(pendaftaranprakerin::class, 'id', 'siswa_id');
+        return $this->belongsTo(pendaftaranprakerin::class, 'id', 'siswa_id')->where('tapel_id', Fungsi::app_tapel_aktif());
     }
     /**
      * The attributes that should be hidden for serialization.

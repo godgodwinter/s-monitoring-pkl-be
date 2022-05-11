@@ -22,6 +22,9 @@ class adminPendaftaranPrakerinListController extends Controller
                     $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
                 });
             })
+            // ->whereHas('pendaftaranprakerin', function ($query) {
+            //     $query->where('tapel_id', Fungsi::app_tapel_aktif());
+            // })
             ->get();
         return response()->json([
             'success'    => true,
@@ -123,6 +126,11 @@ class adminPendaftaranPrakerinListController extends Controller
                     });
                 })->count(),
             'belumdaftar' => Siswa::with('pendaftaranprakerin')
+                ->whereHas('kelasdetail', function ($query) {
+                    $query->whereHas('kelas', function ($query) {
+                        $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
+                    });
+                })
                 ->whereDoesntHave('pendaftaranprakerin')
                 ->count(),
             'prosesdaftar' => pendaftaranprakerin::where('status', 'Proses Daftar')
@@ -149,7 +157,7 @@ class adminPendaftaranPrakerinListController extends Controller
     public function periksaid($id)
     {
         $periksa = "Belum Daftar";
-        $jmlData = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('siswa_id', $id)->count();
+        $jmlData = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $id)->count();
         $tgl_pengajuan = null;
         if ($jmlData > 0) {
             $getData = pendaftaranprakerin::where('siswa_id', $id)->first();
