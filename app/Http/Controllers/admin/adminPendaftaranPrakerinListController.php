@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
+use App\Models\pembimbinglapangan;
+use App\Models\pembimbingsekolah;
 use App\Models\pendaftaranprakerin;
+use App\Models\pendaftaranprakerin_detail;
 use App\Models\Siswa;
+use App\Models\tempatpkl;
 use Illuminate\Http\Request;
 
 class adminPendaftaranPrakerinListController extends Controller
@@ -13,6 +18,22 @@ class adminPendaftaranPrakerinListController extends Controller
     {
         $items = Siswa::with('pendaftaranprakerin')
             ->get();
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
+    public function getpilihanlankah2(Request $request)
+    {
+        $getTempatpkl = tempatpkl::where('tapel_id', Fungsi::app_tapel_aktif())->get();
+        $getPembimbinglapangan = pembimbinglapangan::get();
+        $getPembimbingSekolah = pembimbingsekolah::get();
+        $items = [
+            'tempatpkl' => $getTempatpkl,
+            'pembimbinglapangan' => $getPembimbinglapangan,
+            'pembimbingsekolah' => $getPembimbingSekolah,
+        ];
         return response()->json([
             'success'    => true,
             'data'    => $items,
@@ -46,9 +67,20 @@ class adminPendaftaranPrakerinListController extends Controller
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
-    public function menunggu(Request $request)
+    public function prosesdaftar(Request $request)
     {
         $items = pendaftaranprakerin::with('siswa')->where('status', 'Proses Daftar')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
+    public function menunggu(Request $request)
+    {
+        $items = pendaftaranprakerin::with('siswa')->where('status', 'Menunggu')
             ->orderBy('created_at', 'desc')
             ->get();
         return response()->json([
@@ -75,7 +107,8 @@ class adminPendaftaranPrakerinListController extends Controller
             'belumdaftar' => Siswa::with('pendaftaranprakerin')
                 ->whereDoesntHave('pendaftaranprakerin')
                 ->count(),
-            'menunggu' => pendaftaranprakerin::where('status', 'Proses Daftar')->count(),
+            'prosesdaftar' => pendaftaranprakerin::where('status', 'Proses Daftar')->count(),
+            'menunggu' => pendaftaranprakerin::where('status', 'Menunggu')->count(),
             'disetujui' => pendaftaranprakerin::where('status', 'Disetujui')->count(),
             'sedangpkl' => 0,
             'telahselesai' => 0,
@@ -100,10 +133,24 @@ class adminPendaftaranPrakerinListController extends Controller
             $getData = pendaftaranprakerin::where('siswa_id', $id)->first();
             $periksa = $getData->status;
         }
+        $getTempatpkl = null;
+        $getPembimbinglapangan = null;
+        $getPembimbingSekolah = null;
+        $getDataDetail = null;
+        if ($periksa == 'Menunggu') {
+            $getDataDetail = pendaftaranprakerin_detail::where('pendaftaranprakerin_id', $getData->id)->first();
+            $getTempatpkl = $getDataDetail->tempatpkl ? $getDataDetail->tempatpkl : null;
+            $getPembimbinglapangan = $getDataDetail->pembimbinglapangan ? $getDataDetail->pembimbinglapangan : null;
+            $getPembimbingSekolah = $getDataDetail->pembimbingsekolah ? $getDataDetail->pembimbingsekolah : null;
+        }
         return response()->json([
             'success'    => true,
             'id'    => $id,
             'data'    => $periksa,
+            // 'detail' => $getDataDetail,
+            'tempatpkl' => $getTempatpkl,
+            'pembimbinglapangan' => $getPembimbinglapangan,
+            'pembimbingsekolah' => $getPembimbingSekolah,
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }

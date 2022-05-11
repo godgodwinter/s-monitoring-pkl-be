@@ -82,13 +82,16 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/admin/pendaftaranprakerin_detail/{item}', [adminPendaftaranPrakerinDetailController::class, 'update'])->name('admin.pendaftaranprakerin_detail.update');
     Route::delete('/admin/pendaftaranprakerin_detail/{item}', [adminPendaftaranPrakerinDetailController::class, 'destroy'])->name('admin.pendaftaranprakerin_detail.destroy');
 
-    Route::post('/admin/pendaftaranprakerin/{data}/pendaftaranprakerin_detail/{item}/ubahstatus', [adminPendaftaranPrakerinDetailController::class, 'ubahstatus'])->name('admin.pendaftaranprakerin_detail.ubahstatus');
+    Route::post('/admin/pendaftaranprakerin/{data}/pendaftaranprakerin_detail/ubahstatus', [adminPendaftaranPrakerinDetailController::class, 'ubahstatus'])->name('admin.pendaftaranprakerin_detail.ubahstatus');
 
     //pendaftaranprakerin List
     Route::get('/admin/pendaftaranpkl/list/periksaid/{id}', [adminPendaftaranPrakerinListController::class, 'periksaid'])->name('admin.pendaftaranprakerin.list.periksaid');
+    Route::get('/admin/pendaftaranpkl/list/prosesdaftar', [adminPendaftaranPrakerinListController::class, 'prosesdaftar'])->name('admin.pendaftaranprakerin.list.prosesdaftar');
     Route::get('/admin/pendaftaranpkl/list/menunggu', [adminPendaftaranPrakerinListController::class, 'menunggu'])->name('admin.pendaftaranprakerin.list.menunggu');
     Route::get('/admin/pendaftaranpkl/list/belumdaftar', [adminPendaftaranPrakerinListController::class, 'belumdaftar'])->name('admin.pendaftaranprakerin.list.belumdaftar');
     Route::get('/admin/pendaftaranpkl/list/disetujui', [adminPendaftaranPrakerinListController::class, 'disetujui'])->name('admin.pendaftaranprakerin.list.disetujui');
     Route::get('/admin/pendaftaranpkl/list/getall', [adminPendaftaranPrakerinListController::class, 'getall'])->name('admin.pendaftaranprakerin.list.getall');
     Route::get('/admin/pendaftaranpkl/list/subsidebardata', [adminPendaftaranPrakerinListController::class, 'subsidebardata'])->name('admin.pendaftaranprakerin.list.subsidebardata');
+
+    Route::get('/admin/pendaftaranpkl/list/getpilihanlankah2', [adminPendaftaranPrakerinListController::class, 'getpilihanlankah2'])->name('admin.pendaftaranprakerin.list.getpilihanlankah2');
 });

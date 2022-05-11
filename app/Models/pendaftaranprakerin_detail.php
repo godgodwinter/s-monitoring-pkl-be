@@ -34,7 +34,7 @@ class pendaftaranprakerin_detail extends Model
     }
     public function pembimbinglapangan()
     {
-        return $this->belongsTo('App\Models\pembimbinglapangan');
+        return $this->belongsTo('App\Models\pembimbinglapangan',);
     }
     public function pembimbingsekolah()
     {

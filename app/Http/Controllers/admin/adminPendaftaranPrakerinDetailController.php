@@ -6,6 +6,7 @@ use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\pendaftaranprakerin;
 use App\Models\pendaftaranprakerin_detail;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +24,7 @@ class adminPendaftaranPrakerinDetailController extends Controller
         ], 200);
     }
 
-    public function store(pendaftaranprakerin $data, Request $request)
+    public function store(Siswa $data, Request $request)
     {
         //set validation
         $validator = Validator::make($request->all(), [
@@ -33,24 +34,26 @@ class adminPendaftaranPrakerinDetailController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
-
+        $pendaftaranprakerin = pendaftaranprakerin::where('siswa_id', $data->id)->where('tapel_id', Fungsi::app_tapel_aktif())->orderBy('updated_at', 'desc')->first();
         DB::table('pendaftaranprakerin_detail')->insert(
             array(
                 'tempatpkl_id'     =>   $request->tempatpkl_id,
+                'pembimbinglapangan_id'     =>   $request->pembimbinglapangan_id,
+                'pembimbingsekolah_id'     =>   $request->pembimbingsekolah_id,
                 'keterangan'     =>   $request->keterangan,
                 'tgl_pengajuan'     =>   $request->tgl_pengajuan,
-                'pendaftaranprakerin_id'     =>   $data->id,
+                'pendaftaranprakerin_id'     =>   $pendaftaranprakerin->id,
                 'status'     =>   'Menunggu',
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s")
             )
         );
 
-        // pendaftaranprakerin::where('id', $data->id)
-        //     ->update([
-        //         'status'     =>   'Menunggu',
-        //         'updated_at' => date("Y-m-d H:i:s")
-        //     ]);
+        pendaftaranprakerin::where('id', $pendaftaranprakerin->id)
+            ->update([
+                'status'     =>   'Menunggu',
+                'updated_at' => date("Y-m-d H:i:s")
+            ]);
 
         return response()->json([
             'success'    => true,
@@ -103,7 +106,7 @@ class adminPendaftaranPrakerinDetailController extends Controller
         ], 200);
     }
 
-    public function ubahstatus(pendaftaranprakerin $data, pendaftaranprakerin_detail $item, Request $request)
+    public function ubahstatus(Siswa $data, Request $request)
     {
         //set validation
         $validator = Validator::make($request->all(), [
@@ -114,7 +117,9 @@ class adminPendaftaranPrakerinDetailController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        pendaftaranprakerin_detail::where('id', $item->id)
+        $pendaftaranprakerin = pendaftaranprakerin::where('siswa_id', $data->id)->where('tapel_id', Fungsi::app_tapel_aktif())->orderBy('updated_at', 'desc')->first();
+        $pendaftaranprakerin_detail = pendaftaranprakerin_detail::where('pendaftaranprakerin_id', $pendaftaranprakerin->id)->orderBy('updated_at', 'desc')->first();
+        pendaftaranprakerin_detail::where('id', $pendaftaranprakerin_detail->id)
             ->update([
                 'status'     =>   $request->status, //Disetujui / Ditolak / Menunggu
                 'tgl_konfirmasi'     =>   date('Y-m-d'),
@@ -122,13 +127,20 @@ class adminPendaftaranPrakerinDetailController extends Controller
             ]);
 
         if ($request->status == 'Disetujui') {
-            pendaftaranprakerin::where('id', $data->id)
+            pendaftaranprakerin::where('id', $pendaftaranprakerin->id)
                 ->update([
                     'status'     =>   $request->status, //Belum Daftar/ Proses Daftar / Sedang Prakerin / Telah Selesai
                     'updated_at' => date("Y-m-d H:i:s")
                 ]);
         }
 
+        if ($request->status == 'Ditolak') {
+            pendaftaranprakerin::where('id', $pendaftaranprakerin->id)
+                ->update([
+                    'status'     =>   'Proses Daftar', //Belum Daftar/ Proses Daftar / Sedang Prakerin / Telah Selesai
+                    'updated_at' => date("Y-m-d H:i:s")
+                ]);
+        }
         return response()->json([
             'success'    => true,
             'message'    => 'Status berhasil diubah!',
