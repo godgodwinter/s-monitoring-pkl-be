@@ -160,7 +160,7 @@ class adminPendaftaranPrakerinListController extends Controller
         $jmlData = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $id)->count();
         $tgl_pengajuan = null;
         if ($jmlData > 0) {
-            $getData = pendaftaranprakerin::where('siswa_id', $id)->first();
+            $getData = pendaftaranprakerin::where('siswa_id', $id)->where('tapel_id', Fungsi::app_tapel_aktif())->first();
             $periksa = $getData->status;
             $tgl_pengajuan = count($getData->pendaftaranprakerin_detail) > 0 ? $getData->pendaftaranprakerin_detail[0]->tgl_pengajuan : '';
         }
