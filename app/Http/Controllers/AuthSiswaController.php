@@ -120,7 +120,7 @@ class AuthSiswaController extends Controller
             'token' => $token,
             'code' => 200,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 24  //auto logout after 1 hour (default)
+            'expires_in' => $this->guard()->factory()->getTTL() * 1  //auto logout after 1 hour (default)
         ]);
     }
     /**

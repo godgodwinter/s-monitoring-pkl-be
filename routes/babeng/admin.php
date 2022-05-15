@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/admin/auth/login', [AuthController::class, 'login'])->name('admin.auth.login');
-// Route::post('/admin/auth/register', [AuthController::class, 'register'])->name('admin.auth.register');
+Route::post('/admin/auth/register', [AuthController::class, 'register'])->name('admin.auth.register');
 // Route::middleware('api')->group(function () {
 Route::middleware('auth:api')->group(function () {
     //menu-portofolio

@@ -251,7 +251,7 @@ class Fungsi
         } else {
 
             $tapel = tapel::orderBy('created_at', 'desc')->first();
-            $data = $tapel->id;
+            $data = $tapel ? $tapel->id : '';
         }
         return $data;
     }
@@ -264,7 +264,7 @@ class Fungsi
         } else {
 
             $tapel = tapel::orderBy('created_at', 'desc')->first();
-            $data = $tapel->nama;
+            $data = $tapel->nama ? $tapel->nama : '';
         }
         return $data;
     }
