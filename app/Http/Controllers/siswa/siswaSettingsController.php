@@ -4,6 +4,7 @@ namespace App\Http\Controllers\siswa;
 
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,10 +22,19 @@ class siswaSettingsController extends Controller
             'login_pembimbingsekolah' => Fungsi::login_pembimbingsekolah(),
             'login_pembimbinglapangan' => Fungsi::login_pembimbinglapangan(),
         ];
+        $dataAuth = Siswa::with('kelasdetail')
+            ->whereHas('kelasdetail', function ($query) {
+                $query->whereHas('kelas', function ($query) {
+                    $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
+                });
+            })
+            ->orderBy('updated_at', 'desc')
+            ->first();
+        // dd($dataAuth);
         return response()->json([
             'success'    => true,
             'data'    => $items,
-            'dataAuth'    => $this->guard()->user(),
+            'dataAuth'    => $dataAuth,
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
