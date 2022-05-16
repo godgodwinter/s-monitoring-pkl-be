@@ -42,7 +42,7 @@ class adminTapelController extends Controller
             }
         }
 
-        DB::table('tapel')->insert(
+        $data_id = DB::table('tapel')->insertGetId(
             array(
                 'nama'     =>   $request->nama,
                 'status'     =>   $request->status,
@@ -54,6 +54,7 @@ class adminTapelController extends Controller
         return response()->json([
             'success'    => true,
             'message'    => 'Data berhasil ditambahkan!',
+            'id' => $data_id,
         ], 200);
     }
 
