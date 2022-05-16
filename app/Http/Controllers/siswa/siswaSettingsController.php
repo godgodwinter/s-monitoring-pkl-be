@@ -4,6 +4,8 @@ namespace App\Http\Controllers\siswa;
 
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
+use App\Models\pendaftaranprakerin;
+use App\Models\pendaftaranprakerin_detail;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +25,7 @@ class siswaSettingsController extends Controller
             'login_pembimbinglapangan' => Fungsi::login_pembimbinglapangan(),
         ];
         $dataAuth = Siswa::with('kelasdetail')
+            ->where('id', $this->guard()->user()->id)
             ->whereHas('kelasdetail', function ($query) {
                 $query->whereHas('kelas', function ($query) {
                     $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
@@ -38,6 +41,7 @@ class siswaSettingsController extends Controller
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
+
     public function guard()
     {
         return Auth::guard('siswa');

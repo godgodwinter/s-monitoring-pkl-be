@@ -138,6 +138,7 @@ class adminSiswaController extends Controller
         $periksa = kelasdetail::where('siswa_id', $item->id)
             ->where('kelas_id', $request->kelas_id)
             ->count();
+        // dd($periksa);
         if ($periksa < 1) {
             //select kelas where tapel id
             $getKelasNow = kelas::where('tapel_id', Fungsi::app_tapel_aktif())->get();
