@@ -18,8 +18,12 @@ class tempatpkl extends Model
         'alamat',
         'telp',
         'penanggungjawab',
+        'nama_pimpinan',
         'kuota',
         'tapel_id',
+        'status',  //Tidak Tersedia/Tersedia
+        'tgl_mulai', //mulai pkl
+        'tgl_selesai', // selesai pkl
     ];
 
     public function tapel()
