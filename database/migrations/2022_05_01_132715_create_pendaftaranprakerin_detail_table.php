@@ -14,6 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('pendaftaranprakerin_detail', function (Blueprint $table) {
+
+            //gak jadi dipakek
+
             $table->bigIncrements('id');
             $table->string('tempatpkl_id')->nullable();
             $table->string('status')->nullable(); //Disetujui / Ditolak / Menunggu

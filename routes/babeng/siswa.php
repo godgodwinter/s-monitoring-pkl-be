@@ -20,4 +20,5 @@ Route::middleware('api')->group(function () {
     Route::get('/siswa/profile/get', [siswaProfileController::class, 'index']);
 
     Route::get('/siswa/profile/pendaftaranpkl', [siswaProfileController::class, 'pendaftaranpkl']);
+    Route::get('/siswa/pendaftaranpkl/periksa', [siswaProfileController::class, 'pendaftaranpkl']);
 });
