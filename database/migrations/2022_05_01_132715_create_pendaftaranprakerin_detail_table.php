@@ -18,11 +18,11 @@ return new class extends Migration
             //gak jadi dipakek
 
             $table->bigIncrements('id');
-            $table->string('tempatpkl_id')->nullable();
-            $table->string('status')->nullable(); //Disetujui / Ditolak / Menunggu
-            $table->string('keterangan')->nullable();
-            $table->string('tgl_pengajuan')->nullable();
-            $table->string('tgl_konfirmasi')->nullable();
+            $table->string('tempatpkl_id')->nullable(); //del dipindah ke proses
+            $table->string('status')->nullable(); //Disetujui / Ditolak / Menunggu //del dipindah ke proses
+            $table->string('keterangan')->nullable(); //del
+            $table->string('tgl_pengajuan')->nullable(); //del
+            $table->string('tgl_konfirmasi')->nullable();  //del
             $table->string('pendaftaranprakerin_id')->nullable();
             $table->string('pembimbinglapangan_id')->nullable();
             $table->string('pembimbingsekolah_id')->nullable();
