@@ -5,12 +5,107 @@ namespace App\Http\Controllers\admin;
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\pendaftaranprakerin;
+use App\Models\pendaftaranprakerin_proses;
+use App\Models\Siswa;
+use App\Models\tempatpkl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class adminPendaftaranPrakerinController extends Controller
 {
+    public function daftar(Siswa $id, Request $request)
+    {
+        // insert data siswa
+        $items = [];
+        $kode = 500;
+        $tgl_daftar = date('Y-m-d');
+        $siswa_id = $id->id;
+        $periksa = pendaftaranprakerin::firstOrCreate([
+            'siswa_id'     =>   $siswa_id,
+            'tgl_daftar'     =>   $tgl_daftar,
+            'status'     =>   'Proses Pengajuan Tempat PKL',
+            'tapel_id'     =>   Fungsi::app_tapel_aktif()
+        ]);
+        if ($periksa->wasRecentlyCreated) {
+            $items = 'Data berhasil ditambahkan!';
+            $kode = 200;
+        } else {
+            $items = 'Data ditemukan ! Data gagal ditambahkan!';
+        }
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], $kode);
+    }
+
+    public function prosesPenempatanPkl(tempatpkl $tempatpkl, Request $request)
+    {
+        $items = [];
+        $kode = 500;
+        // periksa apakah tempat pkl masih belum ada
+        // jika belum ada maka insert
+        // a.get proses_id
+        // b. insert siswa ke tapel prosesdetail
+        // c. update status tiap siswa menjadi Proses Pemberkasan
+
+        // jika sudah ada
+        // a. jika belum penuh maka periksa tiap siswa
+        // 1. jika belum maka insert
+        // 2. jika sudah ada maka biarkan
+
+
+        // b, jika sudah penuh maka periksa apakah sudah penuh maka tampilkan error
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            'siswa'    => [],
+            'tempatpkl'    => $tempatpkl,
+            'request'    => $request->dataSiswa,
+        ], $kode);
+    }
+    public function prosesPenempatanPklGet(pendaftaranprakerin_proses $pendaftaranprakerin_proses, Request $request)
+    {
+        $items = [];
+        $kode = 500;
+        // periksa apakah tempat pkl masih belum ada
+        // jika belum ada maka tampilkan error
+        // jika sudah ada
+        // a. ambil tempatpkl , tambahkan jumlah kuota dan tersedia
+        // 1. ambil siswa yang pkl di tempat tersebut
+
+
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            'siswa'    => [],
+            'tempatpkl'    => [],
+        ], $kode);
+    }
+    public function prosesPenempatanPklUploadBerkas(pendaftaranprakerin_proses $pendaftaranprakerin_proses, Request $request)
+    {
+        $items = [];
+        $kode = 500;
+        // upload berkas
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            'siswa'    => [],
+            'tempatpkl'    => [],
+        ], $kode);
+    }
+    public function prosesPenempatanPklPersetujuan(pendaftaranprakerin_proses $pendaftaranprakerin_proses, Request $request)
+    {
+        $items = [];
+        $kode = 500;
+        // upload berkas
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            'siswa'    => [],
+            'tempatpkl'    => [],
+        ], $kode);
+    }
     public function index(Request $request)
     {
         $items = pendaftaranprakerin::where('tapel_id', Fungsi::app_tapel_aktif())

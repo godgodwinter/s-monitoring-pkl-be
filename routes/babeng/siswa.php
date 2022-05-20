@@ -26,4 +26,5 @@ Route::middleware('api')->group(function () {
 
     Route::post('/siswa/pendaftaranpkl/daftar', [siswaPendaftaranPKLController::class, 'daftar']);
     Route::get('/siswa/pendaftaranpkl/getdatatempatpkl', [siswaPendaftaranPKLController::class, 'getDataTempatPKL']);
+    Route::get('/siswa/pendaftaranpkl/getStatuspkl', [siswaPendaftaranPKLController::class, 'getStatusPKL']);
 });

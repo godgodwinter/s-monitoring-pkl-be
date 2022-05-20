@@ -15,6 +15,7 @@ class pendaftaranprakerin_prosesdetail extends Model
 
     protected $fillable = [
         'siswa_id',
+        'pendaftaranprakerin_proses_id',
     ];
 
     public function pendaftaranprakerin_proses()

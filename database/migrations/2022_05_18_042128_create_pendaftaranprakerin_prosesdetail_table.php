@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('pendaftaranprakerin_prosesdetail', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('siswa_id')->nullable(); //BelongsTo
+            $table->string('pendaftaranprakerin_proses_id')->nullable(); //BelongsTo
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

@@ -16,10 +16,11 @@ return new class extends Migration
         Schema::create('pendaftaranprakerin_proses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('tempatpkl_id')->nullable(); //BelongsTo
-            $table->string('pendaftaranprakerin_id')->nullable(); //BelongsTo
+            // $table->string('pendaftaranprakerin_id')->nullable(); //BelongsTo
             $table->string('status')->nullable(); //Ditolak/Disetujui/null
             $table->string('ket')->nullable(); //keterangan
             $table->string('file')->nullable(); //filebalasan
+            $table->string('tapel_id')->nullable(); //tapel_id
             $table->softDeletes();
             $table->timestamps();
         });

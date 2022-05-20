@@ -15,24 +15,25 @@ class pendaftaranprakerin_proses extends Model
 
     protected $fillable = [
         'tempatpkl_id',
-        'pendaftaranprakerin_id',
+        // 'pendaftaranprakerin_id', //tidak digunakan ,, gunakan siswa_id di prosesdetail
         'status', //Disetujui /ditolak/null
         'ket',
         'file',
+        'tapel_id',
     ];
 
     public function pendaftaranprakerin_prosesdetail()
     {
         return $this->hasMany('App\Models\pendaftaranprakerin_prosesdetail');
     }
-    public function tempatpkl_id()
+    public function tempatpkl()
     {
-        return $this->belongsTo('App\Models\tempatpkl_id');
+        return $this->belongsTo('App\Models\tempatpkl');
     }
 
-    public function pendaftaranprakerin_id()
+    public function tapel()
     {
-        return $this->belongsTo('App\Models\pendaftaranprakerin_id');
+        return $this->belongsTo('App\Models\tapel');
     }
 
     // public function getPhotoAttribute($value){
