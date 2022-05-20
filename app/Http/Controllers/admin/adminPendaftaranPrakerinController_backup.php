@@ -6,7 +6,6 @@ use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\pendaftaranprakerin;
 use App\Models\pendaftaranprakerin_proses;
-use App\Models\pendaftaranprakerin_prosesdetail;
 use App\Models\Siswa;
 use App\Models\tempatpkl;
 use Illuminate\Http\Request;
@@ -45,35 +44,10 @@ class adminPendaftaranPrakerinController extends Controller
         $items = [];
         $kode = 500;
         // periksa apakah tempat pkl masih belum ada
-        $periksa = pendaftaranprakerin_proses::where('tempatpkl_id', $tempatpkl->id)->count();
         // jika belum ada maka insert
-        if ($periksa < 1) {
-            $pendaftaranprakerin_proses_id = DB::table('pendaftaranprakerin_proses')->insertGetId([
-                'tempatpkl_id'     =>   $tempatpkl->id,
-                'tapel_id'     =>   Fungsi::app_tapel_aktif()
-
-            ]);
-        } else {
-            $getPendaftaranProses = pendaftaranprakerin_proses::where('tempatpkl_id', $tempatpkl->id)->first();
-            $pendaftaranprakerin_proses_id = $getPendaftaranProses->id;
-            DB::table('pendaftaranprakerin_prosesdetail')->where('pendaftaranprakerin_proses_id', $pendaftaranprakerin_proses_id)->delete();
-        }
         // a.get proses_id
         // b. insert siswa ke tapel prosesdetail
-        foreach ($request->siswa as $siswa) {
-
-            $kode = 200;
-
-            pendaftaranprakerin_prosesdetail::insert([
-                'pendaftaranprakerin_proses_id'     =>   $pendaftaranprakerin_proses_id,
-                'siswa_id'     =>   $siswa['id'],
-            ]);
-            // c. update status tiap siswa menjadi Proses Pemberkasan
-            pendaftaranprakerin::where('siswa_id', $siswa['id'])->where('tapel_id', Fungsi::app_tapel_aktif())
-                ->update([
-                    'status'     =>   'Proses Pemberkasan',
-                ]);
-        }
+        // c. update status tiap siswa menjadi Proses Pemberkasan
 
         // jika sudah ada
         // a. jika belum penuh maka periksa tiap siswa
@@ -86,27 +60,16 @@ class adminPendaftaranPrakerinController extends Controller
             'success'    => true,
             'data'    => $items,
             'siswa'    => [],
-            'tempatpkl'    => $periksa,
+            'tempatpkl'    => $tempatpkl,
             'request'    => $request->dataSiswa,
         ], $kode);
     }
     public function prosesPenempatanPklGet(pendaftaranprakerin_proses $pendaftaranprakerin_proses, Request $request)
     {
         $items = [];
-        $tempatpkl = [];
-        $siswa = [];
         $kode = 500;
         // periksa apakah tempat pkl masih belum ada
-        $periksa = pendaftaranprakerin_proses::where('tempatpkl_id', $pendaftaranprakerin_proses->tempatpkl_id)->count();
         // jika belum ada maka tampilkan error
-        if ($periksa > 0) {
-            $kode = 200;
-            $items = pendaftaranprakerin_proses::with('tempatpkl')->where('tempatpkl_id', $pendaftaranprakerin_proses->tempatpkl_id)->where('tapel_id', Fungsi::app_tapel_aktif())->first();
-            $siswa = pendaftaranprakerin_prosesdetail::with('siswa')
-                ->where('pendaftaranprakerin_proses_id', $pendaftaranprakerin_proses->id)
-                ->get();
-            $tempatpkl = tempatpkl::where('id', $pendaftaranprakerin_proses->id)->first();
-        }
         // jika sudah ada
         // a. ambil tempatpkl , tambahkan jumlah kuota dan tersedia
         // 1. ambil siswa yang pkl di tempat tersebut
@@ -115,49 +78,32 @@ class adminPendaftaranPrakerinController extends Controller
         return response()->json([
             'success'    => true,
             'data'    => $items,
-            'siswa'    => $siswa,
-            'tempatpkl'    => $tempatpkl,
+            'siswa'    => [],
+            'tempatpkl'    => [],
         ], $kode);
     }
     public function prosesPenempatanPklUploadBerkas(pendaftaranprakerin_proses $pendaftaranprakerin_proses, Request $request)
     {
         $items = [];
         $kode = 500;
-        $getSiswaId = pendaftaranprakerin_prosesdetail::with('siswa')->where('pendaftaranprakerin_proses_id', $pendaftaranprakerin_proses->id)->get();
-        foreach ($getSiswaId as $dSiswa) {
-            pendaftaranprakerin::where('siswa_id', $dSiswa->siswa_id)->where('tapel_id', Fungsi::app_tapel_aktif())
-                ->update([
-                    'status'     =>   'Proses Persetujuan',
-                ]);
-            $kode = 200;
-        }
         // upload berkas
         return response()->json([
             'success'    => true,
             'data'    => $items,
-            'siswa'    => $getSiswaId,
+            'siswa'    => [],
+            'tempatpkl'    => [],
         ], $kode);
     }
     public function prosesPenempatanPklPersetujuan(pendaftaranprakerin_proses $pendaftaranprakerin_proses, Request $request)
     {
         $items = [];
         $kode = 500;
-        $getSiswaId = [];
-        if ($request->status == 'Disetujui') {
-
-            $getSiswaId = pendaftaranprakerin_prosesdetail::with('siswa')->where('pendaftaranprakerin_proses_id', $pendaftaranprakerin_proses->id)->get();
-            foreach ($getSiswaId as $dSiswa) {
-                pendaftaranprakerin::where('siswa_id', $dSiswa->siswa_id)->where('tapel_id', Fungsi::app_tapel_aktif())
-                    ->update([
-                        'status'     =>   'Disetujui',
-                    ]);
-                $kode = 200;
-            }
-        }
+        // upload berkas
         return response()->json([
             'success'    => true,
             'data'    => $items,
-            'siswa'    => $getSiswaId,
+            'siswa'    => [],
+            'tempatpkl'    => [],
         ], $kode);
     }
     public function index(Request $request)

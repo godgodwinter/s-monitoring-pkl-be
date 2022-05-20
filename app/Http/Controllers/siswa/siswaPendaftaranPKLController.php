@@ -6,6 +6,7 @@ use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\pendaftaranprakerin;
 use App\Models\pendaftaranprakerin_detail;
+use App\Models\pendaftaranprakerin_pengajuansiswa;
 use App\Models\pendaftaranprakerin_proses;
 use App\Models\tempatpkl;
 use Illuminate\Http\Request;
@@ -16,6 +17,12 @@ use Illuminate\Support\Facades\Validator;
 class siswaPendaftaranPKLController extends Controller
 {
     protected $siswa_id = null;
+    // construct
+    public function __construct()
+    {
+        $this->siswa_id =  $this->guard()->user()->id;
+    }
+
     public function getStatusPKL(Request $request)
     {
         $this->siswa_id = $this->guard()->user()->id;
@@ -97,8 +104,39 @@ class siswaPendaftaranPKLController extends Controller
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], $kode);
     }
-    public function pengajuantempatpkl(Request $request)
+    public function pengajuanTempatPklGet(Request $request)
     {
+        // insert 2 tempat pkl yang dipilih siswa
+        $items = [];
+        // $items = 'Data berhasil ditambahkan';
+        $items = pendaftaranprakerin::with('pendaftaranprakerin_pengajuansiswa')->where('siswa_id', $this->siswa_id)->where('tapel_id', Fungsi::app_tapel_aktif())->first();
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
+    public function pengajuanTempatPklStore(Request $request)
+    {
+        // get pendaftaranprakerin where siswa id
+        $getPendaftaranprakerin = pendaftaranprakerin::where('siswa_id', $this->siswa_id)->where('tapel_id', Fungsi::app_tapel_aktif())->first();
+        $pendaftaranprakerin_id = $getPendaftaranprakerin->id;
+        // 1. periksa apakah data pengajuan sudah ada
+        $periksa = pendaftaranprakerin_pengajuansiswa::where('pendaftaranprakerin_id', $pendaftaranprakerin_id)->count();
+        if ($periksa > 0) {
+            pendaftaranprakerin_pengajuansiswa::where('pendaftaranprakerin_id', $pendaftaranprakerin_id)->delete();
+        }
+        //  jika ada maka delete and insert
+        foreach ($request->tempatpkl as $data) {
+            pendaftaranprakerin_pengajuansiswa::insert([
+                'tempatpkl_id' => $data['id'],
+                'pendaftaranprakerin_id' => $pendaftaranprakerin_id,
+
+            ]);
+        }
+
+        // 2. jika tidak ada maka insert
+
         // insert 2 tempat pkl yang dipilih siswa
         $items = 'Data berhasil ditambahkan';
         return response()->json([

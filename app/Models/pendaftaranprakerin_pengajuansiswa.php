@@ -29,11 +29,15 @@ class pendaftaranprakerin_pengajuansiswa extends Model
     {
         return $this->belongsTo('App\Models\Siswa');
     }
-
-    public function tapel()
+    public function tempatpkl()
     {
-        return $this->belongsTo('App\Models\tapel');
+        return $this->belongsTo('App\Models\tempatpkl');
     }
+
+    // public function tapel()
+    // {
+    //     return $this->belongsTo('App\Models\tapel');
+    // }
 
     // public function getPhotoAttribute($value){
 
@@ -44,6 +48,7 @@ class pendaftaranprakerin_pengajuansiswa extends Model
     public static function boot()
     {
         parent::boot();
+
 
         static::deleting(function ($pendaftaranprakerin) { // before delete() method call this
             $pendaftaranprakerin->pendaftaranprakerin_detail()->delete();

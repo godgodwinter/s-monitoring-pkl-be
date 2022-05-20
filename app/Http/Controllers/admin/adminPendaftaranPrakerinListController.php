@@ -61,6 +61,23 @@ class adminPendaftaranPrakerinListController extends Controller
             'data'    => $items,
         ], 200);
     }
+    protected $tempatpkl_id;
+    public function getSiswaPilihTempat(tempatpkl $tempatpkl, Request $request)
+    {
+        $this->tempatpkl_id = $tempatpkl->id;
+        $items = Siswa::with('pendaftaranprakerin')
+            ->whereHas('pendaftaranprakerin', function ($query) {
+                $query->whereHas('pendaftaranprakerin_pengajuansiswa', function ($query) {
+                    $query->where('pendaftaranprakerin_pengajuansiswa.tempatpkl_id', $this->tempatpkl_id);
+                });
+            })
+            // ->whereDoesntHave('pendaftaranprakerin')
+            ->get();
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
     public function subsidebardata(Request $request)
     {
         $items = [

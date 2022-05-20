@@ -25,7 +25,7 @@ class pendaftaranprakerin_prosesdetail extends Model
 
     public function siswa()
     {
-        return $this->belongsTo('App\Models\siswa');
+        return $this->belongsTo('App\Models\Siswa');
     }
 
     // public function getPhotoAttribute($value){
