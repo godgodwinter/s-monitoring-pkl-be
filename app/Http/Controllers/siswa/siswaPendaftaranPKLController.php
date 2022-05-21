@@ -8,6 +8,7 @@ use App\Models\pendaftaranprakerin;
 use App\Models\pendaftaranprakerin_detail;
 use App\Models\pendaftaranprakerin_pengajuansiswa;
 use App\Models\pendaftaranprakerin_proses;
+use App\Models\pendaftaranprakerin_prosesdetail;
 use App\Models\tempatpkl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -96,6 +97,7 @@ class siswaPendaftaranPKLController extends Controller
             $items = 'Data berhasil ditambahkan!';
             $kode = 200;
         } else {
+            $kode = 200;
             $items = 'Data ditemukan ! Data gagal ditambahkan!';
         }
         return response()->json([
@@ -155,18 +157,39 @@ class siswaPendaftaranPKLController extends Controller
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
-
+    protected $tempatpkl_id;
     public function getDataTempatPKL(Request $request)
     {
         $cari = $request->cari;
+        $tersedia = $request->tersedia; //Tersedia atau Tidak Tersedia atau Semua Data
         $items = tempatpkl::where('nama', 'like', "%" . $cari . "%")->get();
+        $data = [];
         foreach ($items as $item) {
-            $item['tersedia'] = 4;
+            $this->tempatpkl_id = $item->id;
+            $periksa = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')
+                ->whereHas('pendaftaranprakerin_proses', function ($query) {
+                    $query->where('tapel_id', Fungsi::app_tapel_aktif())->where('tempatpkl_id', $this->tempatpkl_id);
+                })
+                ->count();
+            $item['terisi'] = $periksa;
+            $item['tersedia'] = 0;
+            // $item['tersedia'] = $item->kuota - $periksa;
+            if ($tersedia == 'Tersedia') {
+                if ($item['tersedia'] > 0) {
+                    array_push($data, $item);
+                }
+            } else if ($tersedia == 'Tidak Tersedia') {
+                if ($item['tersedia'] < 1) {
+                    array_push($data, $item);
+                }
+            } else {
+                array_push($data, $item);
+            }
         }
         // get identitas tempat pkl dan teman yang berada di tempat pkl yang sama serta status pengajuan diacc/ditolak
         return response()->json([
             'success'    => true,
-            'data'    => $items,
+            'data'    => $data,
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
