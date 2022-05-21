@@ -10,6 +10,7 @@ use App\Models\pendaftaranprakerin_prosesdetail;
 use App\Models\Siswa;
 use App\Models\tempatpkl;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -50,7 +51,9 @@ class adminPendaftaranPrakerinController extends Controller
         if ($periksa < 1) {
             $pendaftaranprakerin_proses_id = DB::table('pendaftaranprakerin_proses')->insertGetId([
                 'tempatpkl_id'     =>   $tempatpkl->id,
-                'tapel_id'     =>   Fungsi::app_tapel_aktif()
+                'tapel_id'     =>   Fungsi::app_tapel_aktif(),
+                'created_at' =>   Carbon::now(),
+                'updated_at' =>   Carbon::now(),
 
             ]);
         } else {
@@ -67,11 +70,14 @@ class adminPendaftaranPrakerinController extends Controller
             pendaftaranprakerin_prosesdetail::insert([
                 'pendaftaranprakerin_proses_id'     =>   $pendaftaranprakerin_proses_id,
                 'siswa_id'     =>   $siswa['id'],
+                'created_at' =>   Carbon::now(),
+                'updated_at' =>   Carbon::now(),
             ]);
             // c. update status tiap siswa menjadi Proses Pemberkasan
             pendaftaranprakerin::where('siswa_id', $siswa['id'])->where('tapel_id', Fungsi::app_tapel_aktif())
                 ->update([
                     'status'     =>   'Proses Pemberkasan',
+                    'updated_at' =>   Carbon::now(),
                 ]);
         }
 
@@ -128,6 +134,7 @@ class adminPendaftaranPrakerinController extends Controller
             pendaftaranprakerin::where('siswa_id', $dSiswa->siswa_id)->where('tapel_id', Fungsi::app_tapel_aktif())
                 ->update([
                     'status'     =>   'Proses Persetujuan',
+                    'updated_at' =>   Carbon::now(),
                 ]);
             $kode = 200;
         }
@@ -150,6 +157,7 @@ class adminPendaftaranPrakerinController extends Controller
                 pendaftaranprakerin::where('siswa_id', $dSiswa->siswa_id)->where('tapel_id', Fungsi::app_tapel_aktif())
                     ->update([
                         'status'     =>   'Disetujui',
+                        'updated_at' =>   Carbon::now(),
                     ]);
                 $kode = 200;
             }

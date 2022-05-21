@@ -6,7 +6,11 @@ use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\pendaftaranprakerin;
 use App\Models\pendaftaranprakerin_detail;
+use App\Models\pendaftaranprakerin_proses;
+use App\Models\pendaftaranprakerin_prosesdetail;
 use App\Models\Siswa;
+use App\Models\tempatpkl;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,35 +34,43 @@ class siswaProfileController extends Controller
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
-
+    protected $siswa_id;
     public function pendaftaranpkl()
     {
+        $this->siswa_id = $this->guard()->user()->id;
         $id = $this->guard()->user()->id;
         $periksa = "Belum Daftar";
         $jmlData = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $id)->count();
-        $tgl_pengajuan = null;
+        $tgl_penempatan = null;
         if ($jmlData > 0) {
             $getData = pendaftaranprakerin::where('siswa_id', $id)->where('tapel_id', Fungsi::app_tapel_aktif())->first();
             $periksa = $getData->status;
-            $tgl_pengajuan = count($getData->pendaftaranprakerin_detail) > 0 ? $getData->pendaftaranprakerin_detail[0]->tgl_pengajuan : '';
         }
         $getTempatpkl = null;
         $getPembimbinglapangan = null;
         $getPembimbingSekolah = null;
         $getDataDetail = null;
-        if ($periksa == 'Menunggu' or $periksa == 'Disetujui' or $periksa == 'Ditolak') {
-            $getDataDetail = pendaftaranprakerin_detail::where('pendaftaranprakerin_id', $getData->id)->orderBy('updated_at', 'desc')->first();
-            $getTempatpkl = $getDataDetail->tempatpkl ? $getDataDetail->tempatpkl : null;
-            $getPembimbinglapangan = $getDataDetail->pembimbinglapangan ? $getDataDetail->pembimbinglapangan : null;
-            $getPembimbingSekolah = $getDataDetail->pembimbingsekolah ? $getDataDetail->pembimbingsekolah : null;
+        $tempatpkl = null;
+        if ($periksa == 'Proses Pengajuan Tempat PKL' or $periksa == 'Proses Penempatan PKL') {
+        } elseif (
+            $periksa == 'Proses Pemberkasan'
+            or $periksa == 'Proses Persetujuan' or $periksa == 'Disetujui'  or $periksa == 'Ditolak'
+        ) {
+            $getPendaftaranPrakerinProsesDetail = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')
+                ->where('siswa_id', $this->siswa_id)->whereHas('pendaftaranprakerin_proses', function ($query) {
+                    $query->where('tapel_id', Fungsi::app_tapel_aktif());
+                })
+                ->first();
+            $tgl_penempatan = $getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses ?
+                Fungsi::carbonCreatedAt($getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->created_at) : null;
+            $tempatpkl = $getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->tempatpkl ? $getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->tempatpkl : null;
         }
         return response()->json([
             'success'    => true,
             'id'    => $id,
             'data'    => $periksa,
-            'tgl_pengajuan'    => $tgl_pengajuan,
-            // 'detail' => $getDataDetail,
-            'tempatpkl' => $getTempatpkl,
+            'tgl_penempatan'    => $tgl_penempatan,
+            'tempatpkl' => $tempatpkl,
             'pembimbinglapangan' => $getPembimbinglapangan,
             'pembimbingsekolah' => $getPembimbingSekolah,
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),

@@ -20,7 +20,7 @@ class pendaftaranprakerin_prosesdetail extends Model
 
     public function pendaftaranprakerin_proses()
     {
-        return $this->belongsTo('App\Models\pendaftaranprakerin_proses');
+        return $this->belongsTo('App\Models\pendaftaranprakerin_proses')->with('tempatpkl');
     }
 
     public function siswa()

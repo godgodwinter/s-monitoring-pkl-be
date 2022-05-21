@@ -3,10 +3,21 @@
 namespace App\Helpers;
 
 use App\Models\tapel;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class Fungsi
 {
+    public static function carbonCreatedAt($input = null)
+    {
+        //input=Y-m-d H:i:s / format default createdAt dan updateddUt
+        $hasil = null;
+
+        if ($input) {
+            $hasil = Carbon::createFromFormat('Y-m-d H:i:s', $input)->format('Y-m-d');
+        }
+        return $hasil;
+    }
 
     public static function rupiah($angka)
     {
