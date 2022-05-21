@@ -61,6 +61,75 @@ class adminPendaftaranPrakerinListController extends Controller
             'data'    => $items,
         ], 200);
     }
+    public function getProsesPengajuanTempatPKL(Request $request)
+    {
+        $items = pendaftaranprakerin::with('siswa')->where('status', 'Proses Pengajuan Tempat PKL')
+            ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->get();
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
+    public function getProsesPenempatanPKL(Request $request)
+    {
+        $items = pendaftaranprakerin::with('siswa')->where('status', 'Proses Penempatan PKL')
+            ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->get();
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
+
+    public function getProsesPemberkasan(Request $request)
+    {
+        $items = pendaftaranprakerin::with('siswa')->where('status', 'Proses Pemberkasan')
+            ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->get();
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
+
+    public function getProsesPersetujuan(Request $request)
+    {
+        $items = pendaftaranprakerin::with('siswa')->where('status', 'Proses Persetujuan')
+            ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->get();
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
+
+    public function getDisetujui(Request $request)
+    {
+        $items = pendaftaranprakerin::with('siswa')->where('status', 'Disetujui')
+            ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->get();
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
+    public function getDitolak(Request $request)
+    {
+        $items = pendaftaranprakerin::with('siswa')->where('status', 'Ditolak')
+            ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->get();
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
     protected $tempatpkl_id;
     public function getSiswaPilihTempat(tempatpkl $tempatpkl, Request $request)
     {
@@ -73,6 +142,7 @@ class adminPendaftaranPrakerinListController extends Controller
             })
             // ->whereDoesntHave('pendaftaranprakerin')
             ->get();
+
         return response()->json([
             'success'    => true,
             'data'    => $items,
