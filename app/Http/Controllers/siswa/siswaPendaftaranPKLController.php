@@ -10,6 +10,7 @@ use App\Models\pendaftaranprakerin_pengajuansiswa;
 use App\Models\pendaftaranprakerin_proses;
 use App\Models\pendaftaranprakerin_prosesdetail;
 use App\Models\tempatpkl;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -133,8 +134,17 @@ class siswaPendaftaranPKLController extends Controller
             pendaftaranprakerin_pengajuansiswa::insert([
                 'tempatpkl_id' => $data['id'],
                 'pendaftaranprakerin_id' => $pendaftaranprakerin_id,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
 
             ]);
+
+            pendaftaranprakerin::where('siswa_id', $this->siswa_id)
+                ->where('tapel_id', Fungsi::app_tapel_aktif())
+                ->update([
+                    'status'     =>   'Proses Penempatan PKL',
+                    'updated_at' =>   Carbon::now(),
+                ]);
         }
 
         // 2. jika tidak ada maka insert
@@ -172,8 +182,8 @@ class siswaPendaftaranPKLController extends Controller
                 })
                 ->count();
             $item['terisi'] = $periksa;
-            $item['tersedia'] = 0;
-            // $item['tersedia'] = $item->kuota - $periksa;
+            // $item['tersedia'] = 0;
+            $item['tersedia'] = $item->kuota - $periksa;
             if ($tersedia == 'Tersedia') {
                 if ($item['tersedia'] > 0) {
                     array_push($data, $item);
