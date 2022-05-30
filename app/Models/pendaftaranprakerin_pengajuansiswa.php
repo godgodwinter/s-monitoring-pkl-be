@@ -24,6 +24,10 @@ class pendaftaranprakerin_pengajuansiswa extends Model
     {
         return $this->hasMany('App\Models\pendaftaranprakerin_detail');
     }
+    public function pendaftaranprakerin()
+    {
+        return $this->belongsTo('App\Models\pendaftaranprakerin');
+    }
 
     public function siswa()
     {

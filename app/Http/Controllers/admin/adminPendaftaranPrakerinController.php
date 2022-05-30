@@ -247,4 +247,30 @@ class adminPendaftaranPrakerinController extends Controller
             'message'    => 'Data berhasil di hapus!',
         ], 200);
     }
+
+    public function getsiswafromtempatpkl(Request $request)
+    {
+        $items = [];
+        $kode = 500;
+        $siswa = [];
+        $tempatpkl = [];
+        $periksa = pendaftaranprakerin_proses::with('tempatpkl')->where('tempatpkl_id', $request->tempatpkl_id)
+            ->where('tapel_id', Fungsi::app_tapel_aktif());
+        if ($periksa->count()) {
+            $kode = 200;
+            $items = $periksa->get();
+            $periksasiswa = pendaftaranprakerin_prosesdetail::with('siswa')->where('pendaftaranprakerin_proses_id', $periksa->first()->id);
+            if ($periksasiswa->count()) {
+                $siswa = $periksasiswa->get();
+            }
+        } else {
+            $kode = 200;
+            $items = "Tempat PKL belum memiliki siswa";
+        }
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            'siswa'    => $siswa,
+        ], $kode);
+    }
 }
