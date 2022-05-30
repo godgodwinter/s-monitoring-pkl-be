@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\pendaftaranprakerin;
+use App\Models\pendaftaranprakerin_detail;
 use App\Models\pendaftaranprakerin_proses;
 use App\Models\pendaftaranprakerin_prosesdetail;
 use App\Models\Siswa;
@@ -59,7 +60,22 @@ class adminPendaftaranPrakerinController extends Controller
         } else {
             $getPendaftaranProses = pendaftaranprakerin_proses::where('tempatpkl_id', $tempatpkl->id)->first();
             $pendaftaranprakerin_proses_id = $getPendaftaranProses->id;
-            DB::table('pendaftaranprakerin_prosesdetail')->where('pendaftaranprakerin_proses_id', $pendaftaranprakerin_proses_id)->delete();
+            // DB::table('pendaftaranprakerin_prosesdetail')->where('pendaftaranprakerin_proses_id', $pendaftaranprakerin_proses_id)->delete();
+            $getSiswaPendaftaranprosesDetail = pendaftaranprakerin_prosesdetail::where('pendaftaranprakerin_proses_id', $pendaftaranprakerin_proses_id)->get();
+            foreach ($getSiswaPendaftaranprosesDetail as $ds) {
+                // periksa apakah id ada pada array $request->siswa
+                $periksainArray = in_array($ds->siswa_id, array_column($request->siswa, 'id'));
+                // dd($periksainArray, $ds->siswa_id);
+                if ($periksainArray == false) {
+                    pendaftaranprakerin::where('siswa_id', $ds->siswa_id)
+                        ->where('tapel_id', Fungsi::app_tapel_aktif())
+                        ->update([
+                            'status'     =>   'Proses Pengajuan Tempat PKL',
+                            'updated_at' =>   Carbon::now(),
+                        ]);
+                    pendaftaranprakerin_prosesdetail::where('siswa_id', $ds->siswa_id)->delete();
+                }
+            }
         }
         // a.get proses_id
         // b. insert siswa ke tapel prosesdetail
@@ -73,6 +89,17 @@ class adminPendaftaranPrakerinController extends Controller
                 'created_at' =>   Carbon::now(),
                 'updated_at' =>   Carbon::now(),
             ]);
+
+            // periksa siswa apakah sudah daftar jika belum maka insert
+            $periksaPendaftaranSiswa = pendaftaranprakerin::where('siswa_id', $siswa['id']);
+            if ($periksaPendaftaranSiswa->count() < 1) {
+                pendaftaranprakerin::insert([
+                    'siswa_id'     =>   $siswa['id'],
+                    'tgl_daftar'     =>   date('Y-m-d'),
+                    'status'     =>   'Proses Pengajuan Tempat PKL',
+                    'tapel_id'     =>   Fungsi::app_tapel_aktif()
+                ]);
+            }
             // c. update status tiap siswa menjadi Proses Pemberkasan
             pendaftaranprakerin::where('siswa_id', $siswa['id'])->where('tapel_id', Fungsi::app_tapel_aktif())
                 ->update([
@@ -85,6 +112,10 @@ class adminPendaftaranPrakerinController extends Controller
         // a. jika belum penuh maka periksa tiap siswa
         // 1. jika belum maka insert
         // 2. jika sudah ada maka biarkan
+
+        // periksa data siswa yang tersimpan
+        // jika sudah tidak ada maka hapus
+
 
 
         // b, jika sudah penuh maka periksa apakah sudah penuh maka tampilkan error

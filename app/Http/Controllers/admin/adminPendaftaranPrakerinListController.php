@@ -308,7 +308,14 @@ class adminPendaftaranPrakerinListController extends Controller
                     }
                 }
             } else {
-                array_push($data, $item);
+                // periksa apakah sudah terdaftar di tempat pkl lain jika sudah maka skip
+                $periksaTerdaftar = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')->whereHas('pendaftaranprakerin_proses', function ($query) {
+                    $query->where('status', NULL);
+                })
+                    ->where('siswa_id', $this->siswa_id)->count();
+                if ($periksaTerdaftar == 0) {
+                    array_push($data, $item);
+                }
             }
         }
         // get identitas tempat pkl dan teman yang berada di tempat pkl yang sama serta status pengajuan diacc/ditolak
