@@ -80,32 +80,36 @@ class adminPendaftaranPrakerinController extends Controller
         // a.get proses_id
         // b. insert siswa ke tapel prosesdetail
         foreach ($request->siswa as $siswa) {
-
+            $periksa = pendaftaranprakerin_prosesdetail::where('siswa_id', $siswa['id'])->count();
+            // dd($periksa);
             $kode = 200;
+            if ($periksa < 1) {
+                $kode = 200;
 
-            pendaftaranprakerin_prosesdetail::insert([
-                'pendaftaranprakerin_proses_id'     =>   $pendaftaranprakerin_proses_id,
-                'siswa_id'     =>   $siswa['id'],
-                'created_at' =>   Carbon::now(),
-                'updated_at' =>   Carbon::now(),
-            ]);
-
-            // periksa siswa apakah sudah daftar jika belum maka insert
-            $periksaPendaftaranSiswa = pendaftaranprakerin::where('siswa_id', $siswa['id']);
-            if ($periksaPendaftaranSiswa->count() < 1) {
-                pendaftaranprakerin::insert([
+                pendaftaranprakerin_prosesdetail::insert([
+                    'pendaftaranprakerin_proses_id'     =>   $pendaftaranprakerin_proses_id,
                     'siswa_id'     =>   $siswa['id'],
-                    'tgl_daftar'     =>   date('Y-m-d'),
-                    'status'     =>   'Proses Pengajuan Tempat PKL',
-                    'tapel_id'     =>   Fungsi::app_tapel_aktif()
-                ]);
-            }
-            // c. update status tiap siswa menjadi Proses Pemberkasan
-            pendaftaranprakerin::where('siswa_id', $siswa['id'])->where('tapel_id', Fungsi::app_tapel_aktif())
-                ->update([
-                    'status'     =>   'Proses Pemberkasan',
+                    'created_at' =>   Carbon::now(),
                     'updated_at' =>   Carbon::now(),
                 ]);
+
+                // periksa siswa apakah sudah daftar jika belum maka insert
+                $periksaPendaftaranSiswa = pendaftaranprakerin::where('siswa_id', $siswa['id']);
+                if ($periksaPendaftaranSiswa->count() < 1) {
+                    pendaftaranprakerin::insert([
+                        'siswa_id'     =>   $siswa['id'],
+                        'tgl_daftar'     =>   date('Y-m-d'),
+                        'status'     =>   'Proses Pengajuan Tempat PKL',
+                        'tapel_id'     =>   Fungsi::app_tapel_aktif()
+                    ]);
+                }
+                // c. update status tiap siswa menjadi Proses Pemberkasan
+                pendaftaranprakerin::where('siswa_id', $siswa['id'])->where('tapel_id', Fungsi::app_tapel_aktif())
+                    ->update([
+                        'status'     =>   'Proses Pemberkasan',
+                        'updated_at' =>   Carbon::now(),
+                    ]);
+            }
         }
 
         // jika sudah ada

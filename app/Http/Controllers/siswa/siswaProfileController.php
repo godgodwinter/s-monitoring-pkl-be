@@ -40,6 +40,7 @@ class siswaProfileController extends Controller
         $this->siswa_id = $this->guard()->user()->id;
         $id = $this->guard()->user()->id;
         $periksa = "Belum Daftar";
+        $anggota = [];
         $jmlData = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $id)->count();
         $tgl_penempatan = null;
         if ($jmlData > 0) {
@@ -65,12 +66,26 @@ class siswaProfileController extends Controller
                 Fungsi::carbonCreatedAt($getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->created_at) : null;
             $tempatpkl = $getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->tempatpkl ? $getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->tempatpkl : null;
         }
+        // $anggota = $getPendaftaranPrakerinProsesDetail->id;
+        $getAnggota = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->where('tempatpkl_id', $tempatpkl->id)->where('tapel_id', Fungsi::app_tapel_aktif())->first();
+        $objAnggota = [];
+        foreach ($getAnggota->pendaftaranprakerin_prosesdetail as $ga) {
+            $objAnggota['id'] = $ga->siswa_id;
+            $objAnggota['nama'] = $ga->siswa->nama;
+            $objAnggota['kelas'] = "{$ga->siswa->kelasdetail->kelas->tingkatan} {$ga->siswa->kelasdetail->kelas->jurusan} {$ga->siswa->kelasdetail->kelas->suffix}";
+            // $objAnggota['kelas'] = $ga->siswa->kelas->tingkatan + ' ' + $ga->siswa->kelas->jurusan + ' ' + $ga->siswa->kelas->suffix;
+            // $objAnggota['nama'] = $ga->pendaftaranprakerin_prosesdetail->siswa;
+            // array push
+            array_push($anggota, $objAnggota);
+        }
+
         return response()->json([
             'success'    => true,
             'id'    => $id,
             'data'    => $periksa,
             'tgl_penempatan'    => $tgl_penempatan,
             'tempatpkl' => $tempatpkl,
+            'anggota' => $anggota,
             'pembimbinglapangan' => $getPembimbinglapangan,
             'pembimbingsekolah' => $getPembimbingSekolah,
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),

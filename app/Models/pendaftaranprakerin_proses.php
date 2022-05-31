@@ -24,7 +24,7 @@ class pendaftaranprakerin_proses extends Model
 
     public function pendaftaranprakerin_prosesdetail()
     {
-        return $this->hasMany('App\Models\pendaftaranprakerin_prosesdetail');
+        return $this->hasMany('App\Models\pendaftaranprakerin_prosesdetail')->with('siswa');
     }
     public function tempatpkl()
     {
