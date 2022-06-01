@@ -14,6 +14,7 @@ use App\Models\pendaftaranprakerin_prosesdetail;
 use App\Models\Siswa;
 use App\Models\tempatpkl;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class adminPendaftaranPrakerinListController extends Controller
 {
@@ -253,18 +254,22 @@ class adminPendaftaranPrakerinListController extends Controller
             $this->tempatpkl_id = $item->id;
             $periksa = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')
                 ->whereHas('pendaftaranprakerin_proses', function ($query) {
-                    $query->where('tapel_id', Fungsi::app_tapel_aktif())->where('tempatpkl_id', $this->tempatpkl_id);
+                    $query->where('tapel_id', Fungsi::app_tapel_aktif())
+                        ->where('status', null)
+                        ->where('tempatpkl_id', $this->tempatpkl_id);
                 })
                 ->count();
             $item['terisi'] = $periksa;
             // $item['tersedia'] = 0;
             $item['tersedia'] = $item->kuota - $periksa;
             if ($tersedia == 'Tersedia') {
-                if ($item['tersedia'] > 0) {
+                // if ($item['tersedia'] > 0) {
+                if ($item['status'] == 'Tersedia') {
                     array_push($data, $item);
-                }
+                };
+                // }
             } else if ($tersedia == 'Tidak Tersedia') {
-                if ($item['tersedia'] < 1) {
+                if ($item['status'] != 'Tersedia') {
                     array_push($data, $item);
                 }
             } else {
@@ -285,7 +290,8 @@ class adminPendaftaranPrakerinListController extends Controller
         $cari = $request->cari;
         $this->tempatpkl_id = $request->tempatpkl_id;
         $tersedia = $request->tersedia; //Semua Data atau Tersedia atau Tidak Tersedia
-        $items = siswa::with('kelasdetail')->where('nama', 'like', "%" . $cari . "%")->get();
+        $items = siswa::with('kelasdetail')->where('nama', 'like', "%" . $cari . "%")
+            ->get();
         $data = [];
         foreach ($items as $item) {
             $this->siswa_id = $item->id;
@@ -300,21 +306,34 @@ class adminPendaftaranPrakerinListController extends Controller
                 if ($periksa > 0) {
                     // periksa apakah sudah terdaftar di tempat pkl lain jika sudah maka skip
                     $periksaTerdaftar = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')->whereHas('pendaftaranprakerin_proses', function ($query) {
-                        $query->where('status', NULL);
+                        $query->where('tapel_id', Fungsi::app_tapel_aktif())->whereNot('status', 'Ditolak');
+                        // $query->where('status', NULL);
                     })
                         ->where('siswa_id', $this->siswa_id)->count();
                     if ($periksaTerdaftar == 0) {
-                        array_push($data, $item);
+                        $periksaPemberkasanSetuju = pendaftaranprakerin::where('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Disetujui')
+                            ->orWhere('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Proses Pemberkasan')
+                            ->orWhere('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Proses Persetujuan');
+                        if ($periksaPemberkasanSetuju->count() == 0) {
+                            array_push($data, $item);
+                        }
                     }
                 }
             } else {
                 // periksa apakah sudah terdaftar di tempat pkl lain jika sudah maka skip
                 $periksaTerdaftar = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')->whereHas('pendaftaranprakerin_proses', function ($query) {
-                    $query->where('status', NULL);
+                    $query->where('tapel_id', Fungsi::app_tapel_aktif())->whereNot('status', 'Ditolak');
+                    // $query->where('status', NULL);
                 })
                     ->where('siswa_id', $this->siswa_id)->count();
                 if ($periksaTerdaftar == 0) {
-                    array_push($data, $item);
+                    // array_push($data, $item);
+                    $periksaPemberkasanSetuju = pendaftaranprakerin::where('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Disetujui')
+                        ->orWhere('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Proses Pemberkasan')
+                        ->orWhere('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Proses Persetujuan');
+                    if ($periksaPemberkasanSetuju->count() == 0) {
+                        array_push($data, $item);
+                    }
                 }
             }
         }
@@ -322,6 +341,78 @@ class adminPendaftaranPrakerinListController extends Controller
         return response()->json([
             'success'    => true,
             'data'    => $data,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
+
+
+    public function periksaidbaru($siswa_id)
+    {
+        $UploadDir = URL::to('/') . '/fileupload/suratbalasan/';
+        $this->siswa_id = $siswa_id;
+        $id = $this->siswa_id;
+        $periksa = "Belum Daftar";
+        $file = null;
+        $anggota = [];
+        $periksaPendaftaranPrakerin = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $this->siswa_id);
+        $tgl_penempatan = null;
+        if ($periksaPendaftaranPrakerin->count() > 0) {
+            $periksa = $periksaPendaftaranPrakerin->first()->status;
+        }
+        $getTempatpkl = null;
+        $getPembimbinglapangan = null;
+        $getPembimbingSekolah = null;
+        $getDataDetail = null;
+        $tempatpkl = null;
+        if ($periksa == 'Proses Pengajuan Tempat PKL' or $periksa == 'Proses Penempatan PKL') {
+        } elseif (
+            $periksa == 'Proses Pemberkasan'
+            or $periksa == 'Proses Persetujuan' or $periksa == 'Disetujui'  or $periksa == 'Ditolak'
+        ) {
+            $getPendaftaranPrakerinProsesDetail = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')
+                ->where('siswa_id', $this->siswa_id)->whereHas('pendaftaranprakerin_proses', function ($query) {
+                    $query->where('tapel_id', Fungsi::app_tapel_aktif());
+                })
+                ->first();
+            $tgl_penempatan = $getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses ?
+                Fungsi::carbonCreatedAt($getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->created_at) : null;
+            $tempatpkl = $getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->tempatpkl ? $getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->tempatpkl : null;
+
+
+            // $anggota = $getPendaftaranPrakerinProsesDetail->id;
+            $getAnggota = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->where('status', null)->where('tempatpkl_id', $tempatpkl->id)->where('tapel_id', Fungsi::app_tapel_aktif());
+            if ($getAnggota->first()->file) {
+                $file = $UploadDir . $getAnggota->first()->file;
+            }
+            if ($getAnggota->count() > 0) {
+                $getAnggotaFirst = $getAnggota->first();
+                $objAnggota = [];
+                foreach ($getAnggotaFirst->pendaftaranprakerin_prosesdetail as $ga) {
+                    $objAnggota['id'] = $ga->siswa_id;
+                    $objAnggota['nomeridentitas'] = $ga->siswa->nomeridentitas;
+                    $objAnggota['nama'] = $ga->siswa->nama;
+                    $objAnggota['jk'] = $ga->siswa->jk;
+                    $objAnggota['alamat'] = $ga->siswa->alamat;
+                    $objAnggota['jurusan'] = "{$ga->siswa->kelasdetail->kelas->jurusan}";
+                    $objAnggota['kelas'] = "{$ga->siswa->kelasdetail->kelas->tingkatan} {$ga->siswa->kelasdetail->kelas->jurusan} {$ga->siswa->kelasdetail->kelas->suffix}";
+                    // $objAnggota['kelas'] = $ga->siswa->kelas->tingkatan + ' ' + $ga->siswa->kelas->jurusan + ' ' + $ga->siswa->kelas->suffix;
+                    // $objAnggota['nama'] = $ga->pendaftaranprakerin_prosesdetail->siswa;
+                    // array push
+                    array_push($anggota, $objAnggota);
+                }
+            }
+        }
+
+        return response()->json([
+            'success'    => true,
+            'id'    => $id,
+            'data'    => $periksa,
+            'tgl_penempatan'    => $tgl_penempatan,
+            'tempatpkl' => $tempatpkl,
+            'anggota' => $anggota,
+            'file' => $file,
+            'pembimbinglapangan' => $getPembimbinglapangan,
+            'pembimbingsekolah' => $getPembimbingSekolah,
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }

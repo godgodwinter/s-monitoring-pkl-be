@@ -55,7 +55,7 @@ class siswaPendaftaranPKLController extends Controller
             $kode = 200;
             //periksa penempatan di tabel pendaftaranprakerin_proses dan pendaftaranprakerin_prosesdetail
             $getData = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')
-                ->where('tapel_id', Fungsi::app_tapel_aktif())
+                ->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', null)
                 ->whereHas('pendaftaranprakerin_prosesdetail', function ($query) {
                     $query->where('siswa_id', $this->siswa_id);
                 })
@@ -179,7 +179,7 @@ class siswaPendaftaranPKLController extends Controller
         $this->siswa_id = $this->guard()->user()->id;
         $periksa = 'Belum Daftar';
         $periksaPendaftaranPrakerin = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $this->siswa_id);
-        $getPendaftaranPrakerin = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')
+        $getPendaftaranPrakerin = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->where('status', null)
             ->whereHas('pendaftaranprakerin_prosesdetail', function ($query) {
                 $query->where('siswa_id', $this->siswa_id);
             })->where('tapel_id', Fungsi::app_tapel_aktif());
@@ -201,6 +201,16 @@ class siswaPendaftaranPKLController extends Controller
                     'file' => $nama_file,
                     'updated_at' => Carbon::now(),
                 ]);
+
+            $getPendaftaranPrakerinProsesDetail = pendaftaranprakerin_prosesdetail::where('pendaftaranprakerin_proses_id', $getPendaftaranPrakerin->first()->id)->get();
+            foreach ($getPendaftaranPrakerinProsesDetail as $gd) {
+                pendaftaranprakerin::where('siswa_id', $gd->siswa_id)
+                    ->where('tapel_id', Fungsi::app_tapel_aktif())
+                    ->update([
+                        'status' => 'Proses Persetujuan',
+                        'updated_at' => Carbon::now(),
+                    ]);
+            }
         }
 
         return response()->json([
@@ -219,7 +229,7 @@ class siswaPendaftaranPKLController extends Controller
             $this->tempatpkl_id = $item->id;
             $periksa = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')
                 ->whereHas('pendaftaranprakerin_proses', function ($query) {
-                    $query->where('tapel_id', Fungsi::app_tapel_aktif())->where('tempatpkl_id', $this->tempatpkl_id);
+                    $query->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', null)->where('tempatpkl_id', $this->tempatpkl_id);
                 })
                 ->count();
             $item['terisi'] = $periksa;

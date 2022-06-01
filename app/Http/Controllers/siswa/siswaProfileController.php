@@ -70,7 +70,7 @@ class siswaProfileController extends Controller
 
 
             // $anggota = $getPendaftaranPrakerinProsesDetail->id;
-            $getAnggota = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->where('tempatpkl_id', $tempatpkl->id)->where('tapel_id', Fungsi::app_tapel_aktif());
+            $getAnggota = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->where('status', null)->where('tempatpkl_id', $tempatpkl->id)->where('tapel_id', Fungsi::app_tapel_aktif());
             if ($getAnggota->first()->file) {
                 $file = $UploadDir . $getAnggota->first()->file;
             }
