@@ -13,6 +13,7 @@ use App\Models\tempatpkl;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class siswaProfileController extends Controller
 {
@@ -37,9 +38,11 @@ class siswaProfileController extends Controller
     protected $siswa_id;
     public function pendaftaranpkl()
     {
+        $UploadDir = URL::to('/') . '/fileupload/suratbalasan/';
         $this->siswa_id = $this->guard()->user()->id;
         $id = $this->guard()->user()->id;
         $periksa = "Belum Daftar";
+        $file = null;
         $anggota = [];
         $periksaPendaftaranPrakerin = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $this->siswa_id);
         $tgl_penempatan = null;
@@ -68,6 +71,9 @@ class siswaProfileController extends Controller
 
             // $anggota = $getPendaftaranPrakerinProsesDetail->id;
             $getAnggota = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->where('tempatpkl_id', $tempatpkl->id)->where('tapel_id', Fungsi::app_tapel_aktif());
+            if ($getAnggota->first()->file) {
+                $file = $UploadDir . $getAnggota->first()->file;
+            }
             if ($getAnggota->count() > 0) {
                 $getAnggotaFirst = $getAnggota->first();
                 $objAnggota = [];
@@ -94,6 +100,7 @@ class siswaProfileController extends Controller
             'tgl_penempatan'    => $tgl_penempatan,
             'tempatpkl' => $tempatpkl,
             'anggota' => $anggota,
+            'file' => $file,
             'pembimbinglapangan' => $getPembimbinglapangan,
             'pembimbingsekolah' => $getPembimbingSekolah,
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),

@@ -162,8 +162,20 @@ class siswaPendaftaranPKLController extends Controller
     {
 
         $file = $request->file('file');
+
         $success = false;
         $items = 'Data tidak ditemukan';
+
+        $validator = Validator::make($request->all(), [
+            // 'file' => '',  //10MB
+            // 'file'   => '',
+            'file' => 'required|max:10000|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,jpg,jpeg,png',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
         $this->siswa_id = $this->guard()->user()->id;
         $periksa = 'Belum Daftar';
         $periksaPendaftaranPrakerin = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $this->siswa_id);
@@ -181,6 +193,14 @@ class siswaPendaftaranPKLController extends Controller
             $file->move($UploadDir, $nama_file);
             $success = true;
             $items = 'Berkas berhasil diupload';
+
+            // update pendaftaranprakerin_proses
+            $getPendaftaranPrakerin
+                // ->where('id', $getPendaftaranPrakerin->first()->id)
+                ->update([
+                    'file' => $nama_file,
+                    'updated_at' => Carbon::now(),
+                ]);
         }
 
         return response()->json([
