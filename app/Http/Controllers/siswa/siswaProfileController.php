@@ -65,18 +65,27 @@ class siswaProfileController extends Controller
             $tgl_penempatan = $getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses ?
                 Fungsi::carbonCreatedAt($getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->created_at) : null;
             $tempatpkl = $getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->tempatpkl ? $getPendaftaranPrakerinProsesDetail->pendaftaranprakerin_proses->tempatpkl : null;
-        }
-        // $anggota = $getPendaftaranPrakerinProsesDetail->id;
-        $getAnggota = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->where('tempatpkl_id', $tempatpkl->id)->where('tapel_id', Fungsi::app_tapel_aktif())->first();
-        $objAnggota = [];
-        foreach ($getAnggota->pendaftaranprakerin_prosesdetail as $ga) {
-            $objAnggota['id'] = $ga->siswa_id;
-            $objAnggota['nama'] = $ga->siswa->nama;
-            $objAnggota['kelas'] = "{$ga->siswa->kelasdetail->kelas->tingkatan} {$ga->siswa->kelasdetail->kelas->jurusan} {$ga->siswa->kelasdetail->kelas->suffix}";
-            // $objAnggota['kelas'] = $ga->siswa->kelas->tingkatan + ' ' + $ga->siswa->kelas->jurusan + ' ' + $ga->siswa->kelas->suffix;
-            // $objAnggota['nama'] = $ga->pendaftaranprakerin_prosesdetail->siswa;
-            // array push
-            array_push($anggota, $objAnggota);
+
+
+            // $anggota = $getPendaftaranPrakerinProsesDetail->id;
+            $getAnggota = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->where('tempatpkl_id', $tempatpkl->id)->where('tapel_id', Fungsi::app_tapel_aktif());
+            if ($getAnggota->count() > 0) {
+                $getAnggotaFirst = $getAnggota->first();
+                $objAnggota = [];
+                foreach ($getAnggotaFirst->pendaftaranprakerin_prosesdetail as $ga) {
+                    $objAnggota['id'] = $ga->siswa_id;
+                    $objAnggota['nomeridentitas'] = $ga->siswa->nomeridentitas;
+                    $objAnggota['nama'] = $ga->siswa->nama;
+                    $objAnggota['jk'] = $ga->siswa->jk;
+                    $objAnggota['alamat'] = $ga->siswa->alamat;
+                    $objAnggota['jurusan'] = "{$ga->siswa->kelasdetail->kelas->jurusan}";
+                    $objAnggota['kelas'] = "{$ga->siswa->kelasdetail->kelas->tingkatan} {$ga->siswa->kelasdetail->kelas->jurusan} {$ga->siswa->kelasdetail->kelas->suffix}";
+                    // $objAnggota['kelas'] = $ga->siswa->kelas->tingkatan + ' ' + $ga->siswa->kelas->jurusan + ' ' + $ga->siswa->kelas->suffix;
+                    // $objAnggota['nama'] = $ga->pendaftaranprakerin_prosesdetail->siswa;
+                    // array push
+                    array_push($anggota, $objAnggota);
+                }
+            }
         }
 
         return response()->json([
