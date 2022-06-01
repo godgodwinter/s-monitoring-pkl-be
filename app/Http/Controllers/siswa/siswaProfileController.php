@@ -41,11 +41,10 @@ class siswaProfileController extends Controller
         $id = $this->guard()->user()->id;
         $periksa = "Belum Daftar";
         $anggota = [];
-        $jmlData = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $id)->count();
+        $periksaPendaftaranPrakerin = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $this->siswa_id);
         $tgl_penempatan = null;
-        if ($jmlData > 0) {
-            $getData = pendaftaranprakerin::where('siswa_id', $id)->where('tapel_id', Fungsi::app_tapel_aktif())->first();
-            $periksa = $getData->status;
+        if ($periksaPendaftaranPrakerin->count() > 0) {
+            $periksa = $periksaPendaftaranPrakerin->first()->status;
         }
         $getTempatpkl = null;
         $getPembimbinglapangan = null;

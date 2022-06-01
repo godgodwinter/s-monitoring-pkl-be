@@ -157,14 +157,35 @@ class siswaPendaftaranPKLController extends Controller
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
+
     public function uploadberkas(Request $request)
     {
-        // insert SURAT BALASAN DARI TEMPAT PKL
-        $items = 'Data berhasil ditambahkan';
+
+        $file = $request->file('file');
+        $success = false;
+        $items = 'Data tidak ditemukan';
+        $this->siswa_id = $this->guard()->user()->id;
+        $periksa = 'Belum Daftar';
+        $periksaPendaftaranPrakerin = pendaftaranprakerin::with('pendaftaranprakerin_detail')->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $this->siswa_id);
+        $getPendaftaranPrakerin = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')
+            ->whereHas('pendaftaranprakerin_prosesdetail', function ($query) {
+                $query->where('siswa_id', $this->siswa_id);
+            })->where('tapel_id', Fungsi::app_tapel_aktif());
+        if ($getPendaftaranPrakerin->count() > 0) {
+            // upload
+            $UploadDir = public_path() . '/fileupload/suratbalasan';
+            // $nama_file = rand() . "-" . $file->getClientOriginalName();
+            $nama_file = $getPendaftaranPrakerin->first()->id . '.' . $file->extension();
+            // dd($nama_file);
+
+            $file->move($UploadDir, $nama_file);
+            $success = true;
+            $items = 'Berkas berhasil diupload';
+        }
+
         return response()->json([
-            'success'    => true,
+            'success'    => $success,
             'data'    => $items,
-            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
     protected $tempatpkl_id;
