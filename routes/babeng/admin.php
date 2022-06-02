@@ -47,6 +47,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/admin/siswa/{item}', [adminSiswaController::class, 'destroy'])->name('admin.siswa.destroy');
     Route::put('/admin/siswa/{item}/generatepassword', [adminSiswaController::class, 'generatepassword'])->name('admin.siswa.generatepassword');
     Route::post('/admin/siswa/generatepasswordall', [adminSiswaController::class, 'generatepasswordall'])->name('admin.siswa.generatepasswordall');
+    Route::get('/admin/datasiswa/profile/{item}', [adminSiswaController::class, 'profile'])->name('admin.siswa.profile');
 
     Route::get('/admin/siswa/getall', [adminSiswaController::class, 'getall'])->name('admin.siswa.getall');
     Route::post('/admin/siswa/{item}/addtotapelaktif', [adminSiswaController::class, 'addtotapelaktif'])->name('admin.siswa.addtotapelaktif');

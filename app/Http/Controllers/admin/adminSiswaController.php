@@ -6,7 +6,11 @@ use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\kelas;
 use App\Models\kelasdetail;
+use App\Models\pendaftaranprakerin;
+use App\Models\pendaftaranprakerin_proses;
+use App\Models\pendaftaranprakerin_prosesdetail;
 use App\Models\Siswa;
+use App\Models\tempatpkl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -271,6 +275,57 @@ class adminSiswaController extends Controller
             'success'    => true,
             'data'    => 'Data Berhasil ditambahkan',
             'siswa'    => $item,
+        ], 200);
+    }
+    protected $siswa_id;
+    protected $tempatpkl_id;
+    protected $proses_id;
+    public function profile(siswa $item)
+    {
+        $this->siswa_id = $item->id;
+        $siswa = [];
+        $tempatpkl = [];
+        $pembimbinglapangan = [];
+        $pembimbingsekolah = [];
+        $anggota = [];
+        $status = null;
+
+        // data siswa
+        $siswa = Siswa::where('id', $item->id)->first();
+        $siswa['kelas_nama'] = "{$siswa->kelasdetail->kelas->tingkatan} {$siswa->kelasdetail->kelas->jurusan} {$siswa->kelasdetail->kelas->suffix}";
+
+        // tempat pkl
+        $getPendaftaranProsesDetail = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')->where('siswa_id', $this->siswa_id)
+            ->whereHas('pendaftaranprakerin_proses', function ($query) {
+                $query->where('pendaftaranprakerin_proses.status', '!=', 'Ditolak')->where('tapel_id', Fungsi::app_tapel_aktif());
+            })->first();
+        $getPendaftaranProses_id = $getPendaftaranProsesDetail ? $getPendaftaranProsesDetail->pendaftaranprakerin_proses->id : null;
+        $Getstatus = pendaftaranprakerin::where('siswa_id', $this->siswa_id)->where('tapel_id', Fungsi::app_tapel_aktif())->first();
+        $status = $Getstatus ? $Getstatus->status : 'Belum Daftar';
+
+        $tempatpkl = $getPendaftaranProsesDetail ? $getPendaftaranProsesDetail->pendaftaranprakerin_proses->tempatpkl : null;
+        // pembimbing
+        if ($getPendaftaranProsesDetail) {
+            $getPendaftaranProses = pendaftaranprakerin_prosesdetail::with('siswa')
+                ->where('pendaftaranprakerin_proses_id', $getPendaftaranProses_id)
+                ->get();
+            foreach ($getPendaftaranProses as $gp) {
+                $anggota[] = $gp ? $gp->siswa : null;
+            }
+            // $anggota[] = $getPendaftaranProses ? $getPendaftaranProses->pendaftaranprakerin_proses->siswa : null;
+        }
+
+        $item = Siswa::with('kelasdetail')->find($item->id);
+        return response()->json([
+            'success'    => true,
+            'data'    => ([
+                'siswa' => $siswa,
+                'status' => $status,
+                'tempatpkl' => $tempatpkl,
+                'anggota' => $anggota,
+                'pembimbinglapangan' => $pembimbinglapangan,
+                'pembimbingsekolah' => $pembimbingsekolah,
+            ]),
         ], 200);
     }
 }
