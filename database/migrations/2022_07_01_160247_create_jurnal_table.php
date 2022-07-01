@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('absensi', function (Blueprint $table) {
+        Schema::create('jurnal', function (Blueprint $table) {
             $table->id();
             $table->string('siswa_id')->nullable(); //BelongsTo
-            $table->string('label')->nullable(); //hadir / tidak hadir
-            $table->string('keterangan')->nullable(); //alasan tidak hadir / kegiatan yang dilakukan
-            $table->string('bukti')->nullable(); //file .jpg/.png (bukti alasan tidak hadir misal sakit berarti surat dokter ))
+            $table->string('label')->nullable(); //nama kegiatan yang dilakukan hari itu
+            $table->text('desc')->nullable(); //deskripsi kegiatan yang dilakukan hari itu
+            $table->string('file')->nullable(); //file bukti kegiatan jika diperlukan
             $table->string('status')->nullable()->default('disetujui'); //disetujui / ditolak / menunggu konfirmasi
             $table->text('alasan')->nullable(); //alasan ditolak (optional)
             $table->timestamps();
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('absensi');
+        Schema::dropIfExists('jurnal');
     }
 };
