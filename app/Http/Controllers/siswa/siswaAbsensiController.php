@@ -50,15 +50,15 @@ class siswaAbsensiController extends Controller
             $kehadiran = null;
             $kehadiranCatatan = null;
             $kehadiranStatus = null;
-            if ($i <= $tglNow) {
-                $getKehadiran = absensi::where('siswa_id', $this->siswa_id)->where('tgl', 'like', $blnthn . "-" . $tglTemp . '%')
-                    ->orderBy('tgl', 'asc')
-                    ->first();
-                $kehadiran = $getKehadiran ? $getKehadiran->label : "Tidak diketahui";
-                $kehadiranCatatan = $getKehadiran ? $getKehadiran->alasan : 0;
-                $tempData->id = $getKehadiran ? $getKehadiran->id : 0;
-                $kehadiranStatus = $getKehadiran ? $getKehadiran->status : null;
-            }
+            // if ($i <= $tglNow) {
+            $getKehadiran = absensi::where('siswa_id', $this->siswa_id)->where('tgl', 'like', $blnthn . "-" . $tglTemp . '%')
+                ->orderBy('tgl', 'asc')
+                ->first();
+            $kehadiran = $getKehadiran ? $getKehadiran->label : null;
+            $kehadiranCatatan = $getKehadiran ? $getKehadiran->alasan : 0;
+            $tempData->id = $getKehadiran ? $getKehadiran->id : 0;
+            $kehadiranStatus = $getKehadiran ? $getKehadiran->status : null;
+            // }
             $tempData->kehadiran = $kehadiran;
             $tempData->kehadiranCatatan = $kehadiranCatatan;
             $tempData->kehadiranStatus = $kehadiranStatus;
@@ -89,10 +89,10 @@ class siswaAbsensiController extends Controller
         $periksa = absensi::where('siswa_id', $this->siswa_id)->where('tgl', $tglNow);
         if ($periksa->count() > 0) {
             return response()->json([
-                'success'    => true,
+                'success'    => false,
                 'data'    => 'Anda sudah absen!',
                 'siswa' => $this->siswa_id,
-            ], 500);
+            ], 200);
         }
 
         // insert and get id first
@@ -101,6 +101,7 @@ class siswaAbsensiController extends Controller
             'label' => $request->label,
             'tgl' => $tglNow,
             'status' => 'menunggu konfirmasi',
+            'alasan' => $request->alasan,
             // 'alasan' => $request->alasan,
             // 'bukti' => $file->getClientOriginalName(),
             'created_at' => date('Y-m-d H:i:s'),
@@ -119,7 +120,6 @@ class siswaAbsensiController extends Controller
                 // update
                 absensi::where('id', $absen_id)->update([
                     'bukti' => $path . '/' . $nama_file,
-                    'alasan' => $request->alasan,
                     'updated_at' => date('Y-m-d H:i:s')
                 ]);
             }
@@ -134,7 +134,22 @@ class siswaAbsensiController extends Controller
         ], $kode);
     }
 
+    public function doBatalkan(Request $request)
+    {
+        $tglNow = date('Y-m-d');
+        $periksa = absensi::where('siswa_id', $this->siswa_id)->where('tgl', $tglNow);
 
+        // delete
+        $delAbsensi = $periksa->delete();
+
+        $kode = 200;
+        return response()->json([
+            'success'    => true,
+            'data'    => 'Berhasil dibatalkan',
+            'siswa' => $this->siswa_id,
+            // 'file' => $request->bukti,
+        ], $kode);
+    }
     public function me()
     {
         return response()->json($this->guard()->user());
