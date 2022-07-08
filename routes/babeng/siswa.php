@@ -35,6 +35,7 @@ Route::middleware('api')->group(function () {
 
     Route::get('/siswa/pkl/absen', [siswaAbsensiController::class, 'getDataAbsensi']);
     Route::post('/siswa/pkl/absen', [siswaAbsensiController::class, 'doAbsen']);
+    Route::post('/siswa/pkl/jurnal', [siswaAbsensiController::class, 'doJurnal']);
     Route::post('/siswa/pkl/absen/batalkan', [siswaAbsensiController::class, 'doBatalkan']);
 
 
