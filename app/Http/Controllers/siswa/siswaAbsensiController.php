@@ -81,7 +81,7 @@ class siswaAbsensiController extends Controller
             $tempData->jurnal = $jurnal;
             $tempData->jurnalCatatan = $jurnalCatatan;
             $tempData->jurnalStatus = $jurnalStatus;
-            $tempData->jurnalfile = $jurnalFile;
+            $tempData->jurnalFile = $jurnalFile;
             // push
             array_push($data, $tempData);
         }
