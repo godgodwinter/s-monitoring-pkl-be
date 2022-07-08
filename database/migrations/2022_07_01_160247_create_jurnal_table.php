@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('file')->nullable(); //file bukti kegiatan jika diperlukan
             $table->string('status')->nullable()->default('disetujui'); //disetujui / ditolak / menunggu konfirmasi
             $table->text('alasan')->nullable(); //alasan ditolak (optional)
+            $table->softDeletes();
             $table->timestamps();
         });
     }

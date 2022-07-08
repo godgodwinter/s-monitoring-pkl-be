@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('bukti')->nullable(); //file .jpg/.png (bukti alasan tidak hadir misal sakit berarti surat dokter ))
             $table->string('status')->nullable()->default('disetujui'); //disetujui / ditolak / menunggu konfirmasi
             $table->text('alasan')->nullable(); //alasan ditolak (optional)
+            $table->softDeletes();
             $table->timestamps();
         });
     }

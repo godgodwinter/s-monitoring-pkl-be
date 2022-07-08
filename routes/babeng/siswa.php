@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthSiswaController;
+use App\Http\Controllers\siswa\siswaAbsensiController;
 use App\Http\Controllers\siswa\siswaPendaftaranPKLController;
 use App\Http\Controllers\siswa\siswaProfileController;
 use App\Http\Controllers\siswa\siswaSettingsController;
@@ -30,6 +31,10 @@ Route::middleware('api')->group(function () {
     Route::post('/siswa/pendaftaranpkl/pengajuanpkl/store', [siswaPendaftaranPKLController::class, 'pengajuanTempatPklStore']);
     Route::get('/siswa/pendaftaranpkl/getStatuspkl', [siswaPendaftaranPKLController::class, 'getStatusPKL']);
     Route::post('/siswa/pendaftaranpkl/uploadberkas', [siswaPendaftaranPKLController::class, 'uploadberkas']);
+
+
+    Route::get('/siswa/pkl/absen', [siswaAbsensiController::class, 'getDataAbsensi']);
+    Route::post('/siswa/pkl/absen', [siswaAbsensiController::class, 'doAbsen']);
 
 
     // Route::post('/siswa/pendaftaranpkl/daftar', [siswaPendaftaranPKLController::class, 'get']);
