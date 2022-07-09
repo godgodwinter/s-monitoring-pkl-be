@@ -48,6 +48,14 @@ return [
             'driver' => 'jwt',
             'provider' => 'siswa',
         ],
+        'pembimbinglapangan' => [
+            'driver' => 'jwt',
+            'provider' => 'pembimbinglapangan',
+        ],
+        'pembimbingsekolah' => [
+            'driver' => 'jwt',
+            'provider' => 'pembimbingsekolah',
+        ],
     ],
 
     /*
@@ -75,6 +83,14 @@ return [
         'siswa' => [
             'driver' => 'eloquent',
             'model' => App\Models\Siswa::class,
+        ],
+        'pembimbinglapangan' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\pembimbinglapangan::class,
+        ],
+        'pembimbingsekolah' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\pembimbingsekolah::class,
         ],
 
         // 'users' => [

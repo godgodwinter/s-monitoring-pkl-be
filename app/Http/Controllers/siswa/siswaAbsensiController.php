@@ -26,6 +26,7 @@ class siswaAbsensiController extends Controller
 
     public function getDataAbsensi(Request $request)
     {
+        // dd($request->blnthn ? $request->blnthn : date('Y-m'));
         $blnthn = $request->blnthn ? $request->blnthn : date('Y-m');
         $data = [];
 
@@ -90,7 +91,8 @@ class siswaAbsensiController extends Controller
         return response()->json([
             'success'    => true,
             'data'    => $data,
-            'siswa' => $this->siswa_id,
+            'blnthn' => $request->blnthn,
+            // 'siswa' => $this->siswa_id,
             // 'file' => $request->bukti,
         ], 200);
     }
