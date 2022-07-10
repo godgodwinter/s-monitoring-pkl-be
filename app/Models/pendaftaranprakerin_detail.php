@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class pendaftaranprakerin_detail extends Model
 {
+    // removed (maybe)
     public $table = "pendaftaranprakerin_detail";
 
     use SoftDeletes;

@@ -20,6 +20,8 @@ class pendaftaranprakerin_proses extends Model
         'ket',
         'file',
         'tapel_id',
+        'pembimbinglapangan_id',
+        'pembimbingsekolah_id',
     ];
 
     public function pendaftaranprakerin_prosesdetail()
@@ -34,6 +36,14 @@ class pendaftaranprakerin_proses extends Model
     public function tapel()
     {
         return $this->belongsTo('App\Models\tapel');
+    }
+    public function pembimbinglapangan()
+    {
+        return $this->belongsTo('App\Models\pembimbinglapangan',);
+    }
+    public function pembimbingsekolah()
+    {
+        return $this->belongsTo('App\Models\pembimbingsekolah');
     }
 
     // public function getPhotoAttribute($value){

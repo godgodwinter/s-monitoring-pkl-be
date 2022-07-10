@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthPembimbingLapangan;
+use App\Http\Controllers\pembimbinglapangan\pembimbingLapanganSettingsController;
 use App\Http\Controllers\siswa\siswaAbsensiController;
 use App\Http\Controllers\siswa\siswaPendaftaranPKLController;
 use App\Http\Controllers\siswa\siswaProfileController;
@@ -16,6 +17,6 @@ Route::middleware('api')->group(function () {
     Route::post('/pembimbinglapangan/auth/me', [AuthPembimbingLapangan::class, 'me']);
 
 
-    Route::get('/pembimbinglapangan/settings/get', [siswaSettingsController::class, 'index']);
-    Route::get('/pembimbinglapangan/profile/get', [siswaProfileController::class, 'index']);
+    // Route::get('/pSembimbinglapangan/settings/get', [pembimbingLapanganSettingsController::class, 'index']);
+    Route::get('/pembimbinglapangan/profile/get', [pembimbingLapanganSettingsController::class, 'index']);
 });
