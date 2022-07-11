@@ -11,6 +11,7 @@ use App\Models\Siswa;
 use App\Models\tempatpkl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class pembimbingLapanganSettingsController extends Controller
 {
@@ -49,6 +50,25 @@ class pembimbingLapanganSettingsController extends Controller
         ], 200);
     }
 
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:3',
+        ]);
+
+        // update password
+        $this->guard()->user()->update([
+            'password' =>  Hash::make($request->password),
+        ]);
+
+        return response()->json([
+            'success'    => true,
+            'data'    => 'Update  berhasil',
+            // 'dataAuth'    => $dataAuth,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
     public function guard()
     {
         return Auth::guard('pembimbinglapangan');
