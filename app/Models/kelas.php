@@ -25,7 +25,7 @@ class kelas extends Model
         return $this->belongsTo('App\Models\tapel');
     }
 
-    public function jurusan()
+    public function jurusan_table()
     {
         return $this->belongsTo('App\Models\jurusan', 'jurusan', 'id');
     }

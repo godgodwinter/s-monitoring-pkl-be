@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
+use App\Models\jurusan;
 use App\Models\kelas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,11 @@ class adminKelasController extends Controller
             ->orderBy('jurusan', 'asc')
             ->orderBy('suffix', 'asc')
             ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->with('jurusan_table')
             ->get();
+        foreach ($items as $item) {
+            $item->jurusan_nama = $item->jurusan_table ? $item->jurusan_table->nama : null;
+        }
         return response()->json([
             'success'    => true,
             'data'    => $items,
@@ -27,16 +32,6 @@ class adminKelasController extends Controller
 
     public function store(Request $request)
     {
-        //set validation
-        $validator = Validator::make($request->all(), [
-            'tingkatan'   => 'required',
-            'jurusan'   => 'required',
-            'suffix'   => 'required',
-        ]);
-        //response error validation
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
 
         DB::table('kelas')->insert(
             array(
@@ -57,9 +52,12 @@ class adminKelasController extends Controller
 
     public function edit(kelas $item)
     {
+        $kelas = kelas::with('jurusan_table')
+            ->where('id', $item->id)
+            ->first();
         return response()->json([
             'success'    => true,
-            'data'    => $item,
+            'data'    => $kelas,
         ], 200);
     }
     public function update(kelas $item, Request $request)
