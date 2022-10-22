@@ -15,7 +15,7 @@ class kelas extends Model
 
     protected $fillable = [
         'tingkatan',
-        'jurusan',
+        'jurusan', //jurusan_id
         'suffix',
         'tapel_id',
     ];
@@ -23,5 +23,10 @@ class kelas extends Model
     public function tapel()
     {
         return $this->belongsTo('App\Models\tapel');
+    }
+
+    public function jurusan()
+    {
+        return $this->belongsTo('App\Models\jurusan', 'jurusan', 'id');
     }
 }

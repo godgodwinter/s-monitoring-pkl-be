@@ -17,6 +17,9 @@ class adminJurusanController extends Controller
             ->with('guru')
             ->where('tapel_id', Fungsi::app_tapel_aktif())
             ->get();
+        foreach ($items as $it) {
+            $it->kepalajurusan_nama = $it->guru ? $it->guru->nama : null;
+        }
         return response()->json([
             'success'    => true,
             'data'    => $items,
