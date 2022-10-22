@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\adminJurusanController;
 use App\Http\Controllers\admin\adminKelasController;
 use App\Http\Controllers\admin\adminPembimbingLapanganController;
 use App\Http\Controllers\admin\adminPembimbingSekolahController;
@@ -33,6 +34,13 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin/tapel/{item}', [adminTapelController::class, 'edit'])->name('admin.tapel.edit');
     Route::put('/admin/tapel/{item}', [adminTapelController::class, 'update'])->name('admin.tapel.update');
     Route::delete('/admin/tapel/{item}', [adminTapelController::class, 'destroy'])->name('admin.tapel.destroy');
+
+    Route::get('/admin/jurusan', [adminJurusanController::class, 'index'])->name('admin.jurusan');
+    Route::post('/admin/jurusan', [adminJurusanController::class, 'store'])->name('admin.jurusan.store');
+    Route::get('/admin/jurusan/{item}', [adminJurusanController::class, 'edit'])->name('admin.jurusan.edit');
+    Route::put('/admin/jurusan/{item}', [adminJurusanController::class, 'update'])->name('admin.jurusan.update');
+    Route::delete('/admin/jurusan/{item}', [adminJurusanController::class, 'destroy'])->name('admin.jurusan.destroy');
+
 
     Route::get('/admin/kelas', [adminKelasController::class, 'index'])->name('admin.kelas');
     Route::post('/admin/kelas/store', [adminKelasController::class, 'store'])->name('admin.kelas.store');

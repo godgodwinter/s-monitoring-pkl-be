@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pembimbingsekolah', function (Blueprint $table) {
+        Schema::create('pembimbingsekolah', function (Blueprint $table) { //guru
             $table->bigIncrements('id');
             $table->string('nama');
             $table->string('email')->nullable();
