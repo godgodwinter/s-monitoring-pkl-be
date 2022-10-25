@@ -14,7 +14,12 @@ class adminTempatPklController extends Controller
     public function index(Request $request)
     {
         $items = tempatpkl::where('tapel_id', Fungsi::app_tapel_aktif())
+            ->with('pembimbinglapangan')
             ->get();
+        foreach ($items as $item) {
+            $item->pembimbinglapangan_nama = null;
+            $item->pembimbinglapangan_nama = $item->pembimbinglapangan ? $item->pembimbinglapangan->nama : null;
+        }
         return response()->json([
             'success'    => true,
             'data'    => $items,
@@ -56,9 +61,12 @@ class adminTempatPklController extends Controller
 
     public function edit(tempatpkl $item)
     {
+        $tempatpkl = tempatpkl::with('pembimbinglapangan',)
+            ->where('id', $item->id)
+            ->first();
         return response()->json([
             'success'    => true,
-            'data'    => $item,
+            'data'    => $tempatpkl,
         ], 200);
     }
     public function update(tempatpkl $item, Request $request)

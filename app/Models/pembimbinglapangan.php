@@ -43,6 +43,10 @@ class pembimbinglapangan extends Authenticatable implements JWTSubject
         'status_data', //Aktif/Nonaktif Sembunyikan atau data sudah tidak digunakan pada tapel saat ini
     ];
 
+    public function tempatpkl()
+    {
+        return $this->belongsTo('App\Models\tempatpkl', 'id', 'penanggungjawab');
+    }
 
     // public function language()
     // {

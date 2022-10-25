@@ -30,4 +30,8 @@ class tempatpkl extends Model
     {
         return $this->belongsTo('App\Models\tapel');
     }
+    public function pembimbinglapangan()
+    {
+        return $this->belongsTo('App\Models\pembimbinglapangan', 'penanggungjawab', 'id');
+    }
 }

@@ -15,7 +15,12 @@ class adminPembimbingLapanganController extends Controller
     public function index(Request $request)
     {
         $items = pembimbinglapangan::orderBy('nama', 'asc')
+            ->with('tempatpkl')
             ->get();
+        foreach ($items as $item) {
+            $item->tempatpkl_nama = $item->tempatpkl ? $item->tempatpkl->nama : null;
+        }
+
         return response()->json([
             'success'    => true,
             'data'    => $items,
