@@ -6,6 +6,7 @@ use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\kelas;
 use App\Models\kelasdetail;
+use App\Models\pembimbinglapangan;
 use App\Models\pendaftaranprakerin;
 use App\Models\pendaftaranprakerin_proses;
 use App\Models\pendaftaranprakerin_prosesdetail;
@@ -25,7 +26,7 @@ class adminSiswaController extends Controller
             ->whereHas('kelasdetail', function ($query) {
                 $query->whereHas('kelas', function ($query) {
                     $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
-                });
+                })->with('jurusan_table');
             })
             ->get();
 
@@ -33,6 +34,9 @@ class adminSiswaController extends Controller
         //     global $request;
         //     $query->where('siswa.nama', 'like', "%" . $request->cari . "%");
         // })
+        foreach ($items as $item) {
+            $item->kelas_nama = $item->kelasdetail ? $item->kelasdetail->kelas->tingkatan . " " . $item->kelasdetail->kelas->jurusan_table->nama . " " . $item->kelasdetail->kelas->suffix : null;
+        }
 
         return response()->json([
             'success'    => true,
@@ -105,6 +109,8 @@ class adminSiswaController extends Controller
     public function edit(siswa $item)
     {
         $item = Siswa::with('kelasdetail')->find($item->id);
+        $item->jurusan_nama = $item->kelasdetail ? $item->kelasdetail->kelas->jurusan_table->nama : null;
+        $item->kelas_nama = $item->kelasdetail ? $item->kelasdetail->kelas->tingkatan . " " . $item->kelasdetail->kelas->jurusan_table->nama . " " . $item->kelasdetail->kelas->suffix : null;
         return response()->json([
             'success'    => true,
             'data'    => $item,
@@ -292,7 +298,7 @@ class adminSiswaController extends Controller
 
         // data siswa
         $siswa = Siswa::where('id', $item->id)->first();
-        $siswa['kelas_nama'] = "{$siswa->kelasdetail->kelas->tingkatan} {$siswa->kelasdetail->kelas->jurusan} {$siswa->kelasdetail->kelas->suffix}";
+        $siswa['kelas_nama'] = "{$siswa->kelasdetail->kelas->tingkatan} {$siswa->kelasdetail->kelas->jurusan_table->nama} {$siswa->kelasdetail->kelas->suffix}";
 
         // tempat pkl
         $getPendaftaranProsesDetail = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')->where('siswa_id', $this->siswa_id)
@@ -315,6 +321,9 @@ class adminSiswaController extends Controller
             // $anggota[] = $getPendaftaranProses ? $getPendaftaranProses->pendaftaranprakerin_proses->siswa : null;
         }
 
+        if ($tempatpkl->penanggungjawab) {
+            $pembimbinglapangan = pembimbinglapangan::where('id', $tempatpkl->penanggungjawab)->first();
+        }
         $item = Siswa::with('kelasdetail')->find($item->id);
         return response()->json([
             'success'    => true,

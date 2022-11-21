@@ -24,6 +24,8 @@ class kelasdetail extends Model
     }
     public function kelas()
     {
-        return $this->belongsTo(kelas::class, 'kelas_id', 'id');
+        $items=$this->belongsTo(kelas::class, 'kelas_id', 'id')->with('jurusan_table');
+        // $items->kelas_nama='aa';
+        return $items;
     }
 }

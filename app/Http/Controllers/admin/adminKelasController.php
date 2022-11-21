@@ -55,6 +55,7 @@ class adminKelasController extends Controller
         $kelas = kelas::with('jurusan_table')
             ->where('id', $item->id)
             ->first();
+            $kelas->jurusan_nama = $item->jurusan_table ? $item->jurusan_table->nama : null;
         return response()->json([
             'success'    => true,
             'data'    => $kelas,
