@@ -127,6 +127,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin/pendaftaranpkl/list/prosespemberkasan', [adminPendaftaranPrakerinListController::class, 'getProsesPemberkasan']);
     Route::get('/admin/pendaftaranpkl/list/prosespersetujuan', [adminPendaftaranPrakerinListController::class, 'getProsesPersetujuan']);
     Route::get('/admin/pendaftaranpkl/list/disetujui', [adminPendaftaranPrakerinListController::class, 'getDisetujui']);
+    Route::post('/admin/pendaftaranpkl/list/disetujui/addpembimbingsekolah/{pendaftaranprakerin_proses}', [adminPendaftaranPrakerinListController::class, 'addpembimbingsekolah']);
     Route::get('/admin/pendaftaranpkl/list/ditolak', [adminPendaftaranPrakerinListController::class, 'getDitolak']);
 
     Route::get('/admin/pendaftaranpkl/getdatatempatpkl', [adminPendaftaranPrakerinListController::class, 'getDataTempatPKL']);

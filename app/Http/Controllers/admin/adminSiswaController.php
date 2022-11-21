@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\kelas;
 use App\Models\kelasdetail;
 use App\Models\pembimbinglapangan;
+use App\Models\pembimbingsekolah;
 use App\Models\pendaftaranprakerin;
 use App\Models\pendaftaranprakerin_proses;
 use App\Models\pendaftaranprakerin_prosesdetail;
@@ -294,6 +295,7 @@ class adminSiswaController extends Controller
         $pembimbinglapangan = [];
         $pembimbingsekolah = [];
         $anggota = [];
+        $kepalaprodi = [];
         $status = null;
 
         // data siswa
@@ -321,9 +323,14 @@ class adminSiswaController extends Controller
             // $anggota[] = $getPendaftaranProses ? $getPendaftaranProses->pendaftaranprakerin_proses->siswa : null;
         }
 
-        if ($tempatpkl->penanggungjawab) {
+        if ($tempatpkl) {
             $pembimbinglapangan = pembimbinglapangan::where('id', $tempatpkl->penanggungjawab)->first();
+            $getPembimbingSekolah = pendaftaranprakerin_proses::where('id', $getPendaftaranProses_id)->first();
+            $pembimbingsekolah = $getPembimbingSekolah ? pembimbingsekolah::where('id', $getPembimbingSekolah->pembimbingsekolah_id)->first() : null;
+            // $pembimbingsekolah = $getPembimbingSekolah->pembimbingsekolah_id;
         }
+        $kepalajurusan = pembimbingsekolah::where('id', $siswa->kelasdetail->kelas->jurusan_table->kepalajurusan_id)->first();
+        // kelas_id
         $item = Siswa::with('kelasdetail')->find($item->id);
         return response()->json([
             'success'    => true,
@@ -334,6 +341,7 @@ class adminSiswaController extends Controller
                 'anggota' => $anggota,
                 'pembimbinglapangan' => $pembimbinglapangan,
                 'pembimbingsekolah' => $pembimbingsekolah,
+                'kepalajurusan' => $kepalajurusan,
             ]),
         ], 200);
     }

@@ -110,13 +110,42 @@ class adminPendaftaranPrakerinListController extends Controller
             'data'    => $items,
         ], 200);
     }
+    // protected $siswa_id;
+    public function addpembimbingsekolah(pendaftaranprakerin_proses $pendaftaranprakerin_proses, Request $request)
+    {
+        $pembimbingsekolah_id = $request->pembimbingsekolah_id;
+        $items = '';
 
+        pendaftaranprakerin_proses::where('id', $pendaftaranprakerin_proses->id)
+            ->update([
+                'pembimbingsekolah_id'     =>   $request->pembimbingsekolah_id,
+                'updated_at' => date("Y-m-d H:i:s")
+            ]);
+
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
     public function getDisetujui(Request $request)
     {
         $items = pendaftaranprakerin::with('siswa')->where('status', 'Disetujui')
             ->orderBy('created_at', 'desc')
             ->where('tapel_id', Fungsi::app_tapel_aktif())
             ->get();
+        foreach ($items as $item) {
+            $this->siswa_id = $item->siswa_id;
+            // $getpendaftaranprakerin_prosesdetailId = pendaftaranprakerin_prosesdetail::where('siswa_id', $item->siswa_id)->first();
+            // $getpendaftaranprakerin_prosesId = pendaftaranprakerin_proses::first();
+            $getpendaftaranprakerin_prosesId = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')
+                ->with('pembimbingsekolah')
+                ->whereHas('pendaftaranprakerin_prosesdetail', function ($query) {
+                    $query->where('siswa_id', $this->siswa_id);
+                })
+                ->first();
+            $item->pembimbingsekolah = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->pembimbingsekolah : null;
+            $item->pembimbingsekolah_nama = $item->pembimbingsekolah ? $item->pembimbingsekolah->nama : null;
+        }
         return response()->json([
             'success'    => true,
             'data'    => $items,
