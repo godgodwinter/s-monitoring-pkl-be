@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\pembimbinglapangan;
+use App\Models\pembimbingsekolah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -65,9 +66,10 @@ class adminPembimbingLapanganController extends Controller
 
     public function edit(pembimbinglapangan $item)
     {
+        $items = pembimbinglapangan::with('tempatpkl')->where('id', $item->id)->first();
         return response()->json([
             'success'    => true,
-            'data'    => $item,
+            'data'    => $items,
         ], 200);
     }
     public function update(pembimbinglapangan $item, Request $request)

@@ -30,7 +30,7 @@ class pendaftaranprakerin_proses extends Model
     }
     public function tempatpkl()
     {
-        return $this->belongsTo('App\Models\tempatpkl');
+        return $this->belongsTo('App\Models\tempatpkl')->with('pembimbinglapangan');
     }
 
     public function tapel()

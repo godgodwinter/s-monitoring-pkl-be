@@ -44,6 +44,10 @@ class pembimbingsekolah extends Authenticatable implements JWTSubject
     ];
 
 
+    public function jurusan()
+    {
+        return $this->belongsTo('App\Models\jurusan', 'id', 'kepalajurusan_id');
+    }
     // public function language()
     // {
     //     return $this->hasMany(language::class,'parrent_id','id');

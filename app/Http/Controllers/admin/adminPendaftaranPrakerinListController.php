@@ -145,6 +145,7 @@ class adminPendaftaranPrakerinListController extends Controller
                 ->first();
             $item->pembimbingsekolah = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->pembimbingsekolah : null;
             $item->pembimbingsekolah_nama = $item->pembimbingsekolah ? $item->pembimbingsekolah->nama : null;
+            $item->pendaftaranprakerin_proses_id = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->id : null;
         }
         return response()->json([
             'success'    => true,

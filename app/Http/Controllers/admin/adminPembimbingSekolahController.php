@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\pembimbingsekolah;
+use App\Models\pendaftaranprakerin_proses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -60,9 +61,15 @@ class adminPembimbingSekolahController extends Controller
 
     public function edit(pembimbingsekolah $item)
     {
+
+        $items = pembimbingsekolah::with('jurusan')->where('id', $item->id)->first();
+        // $items->tempatpkl = null;
+        $getTempatPkl = pendaftaranprakerin_proses::with('tempatpkl')->where('pembimbingsekolah_id', $item->id)->get();
+        $items->tempatpkl = $getTempatPkl;
+
         return response()->json([
             'success'    => true,
-            'data'    => $item,
+            'data'    => $items,
         ], 200);
     }
     public function update(pembimbingsekolah $item, Request $request)
