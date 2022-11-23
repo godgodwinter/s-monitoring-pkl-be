@@ -14,6 +14,7 @@ Route::middleware('api')->group(function () {
     Route::post('/pembimbingsekolah/auth/logout', [AuthPembimbingSekolah::class, 'logout']);
     Route::post('/pembimbingsekolah/auth/refresh', [AuthPembimbingSekolah::class, 'refresh']);
     Route::post('/pembimbingsekolah/auth/me', [AuthPembimbingSekolah::class, 'me']);
+    Route::post("pembimbingsekolah/auth/profile", [AuthPembimbingSekolah::class, 'refresh']);
 
 
     Route::get('/pembimbingsekolah/settings/get', [siswaSettingsController::class, 'index']);

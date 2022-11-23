@@ -106,9 +106,9 @@ class AuthPembimbingSekolah extends Controller
      */
     public function refresh()
     {
-        $dataRefresh = $this->respondWithToken($this->guard()->refresh());
+        return $this->respondWithToken($this->guard()->refresh());
 
-        return $dataRefresh;
+        // return $dataRefresh;
     }
     /**
      * Get the token array structure.
@@ -119,12 +119,26 @@ class AuthPembimbingSekolah extends Controller
      */
     protected function respondWithToken($token)
     {
+
         return response()->json([
-            'success' => true,
-            'data' => (object)['token' => $token],
+            'data' => (object)[
+                'token' => $token,
+                'me' => $this->guard()->user(),
+                'newToken' => $token,
+                'status' => true,
+            ],
+            'message' => "Success",
+            'code' => 200,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 1  //auto logout after 1 hour (default)
-        ], 200);
+            'expires_in' => $this->guard()->factory()->getTTL() * 1,  //auto logout after 1 hour (default)
+        ]);
+        // return response()->json([
+        //     'token' => $token,
+        //     'code' => 200,
+        //     'token_type' => 'bearer',
+        //     'expires_in' => $this->guard()->factory()->getTTL() * 1,  //auto logout after 1 hour (default)
+        //     // 'tapel_aktif' => Fungsi::app_tapel_aktif(),
+        // ]);
     }
     /**
      * Get the guard to be used during authentication.

@@ -4,6 +4,9 @@ namespace App\Http\Controllers\admin;
 
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
+use App\Models\pembimbingsekolah;
+use App\Models\Siswa;
+use App\Models\tempatpkl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,6 +23,9 @@ class adminSettingsController extends Controller
             'login_siswa' => Fungsi::login_siswa(),
             'login_pembimbingsekolah' => Fungsi::login_pembimbingsekolah(),
             'login_pembimbinglapangan' => Fungsi::login_pembimbinglapangan(),
+            'jml_siswa' => Siswa::count(),
+            'jml_guru' => pembimbingsekolah::count(),
+            'jml_tempatpkl' => tempatpkl::where('tapel_id', Fungsi::app_tapel_aktif())->count(),
         ];
         return response()->json([
             'success'    => true,
