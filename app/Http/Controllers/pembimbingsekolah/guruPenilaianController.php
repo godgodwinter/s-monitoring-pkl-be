@@ -5,7 +5,7 @@ namespace App\Http\Controllers\pembimbingsekolah;
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\jurusan;
-use App\Http\Controllers\pembimbingsekolah\guruController;
+use App\Http\Controllers\pembimbingsekolah\kepalajurusanController;
 use App\Models\penilaian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
