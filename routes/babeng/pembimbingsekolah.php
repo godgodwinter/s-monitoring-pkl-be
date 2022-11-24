@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\AdminPenilaianController;
 use App\Http\Controllers\AuthPembimbingSekolah;
+use App\Http\Controllers\pembimbingsekolah\guruDatakuController;
 use App\Http\Controllers\pembimbingsekolah\guruPenilaianController;
 use App\Http\Controllers\pembimbingsekolah\guruPenilaianGuruController;
 use App\Http\Controllers\pembimbingsekolah\guruPenilaianPembimbingLapanganController;
@@ -25,6 +26,13 @@ Route::middleware('api')->group(function () {
     Route::get('/pembimbingsekolah/profile/get', [siswaProfileController::class, 'index']);
 
 
+    // MENU GURU
+    Route::get('/guru/dataku/tempatpkl', [guruDatakuController::class, 'tempatpkl']);
+    Route::get('/guru/dataku/siswa', [guruDatakuController::class, 'siswa']);
+    Route::get('/guru/dataku/penilaian', [guruDatakuController::class, 'index']);
+
+
+    // MENU KEPALA JURUSAN
     Route::get('/guru/penilaian', [guruPenilaianController::class, 'index']);
     Route::post('/guru/penilaian', [guruPenilaianController::class, 'store']);
     Route::get('/guru/penilaian/{item}', [guruPenilaianController::class, 'edit']);
