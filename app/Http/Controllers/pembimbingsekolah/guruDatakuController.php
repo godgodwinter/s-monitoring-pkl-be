@@ -14,10 +14,11 @@ class guruDatakuController extends guruController
     public function tempatpkl(Request $request)
     {
         // $this->periksaAuth();
-        $getProsesPkl = pendaftaranprakerin_proses::with('tempatpkl')->where('pembimbingsekolah_id', $this->me->id)->get();
+        $getProsesPkl = pendaftaranprakerin_proses::with('tempatpkl')->with('pendaftaranprakerin_prosesdetail')->where('pembimbingsekolah_id', $this->me->id)->get();
         $items = collect([]);
         foreach ($getProsesPkl as $proses) {
             if ($proses->tempatpkl) {
+                $proses->tempatpkl->jml_siswa = count($proses->pendaftaranprakerin_prosesdetail);
                 $items[] = $proses->tempatpkl;
             }
         }
