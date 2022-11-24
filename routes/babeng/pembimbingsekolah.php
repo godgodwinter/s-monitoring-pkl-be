@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\admin\AdminPenilaianController;
 use App\Http\Controllers\AuthPembimbingSekolah;
+use App\Http\Controllers\pembimbingsekolah\guruPenilaianController;
 use App\Http\Controllers\siswa\siswaAbsensiController;
 use App\Http\Controllers\siswa\siswaPendaftaranPKLController;
 use App\Http\Controllers\siswa\siswaProfileController;
@@ -19,4 +21,11 @@ Route::middleware('api')->group(function () {
 
     Route::get('/pembimbingsekolah/settings/get', [siswaSettingsController::class, 'index']);
     Route::get('/pembimbingsekolah/profile/get', [siswaProfileController::class, 'index']);
+
+
+    Route::get('/guru/penilaian', [guruPenilaianController::class, 'index']);
+    Route::post('/guru/penilaian', [guruPenilaianController::class, 'store']);
+    Route::get('/guru/penilaian/{item}', [guruPenilaianController::class, 'edit']);
+    Route::put('/guru/penilaian/{item}', [guruPenilaianController::class, 'update']);
+    Route::delete('/guru/penilaian/{item}', [guruPenilaianController::class, 'destroy']);
 });

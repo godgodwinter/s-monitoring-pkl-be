@@ -18,7 +18,6 @@ return new class extends Migration
             $table->bigInteger('penilaian_id')->nullable();
             $table->string('nama')->nullable();
             $table->string('status')->nullable()->default('Aktif');
-            $table->bigInteger('jurusan_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

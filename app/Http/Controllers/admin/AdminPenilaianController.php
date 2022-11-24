@@ -36,6 +36,7 @@ class AdminPenilaianController extends Controller
                 'absensi'     =>   $request->absensi,
                 'jurnal'     =>   $request->jurnal,
                 'tapel_id'     =>   Fungsi::app_tapel_aktif(),
+                'jurusan_id'     =>   $request->jurusan_id,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s")
             )
@@ -75,6 +76,7 @@ class AdminPenilaianController extends Controller
                 'penilaian_pembimbinglapangan'     =>   $request->penilaian_pembimbinglapangan,
                 'absensi'     =>   $request->absensi,
                 'jurnal'     =>   $request->jurnal,
+                'jurusan_id'     =>   $request->jurusan_id,
                 'updated_at' => date("Y-m-d H:i:s")
             ]);
 

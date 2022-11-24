@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('jurnal')->nullable()->default(0);
             $table->bigInteger('tapel_id')->nullable();
             $table->string('status')->nullable()->default('Aktif');
+            $table->bigInteger('jurusan_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

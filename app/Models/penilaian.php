@@ -20,6 +20,7 @@ class penilaian extends Model
         'jurnal',
         'tapel_id',
         'status',
+        'jurusan_id',
     ];
 
     public function guru()

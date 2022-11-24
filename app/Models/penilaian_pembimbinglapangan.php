@@ -17,7 +17,6 @@ class penilaian_pembimbinglapangan extends Model
         'penilaian_id',
         'nama',
         'status',
-        'jurusan_id',
     ];
 
     public function penilaian()

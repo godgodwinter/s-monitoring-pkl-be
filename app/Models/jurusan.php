@@ -22,4 +22,8 @@ class jurusan extends Model
     {
         return $this->belongsTo('App\Models\pembimbingsekolah', 'kepalajurusan_id', 'id');
     }
+    public function kelas()
+    {
+        return $this->hasMany('App\Models\kelas', 'jurusan', 'id');
+    }
 }

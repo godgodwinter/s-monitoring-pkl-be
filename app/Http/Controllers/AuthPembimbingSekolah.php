@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Fungsi;
+use App\Models\jurusan;
 use App\Models\pembimbingsekolah;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
@@ -95,7 +97,7 @@ class AuthPembimbingSekolah extends Controller
      */
     public function me()
     {
-        return response()->json($this->guard()->pembimbingsekolah());
+        return $this->respondWithToken($this->guard()->refresh());
     }
 
 
@@ -119,13 +121,27 @@ class AuthPembimbingSekolah extends Controller
      */
     protected function respondWithToken($token)
     {
-
+        $periksaKepalajurusan = false;
+        $getJurusan = [];
+        $me = $this->guard()->user();
+        $periksa = jurusan::where('kepalajurusan_id', $me->id)
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->count();
+        if ($periksa > 0) {
+            $periksaKepalajurusan = true;
+            $getJurusan = jurusan::where('kepalajurusan_id', $me->id)
+                ->where('tapel_id', Fungsi::app_tapel_aktif())
+                ->with('kelas')
+                ->first();
+        }
         return response()->json([
             'data' => (object)[
                 'token' => $token,
                 'me' => $this->guard()->user(),
                 'newToken' => $token,
                 'status' => true,
+                'kepalajurusan' => $periksaKepalajurusan,
+                'jurusan' => $getJurusan,
             ],
             'message' => "Success",
             'code' => 200,

@@ -17,7 +17,6 @@ class penilaian_guru extends Model
         'penilaian_id',
         'nama',
         'status',
-        'jurusan_id',
     ];
 
     public function penilaian()
