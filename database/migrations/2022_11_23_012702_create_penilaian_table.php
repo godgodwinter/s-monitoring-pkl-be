@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('penilaian', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('penilaian_guru')->default(0); //1-100 //berapa persen
-            $table->integer('penilaian_pembimbing_lapangan')->default(0); //1-100 //berapa persen
-            $table->integer('absensi')->default(0);
-            $table->bigInteger('tapel_id');
+            $table->integer('penilaian_guru')->nullable()->default(0); //1-100 //berapa persen
+            $table->integer('penilaian_pembimbinglapangan')->nullable()->default(0); //1-100 //berapa persen
+            $table->integer('absensi')->nullable()->default(0);
+            $table->integer('jurnal')->nullable()->default(0);
+            $table->bigInteger('tapel_id')->nullable();
             $table->string('status')->nullable()->default('Aktif');
             $table->softDeletes();
             $table->timestamps();

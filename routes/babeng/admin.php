@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\adminPembimbingSekolahController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinDetailController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinListController;
+use App\Http\Controllers\admin\AdminPenilaianController;
 use App\Http\Controllers\admin\adminSettingsController;
 use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
@@ -139,4 +140,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin/pendaftaranpkl/list/subsidebardata', [adminPendaftaranPrakerinListController::class, 'subsidebardata'])->name('admin.pendaftaranprakerin.list.subsidebardata');
 
     Route::get('/admin/pendaftaranpkl/list/getpilihanlankah2', [adminPendaftaranPrakerinListController::class, 'getpilihanlankah2'])->name('admin.pendaftaranprakerin.list.getpilihanlankah2');
+
+
+    Route::get('/admin/penilaian', [AdminPenilaianController::class, 'index']);
+    Route::post('/admin/penilaian', [AdminPenilaianController::class, 'store']);
+    Route::get('/admin/penilaian/{item}', [AdminPenilaianController::class, 'edit']);
+    Route::put('/admin/penilaian/{item}', [AdminPenilaianController::class, 'update']);
+    Route::delete('/admin/penilaian/{item}', [AdminPenilaianController::class, 'destroy']);
 });

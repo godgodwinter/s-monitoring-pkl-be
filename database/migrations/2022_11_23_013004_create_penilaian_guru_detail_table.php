@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('penilaian_guru_detail', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('siswa_id');
-            $table->bigInteger('penilaian_guru_id');
+            $table->bigInteger('siswa_id')->nullable();
+            $table->bigInteger('penilaian_guru_id')->nullable();
             $table->bigInteger('nilai')->nullable();
             $table->softDeletes();
             $table->timestamps();
