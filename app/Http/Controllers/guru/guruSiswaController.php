@@ -14,6 +14,8 @@ use App\Models\penilaian_absensi_dan_jurnal;
 use App\Models\penilaian_guru;
 use App\Models\penilaian_guru_detail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class guruSiswaController extends Controller
 {
@@ -88,7 +90,8 @@ class guruSiswaController extends Controller
             $tempData->id = $n->id;
             $tempData->penilaian_id = $n->id;
             $tempData->penilaian_nama = $n->nama;
-            $tempData->nilai = null;
+            $getNilai = penilaian_guru_detail::where('penilaian_guru_id', $n->id)->where('siswa_id', $item->id)->first();
+            $tempData->nilai = $getNilai ? $getNilai->nilai : null;
             $penilaian_guru[] = $tempData;
         }
 
@@ -106,6 +109,132 @@ class guruSiswaController extends Controller
                 'pembimbingsekolah' => $pembimbingsekolah,
                 'kepalajurusan' => $kepalajurusan,
             ]),
+        ], 200);
+    }
+
+    public function store_nilai_absensi(Siswa $item, Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'nilai'   => 'required|numeric',
+        ]);
+        //response error validation
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $periksa = penilaian_absensi_dan_jurnal::where('prefix', 'absensi')
+            ->where('siswa_id', $item->id)
+            ->where('tapel_id',  Fungsi::app_tapel_aktif())
+            ->count();
+        if ($periksa) {
+
+            penilaian_absensi_dan_jurnal::where('prefix', 'absensi')
+                ->where('siswa_id', $item->id)
+                ->where('tapel_id',  Fungsi::app_tapel_aktif())
+                ->update([
+                    'nilai'     =>   $request->nilai,
+                    'updated_at' => date("Y-m-d H:i:s")
+                ]);
+        } else {
+            DB::table('penilaian_absensi_dan_jurnal')->insert(
+                array(
+                    'nilai'     =>   $request->nilai,
+                    'siswa_id'     =>   $item->id,
+                    'prefix' => 'absensi',
+                    'tapel_id'     =>   Fungsi::app_tapel_aktif(),
+                    'created_at' => date("Y-m-d H:i:s"),
+                    'updated_at' => date("Y-m-d H:i:s")
+                )
+            );
+        }
+
+        return response()->json([
+            'success'    => true,
+            'message'    => 'Data berhasil ditambahkan!',
+        ], 200);
+    }
+
+
+    public function store_nilai_jurnal(Siswa $item, Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'nilai'   => 'required|numeric',
+        ]);
+        //response error validation
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $periksa = penilaian_absensi_dan_jurnal::where('prefix', 'jurnal')
+            ->where('siswa_id', $item->id)
+            ->where('tapel_id',  Fungsi::app_tapel_aktif())
+            ->count();
+        if ($periksa) {
+
+            penilaian_absensi_dan_jurnal::where('prefix', 'jurnal')
+                ->where('siswa_id', $item->id)
+                ->where('tapel_id',  Fungsi::app_tapel_aktif())
+                ->update([
+                    'nilai'     =>   $request->nilai,
+                    'updated_at' => date("Y-m-d H:i:s")
+                ]);
+        } else {
+            DB::table('penilaian_absensi_dan_jurnal')->insert(
+                array(
+                    'nilai'     =>   $request->nilai,
+                    'siswa_id'     =>   $item->id,
+                    'prefix' => 'jurnal',
+                    'tapel_id'     =>   Fungsi::app_tapel_aktif(),
+                    'created_at' => date("Y-m-d H:i:s"),
+                    'updated_at' => date("Y-m-d H:i:s")
+                )
+            );
+        }
+
+        return response()->json([
+            'success'    => true,
+            'message'    => 'Data berhasil ditambahkan!',
+        ], 200);
+    }
+
+
+    public function store_nilai_penilaian_guru(Siswa $item, Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'nilai'   => 'required|numeric',
+            'penilaian_guru_id'   => 'required|numeric',
+        ]);
+        //response error validation
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+        $periksa = penilaian_guru_detail::where('siswa_id', $item->id)
+            ->where('penilaian_guru_id', $request->penilaian_guru_id)
+            ->count();
+        if ($periksa) {
+
+            penilaian_guru_detail::where('siswa_id', $item->id)
+                ->where('penilaian_guru_id', $request->penilaian_guru_id)
+                ->update([
+                    'nilai'     =>   $request->nilai,
+                    'updated_at' => date("Y-m-d H:i:s")
+                ]);
+        } else {
+            DB::table('penilaian_guru_detail')->insert(
+                array(
+                    'nilai'     =>   $request->nilai,
+                    'penilaian_guru_id'     =>   $request->penilaian_guru_id,
+                    'siswa_id'     =>   $item->id,
+                    'created_at' => date("Y-m-d H:i:s"),
+                    'updated_at' => date("Y-m-d H:i:s")
+                )
+            );
+        }
+
+        return response()->json([
+            'success'    => true,
+            'message'    => 'Data berhasil ditambahkan!',
         ], 200);
     }
 }

@@ -100,4 +100,7 @@ Route::middleware('api')->group(function () {
 
 
     Route::get('/guru/penilai/siswadetail/{item}', [guruSiswaController::class, 'siswadetail']);
+    Route::post('/guru/penilai/siswadetail/{item}/absensi', [guruSiswaController::class, 'store_nilai_absensi']);
+    Route::post('/guru/penilai/siswadetail/{item}/jurnal', [guruSiswaController::class, 'store_nilai_jurnal']);
+    Route::post('/guru/penilai/siswadetail/{item}/penilaian_guru', [guruSiswaController::class, 'store_nilai_penilaian_guru']);
 });
