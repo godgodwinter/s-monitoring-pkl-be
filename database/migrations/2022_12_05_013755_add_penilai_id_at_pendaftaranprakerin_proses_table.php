@@ -14,8 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('pendaftaranprakerin_proses', function (Blueprint $table) {
-            $table->bigInteger('pembimbinglapangan_id')->nullable();
-            $table->bigInteger('pembimbingsekolah_id')->nullable();
+            $table->bigInteger('penilai_id')->nullable();
         });
     }
 
@@ -27,8 +26,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('pendaftaranprakerin_proses', function ($table) {
-            $table->dropColumn('pembimbinglapangan_id');
-            $table->dropColumn('pembimbingsekolah_id');
+            $table->dropColumn('penilai_id');
         });
     }
 };

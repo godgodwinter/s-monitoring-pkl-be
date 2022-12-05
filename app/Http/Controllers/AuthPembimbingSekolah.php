@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Fungsi;
 use App\Models\jurusan;
 use App\Models\pembimbingsekolah;
+use App\Models\pendaftaranprakerin_proses;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -121,6 +122,7 @@ class AuthPembimbingSekolah extends Controller
      */
     protected function respondWithToken($token)
     {
+        $periksaPenilai = false;
         $periksaKepalajurusan = false;
         $getJurusan = [];
         $me = $this->guard()->user();
@@ -134,6 +136,12 @@ class AuthPembimbingSekolah extends Controller
                 ->with('kelas')
                 ->first();
         }
+        $periksa = pendaftaranprakerin_proses::where('penilai_id', $me->id)
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->count();
+        if ($periksa > 0) {
+            $periksaPenilai = true;
+        }
         return response()->json([
             'data' => (object)[
                 'token' => $token,
@@ -141,6 +149,7 @@ class AuthPembimbingSekolah extends Controller
                 'newToken' => $token,
                 'status' => true,
                 'kepalajurusan' => $periksaKepalajurusan,
+                'penilai' => $periksaPenilai,
                 'jurusan' => $getJurusan,
             ],
             'message' => "Success",
