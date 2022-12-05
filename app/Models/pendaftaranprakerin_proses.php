@@ -22,6 +22,7 @@ class pendaftaranprakerin_proses extends Model
         'tapel_id',
         'pembimbinglapangan_id',
         'pembimbingsekolah_id',
+        'penilai_id',
     ];
 
     public function pendaftaranprakerin_prosesdetail()

@@ -67,4 +67,49 @@ class guruDatakuController extends guruController
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
+
+
+    public function penilai_tempatpkl(Request $request)
+    {
+        // $this->periksaAuth();
+        $getProsesPkl = pendaftaranprakerin_proses::with('tempatpkl')->with('pendaftaranprakerin_prosesdetail')->where('penilai_id', $this->me->id)->get();
+        $items = collect([]);
+        foreach ($getProsesPkl as $proses) {
+            if ($proses->tempatpkl) {
+                $proses->tempatpkl->jml_siswa = count($proses->pendaftaranprakerin_prosesdetail);
+                $items[] = $proses->tempatpkl;
+            }
+        }
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
+    public function penilai_siswa(Request $request)
+    {
+        // $this->periksaAuth();
+        // $items = Siswa::orderBy('id', 'asc')
+        //     // ->where('tapel_id', Fungsi::app_tapel_aktif())
+        //     // ->where('jurusan_id', $this->jurusan->id)
+        //     ->get();
+
+        $getProsesPkl = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->with('tempatpkl')->where('penilai_id', $this->me->id)->get();
+        $items = collect([]);
+
+        foreach ($getProsesPkl as $proses) {
+            foreach ($proses->pendaftaranprakerin_prosesdetail as $detail) {
+                if ($detail->siswa) {
+                    $detail->siswa->tempatpkl_id = $proses->id;
+                    $detail->siswa->tempatpkl_nama = $proses->tempatpkl ? $proses->tempatpkl->nama : null;
+                    $items[] = $detail->siswa;
+                }
+            }
+        }
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
 }

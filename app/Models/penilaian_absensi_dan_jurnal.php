@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class penilaian_pembimbinglapangan_detail extends Model
+class penilaian_absensi_dan_jurnal extends Model
 {
     public $table = "penilaian_absensi_dan_jurnal";
 
