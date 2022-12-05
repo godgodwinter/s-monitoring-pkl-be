@@ -32,6 +32,7 @@ Route::middleware('api')->group(function () {
 
     // MENU GURU
     Route::get('/guru/dataku/tempatpkl', [guruDatakuController::class, 'tempatpkl']);
+    Route::get('/guru/dataku/tempatpkldetail/{item}', [guruDatakuController::class, 'tempatpkl_detail']);
     Route::get('/guru/dataku/siswa', [guruDatakuController::class, 'siswa']);
     Route::get('/guru/dataku/penilaian', [guruDatakuController::class, 'index']);
 
