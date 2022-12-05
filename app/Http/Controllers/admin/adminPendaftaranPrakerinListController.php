@@ -119,6 +119,7 @@ class adminPendaftaranPrakerinListController extends Controller
         pendaftaranprakerin_proses::where('id', $pendaftaranprakerin_proses->id)
             ->update([
                 'pembimbingsekolah_id'     =>   $request->pembimbingsekolah_id,
+                'penilai_id'     =>   $request->penilai_id,
                 'updated_at' => date("Y-m-d H:i:s")
             ]);
 
@@ -139,6 +140,7 @@ class adminPendaftaranPrakerinListController extends Controller
             // $getpendaftaranprakerin_prosesId = pendaftaranprakerin_proses::first();
             $getpendaftaranprakerin_prosesId = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')
                 ->with('pembimbingsekolah')
+                ->with('penilai')
                 ->whereHas('pendaftaranprakerin_prosesdetail', function ($query) {
                     $query->where('siswa_id', $this->siswa_id);
                 })
@@ -146,6 +148,8 @@ class adminPendaftaranPrakerinListController extends Controller
             $item->pembimbingsekolah = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->pembimbingsekolah : null;
             $item->pembimbingsekolah_nama = $item->pembimbingsekolah ? $item->pembimbingsekolah->nama : null;
             $item->pendaftaranprakerin_proses_id = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->id : null;
+            $item->penilai = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->penilai : null;
+            $item->penilai_nama = $item->penilai ? $item->penilai->nama : null;
         }
         return response()->json([
             'success'    => true,

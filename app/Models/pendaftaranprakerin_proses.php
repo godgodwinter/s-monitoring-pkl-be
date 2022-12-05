@@ -46,6 +46,10 @@ class pendaftaranprakerin_proses extends Model
     {
         return $this->belongsTo('App\Models\pembimbingsekolah');
     }
+    public function penilai()
+    {
+        return $this->belongsTo('App\Models\pembimbingsekolah', 'penilai_id', 'id');
+    }
 
     // public function getPhotoAttribute($value){
 
