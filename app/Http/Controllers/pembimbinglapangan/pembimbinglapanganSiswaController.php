@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\guru;
+namespace App\Http\Controllers\pembimbinglapangan;
 
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
@@ -9,21 +9,48 @@ use App\Models\pembimbingsekolah;
 use App\Models\pendaftaranprakerin;
 use App\Models\pendaftaranprakerin_proses;
 use App\Models\pendaftaranprakerin_prosesdetail;
-use App\Models\Siswa;
 use App\Models\penilaian_absensi_dan_jurnal;
 use App\Models\penilaian_guru;
 use App\Models\penilaian_guru_detail;
+use App\Models\penilaian_pembimbinglapangan;
+use App\Models\penilaian_pembimbinglapangan_detail;
+use App\Models\Siswa;
+use App\Models\tempatpkl;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class guruSiswaController extends Controller
+class pembimbinglapanganSiswaController extends Controller
 {
+    public function siswa(Request $request)
+    {
+        $getTempatpkl = tempatpkl::where('penanggungjawab', $this->guard()->user()->id)->first();
+        $getProsesPkl = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->with('tempatpkl')->where('tempatpkl_id', $getTempatpkl->id)->get();
+        $items = collect([]);
+
+        foreach ($getProsesPkl as $proses) {
+            foreach ($proses->pendaftaranprakerin_prosesdetail as $detail) {
+                if ($detail->siswa) {
+                    $detail->siswa->tempatpkl_id = $proses->id;
+                    $detail->siswa->tempatpkl_nama = $proses->tempatpkl ? $proses->tempatpkl->nama : null;
+                    $items[] = $detail->siswa;
+                }
+            }
+        }
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
+
+
     protected $siswa_id;
     protected $tempatpkl_id;
     protected $proses_id;
     protected $jurusan_id;
-    public function siswadetail(siswa $item)
+    public function penilaian_index(siswa $item)
     {
         $this->siswa_id = $item->id;
         $siswa = [];
@@ -71,6 +98,7 @@ class guruSiswaController extends Controller
         $absensi = null;
         $jurnal = null;
         $penilaian_guru = collect([]);
+        $penilaian_pembimbinglapangan = collect([]);
         $this->jurusan_id = $item->kelasdetail ? $item->kelasdetail->kelas->jurusan : null;
 
         $getAbsensi = penilaian_absensi_dan_jurnal::where('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())
@@ -87,6 +115,7 @@ class guruSiswaController extends Controller
             })
             ->where('status', 'Aktif')->get();
         // dd($getPenilaian_guru);
+
         foreach ($getPenilaian_guru as $n) {
             $tempData = (object)[];
             $tempData->id = $n->id;
@@ -97,11 +126,28 @@ class guruSiswaController extends Controller
             $penilaian_guru[] = $tempData;
         }
 
+        $getPenilaianLapangan = penilaian_pembimbinglapangan::with('penilaian')
+            ->whereHas('penilaian', function ($query) {
+                $query->where('tapel_id', Fungsi::app_tapel_aktif())->where('jurusan_id', $this->jurusan_id);
+            })
+            ->where('status', 'Aktif')->get();
+
+        foreach ($getPenilaianLapangan as $l) {
+            $tempData = (object)[];
+            $tempData->id = $l->id;
+            $tempData->penilaian_id = $l->id;
+            $tempData->penilaian_nama = $l->nama;
+            $getNilai = penilaian_pembimbinglapangan_detail::where('penilaian_pembimbinglapangan_id', $l->id)->where('siswa_id', $item->id)->first();
+            $tempData->nilai = $getNilai ? $getNilai->nilai : null;
+            $penilaian_pembimbinglapangan[] = $tempData;
+        }
+
         return response()->json([
             'success'    => true,
             'data'    => ([
                 'absensi' => $absensi,
                 'jurnal' => $jurnal,
+                'penilaian_pembimbinglapangan' => $penilaian_pembimbinglapangan,
                 'penilaian_guru' => $penilaian_guru,
                 'siswa' => $siswa,
                 'status' => $status,
@@ -113,37 +159,34 @@ class guruSiswaController extends Controller
             ]),
         ], 200);
     }
-
-    public function store_nilai_absensi(Siswa $item, Request $request)
+    public function penilaian_store(Siswa $item, Request $request)
     {
 
         $validator = Validator::make($request->all(), [
             'nilai'   => 'required|numeric',
+            'penilaian_pembimbinglapangan_id'   => 'required|numeric',
         ]);
         //response error validation
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
-        $periksa = penilaian_absensi_dan_jurnal::where('prefix', 'absensi')
-            ->where('siswa_id', $item->id)
-            ->where('tapel_id',  Fungsi::app_tapel_aktif())
+        $periksa = penilaian_pembimbinglapangan_detail::where('siswa_id', $item->id)
+            ->where('penilaian_pembimbinglapangan_id', $request->penilaian_pembimbinglapangan_id)
             ->count();
         if ($periksa) {
 
-            penilaian_absensi_dan_jurnal::where('prefix', 'absensi')
-                ->where('siswa_id', $item->id)
-                ->where('tapel_id',  Fungsi::app_tapel_aktif())
+            penilaian_pembimbinglapangan_detail::where('siswa_id', $item->id)
+                ->where('penilaian_pembimbinglapangan_id', $request->penilaian_pembimbinglapangan_id)
                 ->update([
                     'nilai'     =>   $request->nilai,
                     'updated_at' => date("Y-m-d H:i:s")
                 ]);
         } else {
-            DB::table('penilaian_absensi_dan_jurnal')->insert(
+            DB::table('penilaian_pembimbinglapangan_detail')->insert(
                 array(
                     'nilai'     =>   $request->nilai,
+                    'penilaian_pembimbinglapangan_id'     =>   $request->penilaian_pembimbinglapangan_id,
                     'siswa_id'     =>   $item->id,
-                    'prefix' => 'absensi',
-                    'tapel_id'     =>   Fungsi::app_tapel_aktif(),
                     'created_at' => date("Y-m-d H:i:s"),
                     'updated_at' => date("Y-m-d H:i:s")
                 )
@@ -155,88 +198,8 @@ class guruSiswaController extends Controller
             'message'    => 'Data berhasil ditambahkan!',
         ], 200);
     }
-
-
-    public function store_nilai_jurnal(Siswa $item, Request $request)
+    public function guard()
     {
-
-        $validator = Validator::make($request->all(), [
-            'nilai'   => 'required|numeric',
-        ]);
-        //response error validation
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-        $periksa = penilaian_absensi_dan_jurnal::where('prefix', 'jurnal')
-            ->where('siswa_id', $item->id)
-            ->where('tapel_id',  Fungsi::app_tapel_aktif())
-            ->count();
-        if ($periksa) {
-
-            penilaian_absensi_dan_jurnal::where('prefix', 'jurnal')
-                ->where('siswa_id', $item->id)
-                ->where('tapel_id',  Fungsi::app_tapel_aktif())
-                ->update([
-                    'nilai'     =>   $request->nilai,
-                    'updated_at' => date("Y-m-d H:i:s")
-                ]);
-        } else {
-            DB::table('penilaian_absensi_dan_jurnal')->insert(
-                array(
-                    'nilai'     =>   $request->nilai,
-                    'siswa_id'     =>   $item->id,
-                    'prefix' => 'jurnal',
-                    'tapel_id'     =>   Fungsi::app_tapel_aktif(),
-                    'created_at' => date("Y-m-d H:i:s"),
-                    'updated_at' => date("Y-m-d H:i:s")
-                )
-            );
-        }
-
-        return response()->json([
-            'success'    => true,
-            'message'    => 'Data berhasil ditambahkan!',
-        ], 200);
-    }
-
-
-    public function store_nilai_penilaian_guru(Siswa $item, Request $request)
-    {
-
-        $validator = Validator::make($request->all(), [
-            'nilai'   => 'required|numeric',
-            'penilaian_guru_id'   => 'required|numeric',
-        ]);
-        //response error validation
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-        $periksa = penilaian_guru_detail::where('siswa_id', $item->id)
-            ->where('penilaian_guru_id', $request->penilaian_guru_id)
-            ->count();
-        if ($periksa) {
-
-            penilaian_guru_detail::where('siswa_id', $item->id)
-                ->where('penilaian_guru_id', $request->penilaian_guru_id)
-                ->update([
-                    'nilai'     =>   $request->nilai,
-                    'updated_at' => date("Y-m-d H:i:s")
-                ]);
-        } else {
-            DB::table('penilaian_guru_detail')->insert(
-                array(
-                    'nilai'     =>   $request->nilai,
-                    'penilaian_guru_id'     =>   $request->penilaian_guru_id,
-                    'siswa_id'     =>   $item->id,
-                    'created_at' => date("Y-m-d H:i:s"),
-                    'updated_at' => date("Y-m-d H:i:s")
-                )
-            );
-        }
-
-        return response()->json([
-            'success'    => true,
-            'message'    => 'Data berhasil ditambahkan!',
-        ], 200);
+        return Auth::guard('pembimbinglapangan');
     }
 }

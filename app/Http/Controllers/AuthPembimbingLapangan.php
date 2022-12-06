@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\pembimbinglapangan;
 use App\Models\Siswa;
+use App\Models\tempatpkl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -95,7 +96,7 @@ class AuthPembimbingLapangan extends Controller
      */
     public function me()
     {
-        return response()->json($this->guard()->pembimbinglapangan());
+        return $this->respondWithToken($this->guard()->refresh());
     }
 
 
@@ -106,9 +107,7 @@ class AuthPembimbingLapangan extends Controller
      */
     public function refresh()
     {
-        $dataRefresh = $this->respondWithToken($this->guard()->refresh());
-
-        return $dataRefresh;
+        return $this->respondWithToken($this->guard()->refresh());
     }
     /**
      * Get the token array structure.
@@ -119,12 +118,25 @@ class AuthPembimbingLapangan extends Controller
      */
     protected function respondWithToken($token)
     {
+        $getTempatpkl = tempatpkl::where('penanggungjawab', $this->guard()->user()->id)->first();
         return response()->json([
-            'success' => true,
-            'data' => (object)['token' => $token],
+            //     'success' => true,
+            //     'data' => (object)['token' => $token],
+            //     'token_type' => 'bearer',
+            //     'expires_in' => $this->guard()->factory()->getTTL() * 1  //auto logout after 1 hour (default)
+            // ], 200);
+            'data' => (object)[
+                'token' => $token,
+                'me' => $this->guard()->user(),
+                'newToken' => $token,
+                'status' => true,
+                'tempatpkl'    => $getTempatpkl,
+            ],
+            'message' => "Success",
+            'code' => 200,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 1  //auto logout after 1 hour (default)
-        ], 200);
+            'expires_in' => $this->guard()->factory()->getTTL() * 1,  //auto logout after 1 hour (default)
+        ]);
     }
     /**
      * Get the guard to be used during authentication.

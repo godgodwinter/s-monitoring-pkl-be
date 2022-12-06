@@ -31,16 +31,16 @@ class pembimbingLapanganSettingsController extends Controller
         $items->tempatpkl = $getTempatPkl;
         $getPembimbingLapangan = $dataAuth;
         $items->pembimbinglapangan = $getPembimbingLapangan;
-        $getPembimbingSekolah = pembimbingsekolah::where('id', $getPendaftaranProses->pembimbingsekolah_id)->get();
-        $items->pembimbingsekolah = $getPembimbingSekolah;
-        $getSiswa = pendaftaranprakerin_prosesdetail::with('siswa')->where('pendaftaranprakerin_proses_id', $getPendaftaranProses->id)->get();
-        // $items->siswaList = $getSiswa;
-        $items->siswa = [];
-        foreach ($getSiswa as $sl) {
-            $tempSiswa = $sl->siswa;
-            // push siswa ke array
-            array_push($items->siswa, $tempSiswa);
-        }
+        // $getPembimbingSekolah = pembimbingsekolah::where('id', $getPendaftaranProses->pembimbingsekolah_id)->get();
+        // $items->pembimbingsekolah = $getPembimbingSekolah;
+        // $getSiswa = pendaftaranprakerin_prosesdetail::with('siswa')->where('pendaftaranprakerin_proses_id', $getPendaftaranProses->id)->get();
+        // // $items->siswaList = $getSiswa;
+        // $items->siswa = [];
+        // foreach ($getSiswa as $sl) {
+        //     $tempSiswa = $sl->siswa;
+        //     // push siswa ke array
+        //     array_push($items->siswa, $tempSiswa);
+        // }
 
         return response()->json([
             'success'    => true,
