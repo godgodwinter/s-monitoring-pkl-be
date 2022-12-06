@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\adminPembimbingSekolahController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinDetailController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinListController;
+use App\Http\Controllers\admin\adminPengumumanController;
 use App\Http\Controllers\admin\AdminPenilaianController;
 use App\Http\Controllers\admin\adminSettingsController;
 use App\Http\Controllers\admin\adminSiswaController;
@@ -41,6 +42,13 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin/jurusan/{item}', [adminJurusanController::class, 'edit'])->name('admin.jurusan.edit');
     Route::put('/admin/jurusan/{item}', [adminJurusanController::class, 'update'])->name('admin.jurusan.update');
     Route::delete('/admin/jurusan/{item}', [adminJurusanController::class, 'destroy'])->name('admin.jurusan.destroy');
+
+
+    Route::get('/admin/pengumuman', [adminPengumumanController::class, 'index']);
+    Route::post('/admin/pengumuman', [adminPengumumanController::class, 'store']);
+    Route::get('/admin/pengumuman/{item}', [adminPengumumanController::class, 'edit']);
+    Route::put('/admin/pengumuman/{item}', [adminPengumumanController::class, 'update']);
+    Route::delete('/admin/pengumuman/{item}', [adminPengumumanController::class, 'destroy']);
 
 
     Route::get('/admin/kelas', [adminKelasController::class, 'index'])->name('admin.kelas');
