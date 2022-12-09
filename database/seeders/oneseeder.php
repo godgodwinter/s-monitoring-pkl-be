@@ -67,24 +67,24 @@ class oneseeder extends Seeder
             'updated_at' => Carbon::now()
         ]);
 
-        DB::table('kelas')->truncate();
-        // seeder kelas
-        kelas::insert([
-            'tingkatan' => 'X',
-            'jurusan' => 'TKJ',
-            'suffix' => '1',
-            'tapel_id' => Fungsi::app_tapel_aktif(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
-        kelas::insert([
-            'tingkatan' => 'X',
-            'jurusan' => 'TSM',
-            'suffix' => '1',
-            'tapel_id' => Fungsi::app_tapel_aktif(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
+        // DB::table('kelas')->truncate();
+        // // seeder kelas
+        // kelas::insert([
+        //     'tingkatan' => 'X',
+        //     'jurusan' => 'TKJ',
+        //     'suffix' => '1',
+        //     'tapel_id' => Fungsi::app_tapel_aktif(),
+        //     'created_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now()
+        // ]);
+        // kelas::insert([
+        //     'tingkatan' => 'X',
+        //     'jurusan' => 'TSM',
+        //     'suffix' => '1',
+        //     'tapel_id' => Fungsi::app_tapel_aktif(),
+        //     'created_at' => Carbon::now(),
+        //     'updated_at' => Carbon::now()
+        // ]);
 
         // DB::table('tempatpkl')->truncate();
         // // seeder Tempat PKL
