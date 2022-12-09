@@ -86,195 +86,195 @@ class oneseeder extends Seeder
             'updated_at' => Carbon::now()
         ]);
 
-        DB::table('tempatpkl')->truncate();
-        // seeder Tempat PKL
-        $dataTempatPkl = [
-            [
-                'nama' => 'PT Pertamina',
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => 'PT Bank Mandiri (Persero) Tbk',
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => '1',
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-11-01',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => ' PT Bank Rakyat Indonesia Tbk',
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => ' PT  Bank Central Asia Tbk',
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => ' PT   Indomarco Prismatama',
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => $faker->company,
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => $faker->company,
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => $faker->company,
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => $faker->company,
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => $faker->company,
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => $faker->company,
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => $faker->company,
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => $faker->company,
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-            [
-                'nama' => $faker->company,
-                'alamat' =>  $faker->address,
-                'telp' => $faker->phoneNumber,
-                'penanggungjawab' => $faker->name,
-                'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
-                'tapel_id' => Fungsi::app_tapel_aktif(),
-                'status' => 'Tersedia',
-                'tgl_mulai' => '2020-01-01',
-                'tgl_selesai' => '2020-12-31',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now()
-            ],
-        ];
-        foreach ($dataTempatPkl as $data) {
-            tempatpkl::insert($data);
-        };
+        // DB::table('tempatpkl')->truncate();
+        // // seeder Tempat PKL
+        // $dataTempatPkl = [
+        //     [
+        //         'nama' => 'PT Pertamina',
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => 'PT Bank Mandiri (Persero) Tbk',
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => '1',
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-11-01',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => ' PT Bank Rakyat Indonesia Tbk',
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => ' PT  Bank Central Asia Tbk',
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => ' PT   Indomarco Prismatama',
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => $faker->company,
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => $faker->company,
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => $faker->company,
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => $faker->company,
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => $faker->company,
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => $faker->company,
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => $faker->company,
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => $faker->company,
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        //     [
+        //         'nama' => $faker->company,
+        //         'alamat' =>  $faker->address,
+        //         'telp' => $faker->phoneNumber,
+        //         'penanggungjawab' => $faker->name,
+        //         'kuota' =>  $faker->randomElement(['1', '2', '3', '4', '5']),
+        //         'tapel_id' => Fungsi::app_tapel_aktif(),
+        //         'status' => 'Tersedia',
+        //         'tgl_mulai' => '2020-01-01',
+        //         'tgl_selesai' => '2020-12-31',
+        //         'created_at' => Carbon::now(),
+        //         'updated_at' => Carbon::now()
+        //     ],
+        // ];
+        // foreach ($dataTempatPkl as $data) {
+        //     tempatpkl::insert($data);
+        // };
 
         DB::table('users')->truncate();
         // admin
@@ -287,116 +287,116 @@ class oneseeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ]);
-        $jmlSeeder = 10;
-        // seeder pembimbinglapangan
-        DB::table('pembimbinglapangan')->truncate();
+        // $jmlSeeder = 10;
+        // // seeder pembimbinglapangan
+        // DB::table('pembimbinglapangan')->truncate();
 
-        pembimbinglapangan::insert([
-            'nama' => $faker->unique()->name,
-            'email' => $faker->unique()->email,
-            'username' => 'pembimbinglapangan',
-            'password' => Hash::make('123'),
-            'nomeridentitas' => $faker->unique()->numberBetween($min = 1000, $max = 9000),
-            'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
-            'tempatlahir' => $faker->city,
-            'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
-            'alamat' => $faker->address,
-            'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
-            'telp' => $faker->phoneNumber,
-        ]);
-        for ($i = 0; $i < $jmlSeeder; $i++) {
-            pembimbinglapangan::insert([
-                'nama' => $faker->unique()->name,
-                'email' => $faker->unique()->email,
-                'username' => $faker->unique()->username,
-                'password' => Hash::make('123'),
-                'nomeridentitas' => $faker->unique()->numberBetween($min = 1000, $max = 9000),
-                'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
-                'tempatlahir' => $faker->city,
-                'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
-                'alamat' => $faker->address,
-                'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
-                'telp' => $faker->phoneNumber,
-            ]);
-        }
+        // pembimbinglapangan::insert([
+        //     'nama' => $faker->unique()->name,
+        //     'email' => $faker->unique()->email,
+        //     'username' => 'pembimbinglapangan',
+        //     'password' => Hash::make('123'),
+        //     'nomeridentitas' => $faker->unique()->numberBetween($min = 1000, $max = 9000),
+        //     'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
+        //     'tempatlahir' => $faker->city,
+        //     'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        //     'alamat' => $faker->address,
+        //     'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
+        //     'telp' => $faker->phoneNumber,
+        // ]);
+        // for ($i = 0; $i < $jmlSeeder; $i++) {
+        //     pembimbinglapangan::insert([
+        //         'nama' => $faker->unique()->name,
+        //         'email' => $faker->unique()->email,
+        //         'username' => $faker->unique()->username,
+        //         'password' => Hash::make('123'),
+        //         'nomeridentitas' => $faker->unique()->numberBetween($min = 1000, $max = 9000),
+        //         'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
+        //         'tempatlahir' => $faker->city,
+        //         'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        //         'alamat' => $faker->address,
+        //         'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
+        //         'telp' => $faker->phoneNumber,
+        //     ]);
+        // }
 
-        // seeder Pembimbing Sekolah
-        DB::table('pembimbingsekolah')->truncate();
+        // // seeder Pembimbing Sekolah
+        // DB::table('pembimbingsekolah')->truncate();
 
-        pembimbingsekolah::insert([
-            'nama' => $faker->unique()->name,
-            'email' => $faker->unique()->email,
-            'username' => 'pembimbingsekolah',
-            'password' => Hash::make('123'),
-            'nomeridentitas' => $faker->unique()->numberBetween($min = 1000, $max = 9000),
-            'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
-            'tempatlahir' => $faker->city,
-            'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
-            'alamat' => $faker->address,
-            'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
-            'telp' => $faker->phoneNumber,
-        ]);
+        // pembimbingsekolah::insert([
+        //     'nama' => $faker->unique()->name,
+        //     'email' => $faker->unique()->email,
+        //     'username' => 'pembimbingsekolah',
+        //     'password' => Hash::make('123'),
+        //     'nomeridentitas' => $faker->unique()->numberBetween($min = 1000, $max = 9000),
+        //     'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
+        //     'tempatlahir' => $faker->city,
+        //     'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        //     'alamat' => $faker->address,
+        //     'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
+        //     'telp' => $faker->phoneNumber,
+        // ]);
 
-        for ($i = 0; $i < $jmlSeeder; $i++) {
-            pembimbingsekolah::insert([
-                'nama' => $faker->unique()->name,
-                'email' => $faker->unique()->email,
-                'username' => $faker->unique()->username,
-                'password' => Hash::make('123'),
-                'nomeridentitas' => $faker->unique()->numberBetween($min = 1000, $max = 9000),
-                'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
-                'tempatlahir' => $faker->city,
-                'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
-                'alamat' => $faker->address,
-                'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
-                'telp' => $faker->phoneNumber,
-            ]);
-        }
-
-
-        $jmlSeeder = 50;
-        // seeder Pembimbing Sekolah
-        DB::table('siswa')->truncate();
-
-        $siswa_id = DB::table('siswa')->insertGetId([
-            'nama' => $faker->unique()->name,
-            'email' => $faker->unique()->email,
-            'username' => 'siswa',
-            'password' => Hash::make('123'),
-            'nomeridentitas' => '1234',
-            'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
-            'tempatlahir' => $faker->city,
-            'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
-            'alamat' => $faker->address,
-            'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
-            'telp' => $faker->phoneNumber,
-        ]);
-        kelasdetail::insert([
-            'kelas_id' => $faker->randomElement(['1', '2']),
-            'siswa_id' => $siswa_id,
-        ]);
-
-        for ($i = 0; $i < $jmlSeeder; $i++) {
-            $siswa_id = DB::table('siswa')->insertGetId([
-                'nama' => $faker->unique()->name,
-                'email' => $faker->unique()->email,
-                'username' => $faker->unique()->username,
-                'password' => Hash::make('123'),
-                'nomeridentitas' => $faker->unique()->numberBetween($min = 1000, $max = 9000),
-                'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
-                'tempatlahir' => $faker->city,
-                'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
-                'alamat' => $faker->address,
-                'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
-                'telp' => $faker->phoneNumber,
-            ]);
+        // for ($i = 0; $i < $jmlSeeder; $i++) {
+        //     pembimbingsekolah::insert([
+        //         'nama' => $faker->unique()->name,
+        //         'email' => $faker->unique()->email,
+        //         'username' => $faker->unique()->username,
+        //         'password' => Hash::make('123'),
+        //         'nomeridentitas' => $faker->unique()->numberBetween($min = 1000, $max = 9000),
+        //         'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
+        //         'tempatlahir' => $faker->city,
+        //         'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        //         'alamat' => $faker->address,
+        //         'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
+        //         'telp' => $faker->phoneNumber,
+        //     ]);
+        // }
 
 
-            kelasdetail::insert([
-                'kelas_id' => $faker->randomElement(['1', '2']),
-                'siswa_id' => $siswa_id,
-            ]);
-            pendaftaranprakerin::truncate();
-        }
+        // $jmlSeeder = 50;
+        // // seeder Pembimbing Sekolah
+        // DB::table('siswa')->truncate();
+
+        // $siswa_id = DB::table('siswa')->insertGetId([
+        //     'nama' => $faker->unique()->name,
+        //     'email' => $faker->unique()->email,
+        //     'username' => 'siswa',
+        //     'password' => Hash::make('123'),
+        //     'nomeridentitas' => '1234',
+        //     'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
+        //     'tempatlahir' => $faker->city,
+        //     'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        //     'alamat' => $faker->address,
+        //     'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
+        //     'telp' => $faker->phoneNumber,
+        // ]);
+        // kelasdetail::insert([
+        //     'kelas_id' => $faker->randomElement(['1', '2']),
+        //     'siswa_id' => $siswa_id,
+        // ]);
+
+        // for ($i = 0; $i < $jmlSeeder; $i++) {
+        //     $siswa_id = DB::table('siswa')->insertGetId([
+        //         'nama' => $faker->unique()->name,
+        //         'email' => $faker->unique()->email,
+        //         'username' => $faker->unique()->username,
+        //         'password' => Hash::make('123'),
+        //         'nomeridentitas' => $faker->unique()->numberBetween($min = 1000, $max = 9000),
+        //         'agama' => $faker->randomElement(['Islam', 'Kristen', 'Hindu', 'Budha', 'Konghucu']),
+        //         'tempatlahir' => $faker->city,
+        //         'tgllahir' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        //         'alamat' => $faker->address,
+        //         'jk' => $faker->randomElement(['Laki-Laki', 'Perempuan']),
+        //         'telp' => $faker->phoneNumber,
+        //     ]);
+
+
+        //     kelasdetail::insert([
+        //         'kelas_id' => $faker->randomElement(['1', '2']),
+        //         'siswa_id' => $siswa_id,
+        //     ]);
+        //     pendaftaranprakerin::truncate();
+        // }
     }
 }
