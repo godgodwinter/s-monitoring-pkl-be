@@ -19,3 +19,4 @@ require __DIR__ . '/babeng/admin.php';
 require __DIR__ . '/babeng/siswa.php';
 require __DIR__ . '/babeng/pembimbinglapangan.php';
 require __DIR__ . '/babeng/pembimbingsekolah.php';
+require __DIR__ . '/babeng/tanpalogin.php';

@@ -15,7 +15,7 @@ class adminPengumumanController extends Controller
 {
     public function index(Request $request)
     {
-        $items = pengumuman::orderBy('updated_at', 'desc')
+        $items = pengumuman::orderBy('created_at', 'desc')
             ->with('label')
             ->get();
         return response()->json([
@@ -30,7 +30,7 @@ class adminPengumumanController extends Controller
         $validator = Validator::make($request->all(), [
             'title'   => 'required',
             'content'   => 'required',
-            'desc'   => 'required',
+            // 'desc'   => 'required',
         ]);
         //response error validation
         if ($validator->fails()) {
@@ -71,7 +71,7 @@ class adminPengumumanController extends Controller
         $validator = Validator::make($request->all(), [
             'title'   => 'required',
             'content'   => 'required',
-            'desc'   => 'required',
+            // 'desc'   => 'required',
         ]);
         //response error validation
         if ($validator->fails()) {
@@ -101,6 +101,19 @@ class adminPengumumanController extends Controller
             'message'    => 'Data berhasil di hapus!',
         ], 200);
     }
+
+    public function guest_index(Request $request)
+    {
+        $items = pengumuman::orderBy('created_at', 'desc')
+            ->with('label')
+            ->get();
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
+
     public function guard()
     {
         return Auth::guard();
