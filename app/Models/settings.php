@@ -10,7 +10,7 @@ class settings extends Model
 {
     public $table = "settings";
 
-    use SoftDeletes;
+    // use SoftDeletes;
     use HasFactory;
 
     protected $fillable = [
@@ -21,5 +21,6 @@ class settings extends Model
         'login_siswa',
         'login_pembimbingsekolah',
         'login_pembimbinglapangan',
+        'bataswaktu',
     ];
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
 use App\Http\Controllers\admin\adminTempatPklController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\guest\guestSettingsController;
 use App\Http\Controllers\siswa\siswaPendaftaranPKLController;
 use Illuminate\Support\Facades\Route;
 
@@ -155,4 +156,8 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin/penilaian/{item}', [AdminPenilaianController::class, 'edit']);
     Route::put('/admin/penilaian/{item}', [AdminPenilaianController::class, 'update']);
     Route::delete('/admin/penilaian/{item}', [AdminPenilaianController::class, 'destroy']);
+
+
+    Route::get('/admin/settings/bataswaktu', [guestSettingsController::class, 'index']);
+    Route::put('/admin/settings/bataswaktu', [guestSettingsController::class, 'update']);
 });
