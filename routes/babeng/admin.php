@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\adminAbsensiController;
 use App\Http\Controllers\admin\adminJurusanController;
 use App\Http\Controllers\admin\adminKelasController;
 use App\Http\Controllers\admin\adminPembimbingLapanganController;
@@ -161,3 +162,5 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin/settings/bataswaktu', [guestSettingsController::class, 'index']);
     Route::put('/admin/settings/bataswaktu', [guestSettingsController::class, 'update']);
 });
+
+Route::get('/admin/pkl/absen/siswa/{siswa}', [adminAbsensiController::class, 'getDataAbsensi']);
