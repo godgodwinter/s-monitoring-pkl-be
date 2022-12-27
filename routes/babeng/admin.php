@@ -14,6 +14,7 @@ use App\Http\Controllers\admin\adminSettingsController;
 use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
 use App\Http\Controllers\admin\adminTempatPklController;
+use App\Http\Controllers\adminTagihanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\guest\guestSettingsController;
 use App\Http\Controllers\siswa\siswaPendaftaranPKLController;
@@ -161,6 +162,13 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/admin/settings/bataswaktu', [guestSettingsController::class, 'index']);
     Route::put('/admin/settings/bataswaktu', [guestSettingsController::class, 'update']);
+
+
+    Route::get('/admin/tagihan', [adminTagihanController::class, 'index']);
+    Route::post('/admin/tagihan', [adminTagihanController::class, 'store']);
+    Route::get('/admin/tagihan/1', [adminTagihanController::class, 'edit']);
+    Route::put('/admin/tagihan/1', [adminTagihanController::class, 'update']);
+    Route::delete('/admin/tagihan', [adminTagihanController::class, 'destroy']);
 });
 
 Route::get('/admin/pkl/absen/siswa/{siswa}', [adminAbsensiController::class, 'getDataAbsensi']);
