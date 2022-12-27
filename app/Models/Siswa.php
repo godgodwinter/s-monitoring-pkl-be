@@ -54,6 +54,12 @@ class Siswa extends Authenticatable implements JWTSubject
         return $this->belongsTo(kelasdetail::class, 'id', 'siswa_id')->with('kelas');
     }
 
+    public function tagihan()
+    {
+        return $this->belongsTo(tagihan::class, 'id', 'siswa_id')->where('tapel_id', Fungsi::app_tapel_aktif())->with('pembayaran');
+    }
+
+
     public function pendaftaranprakerin()
     {
         return $this->belongsTo(pendaftaranprakerin::class, 'id', 'siswa_id')->where('tapel_id', Fungsi::app_tapel_aktif());

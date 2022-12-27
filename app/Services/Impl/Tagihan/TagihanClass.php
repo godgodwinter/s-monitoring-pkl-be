@@ -3,6 +3,7 @@
 namespace App\Services\Impl\Tagihan;
 
 use App\Helpers\Fungsi;
+use App\Models\kelasdetail;
 use App\Models\pembayaran;
 use App\Models\tagihan;
 use Faker\Factory as Faker;
@@ -25,7 +26,8 @@ class TagihanClass
 
         foreach ($result as $rs) {
             $rs->pembayaran_jml = $rs->pembayaran ? $rs->pembayaran->count() : 0;
-            $rs->pembayaran_persen = $rs->pembayaran ? number_format($rs->pembayaran->sum('nominal_bayar') / $rs->total_tagihan * 100) : 0;
+            $rs->pembayaran_total = $rs->pembayaran ? $rs->pembayaran->sum('nominal_bayar') : 0;
+            $rs->pembayaran_persen = $rs->pembayaran->sum('nominal_bayar') < $rs->total_tagihan ? $rs->pembayaran ? number_format($rs->pembayaran->sum('nominal_bayar') / $rs->total_tagihan * 100) : 0 : 100;
             $rs->pembayaran_persen_kurang = number_format(100 - $rs->pembayaran_persen, 2);
         }
         return $result;
@@ -45,6 +47,30 @@ class TagihanClass
         );
         return 'Data berhasil ditambahkan';
     }
+    public function tagihan_store_kelas($kelas_id, object $dataForm)
+    {
+        $getSiswaId = kelasdetail::where('kelas_id', $kelas_id)->get();
+        foreach ($getSiswaId as $dataGetSiswaId) {
+            $periksa = tagihan::where('siswa_id', $dataGetSiswaId->siswa_id)
+                ->where('tapel_id', Fungsi::app_tapel_aktif());
+            $dataForm->siswa_id = $dataGetSiswaId->siswa_id;
+            $dataForm->tapel_id = Fungsi::app_tapel_aktif();
+            // dd($dataForm, $dataForm->siswa_id, $dataForm->tapel_id, $dataGetSiswaId->siswa_id, $periksa->count());
+            if ($periksa->count() > 0) {
+
+                // dd($dataForm, $dataForm->siswa_id, $periksa->count());
+                // update
+                $this->tagihan_update_where_siswa($dataGetSiswaId->siswa_id, Fungsi::app_tapel_aktif(), $dataForm);
+            } else {
+                // dd($dataForm, $dataForm->siswa_id, $periksa->count());
+                //insert
+                $this->tagihan_store($dataForm);
+            }
+        }
+        // dd($getSiswaId);
+
+        return 'Data berhasil ditambahkan';
+    }
 
     public function tagihan_edit(int $tagihan_id)
     {
@@ -54,11 +80,27 @@ class TagihanClass
             ->with('tapel')
             ->first();
         $result->pembayaran_jml = $result->pembayaran ? $result->pembayaran->count() : 0;
-        $result->pembayaran_persen = $result->pembayaran ? number_format($result->pembayaran->sum('nominal_bayar') / $result->total_tagihan * 100) : 0;
+        $result->pembayaran_total = $result->pembayaran ? $result->pembayaran->sum('nominal_bayar') : 0;
+        $result->pembayaran_persen = $result->pembayaran->sum('nominal_bayar') < $result->total_tagihan  ? $result->pembayaran ? number_format($result->pembayaran->sum('nominal_bayar') / $result->total_tagihan * 100) : 0 : 100;
         $result->pembayaran_persen_kurang = number_format(100 - $result->pembayaran_persen, 2);
         return $result;
     }
 
+    public function tagihan_update_where_siswa(int $siswa_id, int $tapel_id, object $dataForm)
+    {
+
+        tagihan::where('siswa_id', $siswa_id)
+            ->where('tapel_id', $tapel_id)
+            ->update([
+                'siswa_id'     =>   $dataForm->siswa_id,
+                'tgl'     =>   $dataForm->tgl,
+                'total_tagihan'     =>   $dataForm->total_tagihan,
+                // 'tapel_id'     =>   $dataForm->tapel_id,
+                'updated_at' => date("Y-m-d H:i:s")
+            ]);
+
+        return 'Data berhasil diupdate!';
+    }
     public function tagihan_update(int $tagihan_id, object $dataForm)
     {
 

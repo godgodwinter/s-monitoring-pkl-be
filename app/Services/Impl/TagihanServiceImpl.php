@@ -25,6 +25,12 @@ class TagihanServiceImpl implements tagihanService
 
         return $items;
     }
+    public function tagihan_store_kelas($kelas_id, object $dataForm)
+    {
+        $items = $this->tagihanClass->tagihan_store_kelas($kelas_id, $dataForm);
+
+        return $items;
+    }
     public function tagihan_edit(int $tagihan_id)
     {
         $items = $this->tagihanClass->tagihan_edit($tagihan_id);

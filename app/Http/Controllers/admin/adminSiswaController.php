@@ -29,8 +29,18 @@ class adminSiswaController extends Controller
                     $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
                 })->with('jurusan_table');
             })
+            ->with('tagihan')
             ->get();
 
+        foreach ($items as $result) {
+            $result->total_tagihan = $result->tagihan ? $result->tagihan->total_tagihan : 0;
+            if ($result->tagihan) {
+                $result->pembayaran_jml = $result->tagihan->pembayaran ? $result->tagihan->pembayaran->count() : 0;
+                $result->pembayaran_total = $result->tagihan->pembayaran ? $result->tagihan->pembayaran->sum('nominal_bayar') : 0;
+                $result->pembayaran_persen = $result->tagihan->pembayaran->sum('nominal_bayar') < $result->tagihan->total_tagihan  ? ($result->tagihan->pembayaran ? number_format($result->tagihan->pembayaran->sum('nominal_bayar') / $result->tagihan->total_tagihan * 100) : 0) : 100;
+                $result->pembayaran_persen_kurang = number_format(100 - $result->pembayaran_persen, 2);
+            }
+        }
         // ->whereHas('siswa', function ($query) {
         //     global $request;
         //     $query->where('siswa.nama', 'like', "%" . $request->cari . "%");
@@ -109,7 +119,15 @@ class adminSiswaController extends Controller
 
     public function edit(siswa $item)
     {
-        $item = Siswa::with('kelasdetail')->find($item->id);
+        $item = Siswa::with('kelasdetail')
+            ->with('tagihan')->find($item->id);
+        $item->total_tagihan = $item->tagihan ? $item->tagihan->total_tagihan : 0;
+        if ($item->tagihan) {
+            $item->pembayaran_jml = $item->tagihan->pembayaran ? $item->tagihan->pembayaran->count() : 0;
+            $item->pembayaran_total = $item->tagihan->pembayaran ? $item->tagihan->pembayaran->sum('nominal_bayar') : 0;
+            $item->pembayaran_persen = $item->tagihan->pembayaran->sum('nominal_bayar') < $item->tagihan->total_tagihan  ? ($item->tagihan->pembayaran ? number_format($item->tagihan->pembayaran->sum('nominal_bayar') / $item->tagihan->total_tagihan * 100) : 0) : 100;
+            $item->pembayaran_persen_kurang = number_format(100 - $item->pembayaran_persen, 2);
+        }
         $item->jurusan_nama = $item->kelasdetail ? $item->kelasdetail->kelas->jurusan_table->nama : null;
         $item->kelas_nama = $item->kelasdetail ? $item->kelasdetail->kelas->tingkatan . " " . $item->kelasdetail->kelas->jurusan_table->nama . " " . $item->kelasdetail->kelas->suffix : null;
         return response()->json([
@@ -299,7 +317,16 @@ class adminSiswaController extends Controller
         $status = null;
 
         // data siswa
-        $siswa = Siswa::where('id', $item->id)->first();
+        $siswa = Siswa::where('id', $item->id)->with('tagihan')->first();
+
+        $siswa->min_pembayaran = Fungsi::app_min_pembayaran();
+        $siswa->total_tagihan = $siswa->tagihan ? $siswa->tagihan->total_tagihan : 0;
+        if ($siswa->tagihan) {
+            $siswa->pembayaran_jml = $siswa->tagihan->pembayaran ? $siswa->tagihan->pembayaran->count() : 0;
+            $siswa->pembayaran_total = $siswa->tagihan->pembayaran ? $siswa->tagihan->pembayaran->sum('nominal_bayar') : 0;
+            $siswa->pembayaran_persen = $siswa->tagihan->pembayaran->sum('nominal_bayar') < $siswa->tagihan->total_tagihan  ? ($siswa->tagihan->pembayaran ? number_format($siswa->tagihan->pembayaran->sum('nominal_bayar') / $siswa->tagihan->total_tagihan * 100) : 0) : 100;
+            $siswa->pembayaran_persen_kurang = number_format(100 - $siswa->pembayaran_persen, 2);
+        }
         $siswa['kelas_nama'] = "{$siswa->kelasdetail->kelas->tingkatan} {$siswa->kelasdetail->kelas->jurusan_table->nama} {$siswa->kelasdetail->kelas->suffix}";
 
         // tempat pkl
