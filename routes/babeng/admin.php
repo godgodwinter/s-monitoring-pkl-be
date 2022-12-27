@@ -179,9 +179,12 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/admin/tagihan/null/bayar/{pembayaran}', [adminTagihanController::class, 'bayar_destroy']);
 
     //EXPORT IMPORT
-    Route::post('/admin/proses/cleartemp ', [adminProsesController::class, 'clearTemp']);
+    Route::post('/admin/proses/cleartemp', [adminProsesController::class, 'clearTemp']);
 
     Route::post('/admin/proses/import/siswa', [adminProsesController::class, 'importSiswa']);
+    Route::post('/admin/proses/import/tempatpkl', [adminProsesController::class, 'importTempatpkl']);
+    Route::post('/admin/proses/import/pembimbinglapangan', [adminProsesController::class, 'importPembimbinglapangan']);
+    Route::post('/admin/proses/import/guru', [adminProsesController::class, 'importGuru']);
 });
 
 Route::get('/admin/pkl/absen/siswa/{siswa}', [adminAbsensiController::class, 'getDataAbsensi']);
