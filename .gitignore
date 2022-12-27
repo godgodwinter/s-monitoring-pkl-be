@@ -17,3 +17,8 @@ yarn-error.log
 
 /public/fileupload
 /public/uploads
+/public/file_temp
+/public/images
+/public/uploads
+/public/uploads/images
+/public/uploads/audio
