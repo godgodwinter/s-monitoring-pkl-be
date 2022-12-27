@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\adminPendaftaranPrakerinDetailController;
 use App\Http\Controllers\admin\adminPendaftaranPrakerinListController;
 use App\Http\Controllers\admin\adminPengumumanController;
 use App\Http\Controllers\admin\AdminPenilaianController;
+use App\Http\Controllers\admin\adminProsesController;
 use App\Http\Controllers\admin\adminSettingsController;
 use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTapelController;
@@ -176,6 +177,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/admin/tagihan/{tagihan}/bayar', [adminTagihanController::class, 'bayar']);
     Route::post('/admin/tagihan/null/bayar/siswa/{siswa}', [adminTagihanController::class, 'bayar_siswa']); //otomatis tapel saat ini
     Route::delete('/admin/tagihan/null/bayar/{pembayaran}', [adminTagihanController::class, 'bayar_destroy']);
+
+    //EXPORT IMPORT
+    Route::post('/admin/proses/cleartemp ', [adminProsesController::class, 'clearTemp']);
+
+    Route::post('/admin/proses/import/siswa', [adminProsesController::class, 'importSiswa']);
 });
 
 Route::get('/admin/pkl/absen/siswa/{siswa}', [adminAbsensiController::class, 'getDataAbsensi']);
