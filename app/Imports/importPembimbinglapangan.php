@@ -7,6 +7,7 @@ use App\Models\apiprobk;
 use App\Models\buletinpsikologi;
 use App\Models\kelasdetail;
 use App\Models\klasifikasiakademis;
+use App\Models\pembimbinglapangan;
 use App\Models\Siswa;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -37,14 +38,13 @@ class importPembimbinglapangan implements ToCollection, WithCalculatedFormulas
         foreach ($rows as $row) {
             if ($no > 0) {
                 if (($row[1] != null) and ($row[1] != '')) {
-                    $kelas_id = $row[11];
-                    $periksa = Siswa::where('nama', $row[1])->where('nomeridentitas', $row[2]);
+                    $periksa = pembimbinglapangan::where('nama', $row[1])->where('nomeridentitas', $row[2]);
                     if ($periksa->count() > 0) {
                         $periksa->update([
                             'nama' => $row[1],
-                            'nomeridentitas' => $row[2],
+                            'email' => $row[2],
                             'username' => $row[3],
-                            'email' => $row[4],
+                            'nomeridentitas' => $row[4],
                             'agama' => $row[5],
                             'tempatlahir' => $row[6],
                             'tgllahir' => $row[7],
@@ -55,12 +55,12 @@ class importPembimbinglapangan implements ToCollection, WithCalculatedFormulas
                         ]);
                         $jmlDiSkip++;
                     } else {
-                        $siswa = Siswa::insertGetId(
+                        $pembimbinglapangan = pembimbinglapangan::insertGetId(
                             array(
                                 'nama' => $row[1],
-                                'nomeridentitas' => $row[2],
+                                'email' => $row[2],
                                 'username' => $row[3],
-                                'email' => $row[4],
+                                'nomeridentitas' => $row[4],
                                 'agama' => $row[5],
                                 'tempatlahir' => $row[6],
                                 'tgllahir' => $row[7],
@@ -68,16 +68,6 @@ class importPembimbinglapangan implements ToCollection, WithCalculatedFormulas
                                 'jk' => $row[9],
                                 'telp' => $row[10],
                                 'password' => Hash::make(123),
-                                'deleted_at' => null,
-                                'created_at' => date("Y-m-d H:i:s"),
-                                'updated_at' => date("Y-m-d H:i:s")
-                            )
-                        );
-                        $kelasdetail = kelasdetail::insertGetId(
-                            array(
-                                'kelas_id' => $kelas_id,
-                                // 'tapel_id' => $tapel_id,
-                                'siswa_id' => $siswa,
                                 'deleted_at' => null,
                                 'created_at' => date("Y-m-d H:i:s"),
                                 'updated_at' => date("Y-m-d H:i:s")
