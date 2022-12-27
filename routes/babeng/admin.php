@@ -170,7 +170,9 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/admin/tagihan/{tagihan}', [adminTagihanController::class, 'update']);
     Route::delete('/admin/tagihan/{tagihan}', [adminTagihanController::class, 'destroy']);
 
+
     Route::post('/admin/tagihan/{tagihan}/bayar', [adminTagihanController::class, 'bayar']);
+    Route::post('/admin/tagihan/null/bayar/siswa/{siswa}', [adminTagihanController::class, 'bayar_siswa']); //otomatis tapel saat ini
     Route::delete('/admin/tagihan/{tagihan}/bayar/{pembayaran}', [adminTagihanController::class, 'bayar_destroy']);
 });
 

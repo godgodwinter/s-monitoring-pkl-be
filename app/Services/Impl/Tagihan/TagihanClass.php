@@ -110,4 +110,27 @@ class TagihanClass
         pembayaran::where('id', $pembayaran_id)->forceDelete();
         return "Data berhasil dihapus";
     }
+
+
+    public function tagihan_bayar_siswa(int $siswa_id, object $dataForm)
+    {
+        $tagihan_id = null;
+        $getTagihan = tagihan::where('tapel_id', Fungsi::app_tapel_aktif())
+            ->where('siswa_id', $siswa_id)->first();
+
+        if ($getTagihan) {
+            $data_id = pembayaran::insertGetId(
+                array(
+                    'tgl'     =>   $dataForm->tgl,
+                    'nominal_bayar'     =>   $dataForm->nominal_bayar,
+                    'tagihan_id'     =>   $getTagihan->id,
+                    'created_at' => date("Y-m-d H:i:s"),
+                    'updated_at' => date("Y-m-d H:i:s")
+                )
+            );
+            return 'Data berhasil ditambahkan!';
+        } else {
+            return 'tagihan tidak ditemukan!';
+        }
+    }
 }

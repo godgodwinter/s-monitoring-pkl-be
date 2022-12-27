@@ -53,6 +53,12 @@ class TagihanServiceImpl implements tagihanService
 
         return $items;
     }
+    public function tagihan_bayar_siswa(int $siswa_id, object $dataForm)
+    {
+        $items = $this->tagihanClass->tagihan_bayar_siswa($siswa_id, $dataForm);
+
+        return $items;
+    }
     public function tagihan_bayar_destroy(int $pembayaran_id)
     {
         $items = $this->tagihanClass->tagihan_bayar_destroy($pembayaran_id);

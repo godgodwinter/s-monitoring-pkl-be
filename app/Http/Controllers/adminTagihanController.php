@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Fungsi;
 use App\Models\pembayaran;
+use App\Models\Siswa;
 use App\Models\tagihan;
 use App\Services\tagihanService;
 use Illuminate\Http\Request;
@@ -103,10 +104,27 @@ class adminTagihanController extends Controller
             'data'    => $items,
         ], 200);
     }
+    public function bayar_siswa(Request $request, Siswa $siswa)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'tgl'   => 'required',
+            'nominal_bayar'   => 'required',
+        ]);
+
+        $dataForm = (object)[];
+        $dataForm->nominal_bayar = $request->nominal_bayar;
+        $dataForm->tgl = $request->tgl;
+        $items = $this->tagihanService->tagihan_bayar_siswa($siswa->id, $dataForm);
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
 
     public function bayar_destroy(Request $request, tagihan $tagihan, pembayaran $pembayaran)
     {
-    $items = $this->tagihanService->tagihan_bayar_destroy($pembayaran->id);
+        $items = $this->tagihanService->tagihan_bayar_destroy($pembayaran->id);
         return response()->json([
             'success'    => true,
             'data'    => $items,
