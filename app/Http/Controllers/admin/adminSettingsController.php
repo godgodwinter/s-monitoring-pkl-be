@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\pembimbingsekolah;
+use App\Models\settings;
 use App\Models\Siswa;
 use App\Models\tempatpkl;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class adminSettingsController extends Controller
             'jml_siswa' => Siswa::count(),
             'jml_guru' => pembimbingsekolah::count(),
             'jml_tempatpkl' => tempatpkl::where('tapel_id', Fungsi::app_tapel_aktif())->count(),
+            'min_pembayaran' => Fungsi::app_min_pembayaran(),
         ];
         return response()->json([
             'success'    => true,

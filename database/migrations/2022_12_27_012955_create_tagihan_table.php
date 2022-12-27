@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamps();
         });
         Schema::table('settings', function (Blueprint $table) {
-            $table->bigInteger('min_pembayaran')->nullable(); //dalam persen
+            $table->bigInteger('min_pembayaran')->default(60)->nullable(); //dalam persen
         });
     }
 
@@ -37,7 +37,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('tagihan');
         Schema::table('settings', function ($table) {
-            $table->dropColumn('penilai_id');
+            $table->dropColumn('min_pembayaran');
         });
     }
 };

@@ -22,5 +22,6 @@ class settings extends Model
         'login_pembimbingsekolah',
         'login_pembimbinglapangan',
         'bataswaktu',
+        'min_pembayaran',
     ];
 }

@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\settings;
 use App\Models\tapel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -265,6 +266,12 @@ class Fungsi
             $data = $tapel ? $tapel->id : '';
         }
         return $data;
+    }
+    public static function app_min_pembayaran()
+    {
+        $jmltapel = settings::first();
+        $data = settings::where('id', 1)->first();
+        return $data ? $data->min_pembayaran : 0;
     }
     public static function app_tapel_aktif_nama()
     {

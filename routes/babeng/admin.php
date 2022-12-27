@@ -166,9 +166,12 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('/admin/tagihan', [adminTagihanController::class, 'index']);
     Route::post('/admin/tagihan', [adminTagihanController::class, 'store']);
-    Route::get('/admin/tagihan/1', [adminTagihanController::class, 'edit']);
-    Route::put('/admin/tagihan/1', [adminTagihanController::class, 'update']);
-    Route::delete('/admin/tagihan', [adminTagihanController::class, 'destroy']);
+    Route::get('/admin/tagihan/{tagihan}', [adminTagihanController::class, 'edit']);
+    Route::put('/admin/tagihan/{tagihan}', [adminTagihanController::class, 'update']);
+    Route::delete('/admin/tagihan/{tagihan}', [adminTagihanController::class, 'destroy']);
+
+    Route::post('/admin/tagihan/{tagihan}/bayar', [adminTagihanController::class, 'bayar']);
+    Route::delete('/admin/tagihan/{tagihan}/bayar/{pembayaran}', [adminTagihanController::class, 'bayar_destroy']);
 });
 
 Route::get('/admin/pkl/absen/siswa/{siswa}', [adminAbsensiController::class, 'getDataAbsensi']);

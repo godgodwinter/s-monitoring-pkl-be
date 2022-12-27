@@ -50,6 +50,7 @@ class guestSettingsController extends Controller
         settings::where('id', 1)
             ->update([
                 'bataswaktu'     =>   date("Y-m-d") . " " . $request->bataswaktu,
+                'min_pembayaran' => $request->min_pembayaran,
                 'updated_at' => date("Y-m-d H:i:s")
             ]);
 

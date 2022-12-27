@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Fungsi;
+use App\Models\pembayaran;
 use App\Models\tagihan;
 use App\Services\tagihanService;
 use Illuminate\Http\Request;
@@ -46,7 +47,7 @@ class adminTagihanController extends Controller
 
     public function edit(Request $request, tagihan $tagihan)
     {
-        $items = $this->SkolastikService->tagihan_edit($tagihan->id);
+        $items = $this->tagihanService->tagihan_edit($tagihan->id);
         return response()->json([
             'success'    => true,
             'data'    => $items,
@@ -65,7 +66,7 @@ class adminTagihanController extends Controller
         $dataForm->total_tagihan = $request->total_tagihan;
         $dataForm->tgl = $request->tgl;
         $dataForm->siswa_id = $request->siswa_id;
-        $items = $this->SkolastikService->tagihan_update($tagihan->id, $dataForm);
+        $items = $this->tagihanService->tagihan_update($tagihan->id, $dataForm);
         return response()->json([
             'success'    => true,
             'data'    => $items,
@@ -75,6 +76,37 @@ class adminTagihanController extends Controller
     public function destroy(Request $request, tagihan $tagihan)
     {
         $items = $this->tagihanService->tagihan_destroy($tagihan->id);
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
+
+    // !---------------------------
+    // !tagihan //aksi
+    // !---------------------------
+
+    public function bayar(Request $request, tagihan $tagihan)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'tgl'   => 'required',
+            'nominal_bayar'   => 'required',
+        ]);
+
+        $dataForm = (object)[];
+        $dataForm->nominal_bayar = $request->nominal_bayar;
+        $dataForm->tgl = $request->tgl;
+        $items = $this->tagihanService->tagihan_bayar($tagihan->id, $dataForm);
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+        ], 200);
+    }
+
+    public function bayar_destroy(Request $request, tagihan $tagihan, pembayaran $pembayaran)
+    {
+    $items = $this->tagihanService->tagihan_bayar_destroy($pembayaran->id);
         return response()->json([
             'success'    => true,
             'data'    => $items,
