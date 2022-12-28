@@ -38,7 +38,7 @@ class importPembimbinglapangan implements ToCollection, WithCalculatedFormulas
         foreach ($rows as $row) {
             if ($no > 0) {
                 if (($row[1] != null) and ($row[1] != '')) {
-                    $periksa = pembimbinglapangan::where('nama', $row[1])->where('nomeridentitas', $row[2]);
+                    $periksa = pembimbinglapangan::where('nama', $row[1])->where('nomeridentitas', $row[4]);
                     if ($periksa->count() > 0) {
                         $periksa->update([
                             'nama' => $row[1],

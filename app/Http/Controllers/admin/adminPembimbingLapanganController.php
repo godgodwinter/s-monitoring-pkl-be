@@ -15,7 +15,7 @@ class adminPembimbingLapanganController extends Controller
 {
     public function index(Request $request)
     {
-        $items = pembimbinglapangan::orderBy('nama', 'asc')
+        $items = pembimbinglapangan::orderBy('id', 'desc')
             ->with('tempatpkl')
             ->get();
         foreach ($items as $item) {
@@ -109,7 +109,8 @@ class adminPembimbingLapanganController extends Controller
     public function destroy(pembimbinglapangan $item)
     {
 
-        pembimbinglapangan::destroy($item->id);
+        pembimbinglapangan::where('id', $item->id)->forceDelete();
+        // pembimbinglapangan::destroy($item->id);
         return response()->json([
             'success'    => true,
             'message'    => 'Data berhasil di hapus!',

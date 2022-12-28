@@ -23,7 +23,7 @@ class adminSiswaController extends Controller
 {
     public function index(Request $request)
     {
-        $items = Siswa::with('kelasdetail')->orderBy('nama', 'asc')
+        $items = Siswa::with('kelasdetail')->orderBy('id', 'desc')
             ->whereHas('kelasdetail', function ($query) {
                 $query->whereHas('kelas', function ($query) {
                     $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
@@ -200,8 +200,8 @@ class adminSiswaController extends Controller
     }
     public function destroy(siswa $item)
     {
-
-        siswa::destroy($item->id);
+        kelasdetail::where('siswa_id', $item->id)->forceDelete();
+        siswa::where('id', $item->id)->forceDelete();
         return response()->json([
             'success'    => true,
             'message'    => 'Data berhasil di hapus!',

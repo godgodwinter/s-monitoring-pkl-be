@@ -13,7 +13,7 @@ class adminTempatPklController extends Controller
 {
     public function index(Request $request)
     {
-        $items = tempatpkl::where('tapel_id', Fungsi::app_tapel_aktif())
+        $items = tempatpkl::where('tapel_id', Fungsi::app_tapel_aktif())->orderBy('id', 'desc')
             ->with('pembimbinglapangan')
             ->get();
         foreach ($items as $item) {
@@ -101,7 +101,8 @@ class adminTempatPklController extends Controller
     public function destroy(tempatpkl $item)
     {
 
-        tempatpkl::destroy($item->id);
+        tempatpkl::where('id', $item->id)->forceDelete();
+        // tempatpkl::destroy($item->id);
         return response()->json([
             'success'    => true,
             'message'    => 'Data berhasil di hapus!',
