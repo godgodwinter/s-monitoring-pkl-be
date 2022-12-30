@@ -193,5 +193,6 @@ Route::middleware('babeng:adminOwner')->group(function () {
     Route::post('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnal']);
     Route::delete('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnalDelete']);
     Route::get('/admin/pkl/nilaiakhir/siswa/{siswa}', [adminHasilController::class, 'getHasil']);
-    Route::get('/admin/pkl/nilaiakhir/siswa/{siswa}/cetak', [adminHasilController::class, 'getHasilCetak']);
 });
+
+Route::get('/admin/pkl/nilaiakhir/siswa/{siswa}/cetak', [adminHasilController::class, 'getHasilCetak']);
