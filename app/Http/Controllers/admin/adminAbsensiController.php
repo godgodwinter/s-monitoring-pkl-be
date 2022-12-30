@@ -48,6 +48,7 @@ class adminAbsensiController extends Controller
             $absensi_id = $getKehadiran ? $getKehadiran->id : null;
             $kehadiran = $getKehadiran ? $getKehadiran->label : null;
             $kehadiranCatatan = $getKehadiran ? $getKehadiran->alasan : null;
+            $kehadiranCatatanPembimbing = $getKehadiran ? $getKehadiran->catatan_pembimbing : null;
             // $tempData->id = $getKehadiran ? $getKehadiran->id : null;
             $tempData->id = $i;
             $kehadiranStatus = $getKehadiran ? $getKehadiran->status : null;
@@ -59,6 +60,7 @@ class adminAbsensiController extends Controller
             $tempData->kehadiranCatatan = $kehadiranCatatan;
             $tempData->kehadiranStatus = $kehadiranStatus;
             $tempData->kehadiranBukti = $kehadiranBukti;
+            $tempData->kehadiranCatatanPembimbing = $kehadiranCatatanPembimbing;
 
             $jurnal = null;
             $jurnal_id = null;
@@ -72,12 +74,14 @@ class adminAbsensiController extends Controller
             $jurnal = $getJurnal ? $getJurnal->label : null;
             $jurnalCatatan = $getJurnal ? $getJurnal->alasan : null;
             $jurnalStatus = $getJurnal ? $getJurnal->status : null;
+            $jurnalCatatanPembimbing = $getJurnal ? $getJurnal->catatan_pembimbing : null;
             $jurnalFile = $getJurnal ? url('/') . '/' . $getJurnal->file : null;
             $tempData->jurnal_id = $jurnal_id;
             $tempData->jurnal = $jurnal;
             $tempData->jurnalCatatan = $jurnalCatatan;
             $tempData->jurnalStatus = $jurnalStatus;
             $tempData->jurnalFile = $jurnalFile;
+            $tempData->jurnalCatatanPembimbing = $jurnalCatatanPembimbing;
             // push
             array_push($data, $tempData);
         }
