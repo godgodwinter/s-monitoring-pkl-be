@@ -188,3 +188,7 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::get('/admin/pkl/absen/siswa/{siswa}', [adminAbsensiController::class, 'getDataAbsensi']);
+Route::post('/admin/pkl/absen/konfirmasi/{absensi}', [adminAbsensiController::class, 'doKonfirmasiAbsen']);
+Route::delete('/admin/pkl/absen/konfirmasi/{absensi}', [adminAbsensiController::class, 'doKonfirmasiAbsenDelete']);
+Route::post('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnal']);
+Route::delete('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnalDelete']);

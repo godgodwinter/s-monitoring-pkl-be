@@ -40,10 +40,12 @@ class adminAbsensiController extends Controller
             $kehadiran = null;
             $kehadiranCatatan = null;
             $kehadiranStatus = null;
+            $absensi_id = null;
             // if ($i <= $tglNow) {
             $getKehadiran = absensi::where('siswa_id', $this->siswa_id)->where('tgl', 'like', $blnthn . "-" . $tglTemp . '%')
                 ->orderBy('tgl', 'asc')
                 ->first();
+            $absensi_id = $getKehadiran ? $getKehadiran->id : null;
             $kehadiran = $getKehadiran ? $getKehadiran->label : null;
             $kehadiranCatatan = $getKehadiran ? $getKehadiran->alasan : null;
             // $tempData->id = $getKehadiran ? $getKehadiran->id : null;
@@ -52,22 +54,26 @@ class adminAbsensiController extends Controller
 
             $kehadiranBukti = $getKehadiran ? url('/') . '/' . $getKehadiran->bukti : null;
             // }
+            $tempData->absensi_id = $absensi_id;
             $tempData->kehadiran = $kehadiran;
             $tempData->kehadiranCatatan = $kehadiranCatatan;
             $tempData->kehadiranStatus = $kehadiranStatus;
             $tempData->kehadiranBukti = $kehadiranBukti;
 
             $jurnal = null;
+            $jurnal_id = null;
             $jurnalCatatan = null;
             $jurnalStatus = null;
             $jurnalFile = null;
             $getJurnal = jurnal::where('siswa_id', $this->siswa_id)->where('tgl', 'like', $blnthn . "-" . $tglTemp . '%')
                 ->orderBy('tgl', 'asc')
                 ->first();
+            $jurnal_id = $getJurnal ? $getJurnal->id : null;
             $jurnal = $getJurnal ? $getJurnal->label : null;
             $jurnalCatatan = $getJurnal ? $getJurnal->alasan : null;
             $jurnalStatus = $getJurnal ? $getJurnal->status : null;
             $jurnalFile = $getJurnal ? url('/') . '/' . $getJurnal->file : null;
+            $tempData->jurnal_id = $jurnal_id;
             $tempData->jurnal = $jurnal;
             $tempData->jurnalCatatan = $jurnalCatatan;
             $tempData->jurnalStatus = $jurnalStatus;
@@ -81,6 +87,100 @@ class adminAbsensiController extends Controller
             'success'    => true,
             'data'    => $data,
             'blnthn' => $request->blnthn,
+            // 'siswa' => $this->siswa_id,
+            // 'file' => $request->bukti,
+        ], 200);
+    }
+    public function doKonfirmasiAbsen(absensi $absensi, Request $request)
+    {
+
+        $data = [];
+        $periksa = absensi::where('id', $absensi->id);
+        if ($periksa->count() > 0) {
+            $periksa
+                ->update([
+                    'status'     =>   $request->status,
+                    'catatan_pembimbing'     =>   $request->catatan_pembimbing,
+                    'updated_at' => date("Y-m-d H:i:s")
+                ]);
+            $data = "Data berhasil diupdate!";
+        } else {
+            $data = "Data tidak ditemukan";
+        }
+        return response()->json([
+            'success'    => true,
+            'data'    => $data,
+            // 'siswa' => $this->siswa_id,
+            // 'file' => $request->bukti,
+        ], 200);
+    }
+    public function doKonfirmasiAbsenDelete(absensi $absensi, Request $request)
+    {
+
+        $data = [];
+        $periksa = absensi::where('id', $absensi->id);
+        if ($periksa->count() > 0) {
+            $periksa
+                ->update([
+                    'status'     =>   'menunggu konfirmasi',
+                    'catatan_pembimbing'     =>   null,
+                    'updated_at' => date("Y-m-d H:i:s")
+                ]);
+            $data = "Data berhasil diupdate!";
+        } else {
+            $data = "Data tidak ditemukan";
+        }
+        return response()->json([
+            'success'    => true,
+            'data'    => $data,
+            // 'siswa' => $this->siswa_id,
+            // 'file' => $request->bukti,
+        ], 200);
+    }
+
+
+    public function doKonfirmasiJurnal(jurnal $jurnal, Request $request)
+    {
+
+        $data = [];
+        $periksa = jurnal::where('id', $jurnal->id);
+        if ($periksa->count() > 0) {
+            $periksa
+                ->update([
+                    'status'     =>   $request->status,
+                    'catatan_pembimbing'     =>   $request->catatan_pembimbing,
+                    'updated_at' => date("Y-m-d H:i:s")
+                ]);
+            $data = "Data berhasil diupdate!";
+        } else {
+            $data = "Data tidak ditemukan";
+        }
+        return response()->json([
+            'success'    => true,
+            'data'    => $data,
+            // 'siswa' => $this->siswa_id,
+            // 'file' => $request->bukti,
+        ], 200);
+    }
+    public function doKonfirmasiJurnalDelete(jurnal $jurnal, Request $request)
+    {
+
+        $data = [];
+        $periksa = jurnal::where('id', $jurnal->id);
+        if ($periksa->count() > 0) {
+            $periksa
+                ->update([
+                    'status'     =>   'menunggu konfirmasi',
+                    'catatan_pembimbing'     =>   null,
+                    'updated_at' => date("Y-m-d H:i:s")
+                ]);
+            $data = "Data berhasil diupdate!";
+        } else {
+            $data = "Data tidak ditemukan";
+        }
+        return response()->json([
+            'success'    => true,
+            'data'    => $data,
             // 'siswa' => $this->siswa_id,
             // 'file' => $request->bukti,
         ], 200);
