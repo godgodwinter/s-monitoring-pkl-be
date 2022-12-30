@@ -18,7 +18,7 @@ class BabengMiddleware
     public function handle(Request $request, Closure $next, $role)
     {
         if ($role === 'adminOwner') {
-            if (Auth::guard()->user() || Auth::guard('owner')->user()) {
+            if (Auth::guard()->user() || Auth::guard('pembimbinglapangan')->user() || Auth::guard('pembimbingsekolah')->user()) {
 
                 return $next($request);
             } else {

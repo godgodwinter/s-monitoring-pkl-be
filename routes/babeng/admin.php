@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\adminAbsensiController;
+use App\Http\Controllers\admin\adminHasilController;
 use App\Http\Controllers\admin\adminJurusanController;
 use App\Http\Controllers\admin\adminKelasController;
 use App\Http\Controllers\admin\adminPembimbingLapanganController;
@@ -26,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/admin/auth/login', [AuthController::class, 'login'])->name('admin.auth.login');
 Route::post('/admin/auth/register', [AuthController::class, 'register'])->name('admin.auth.register');
 // Route::middleware('api')->group(function () {
-Route::middleware('auth:api')->group(function () {
+Route::middleware('babeng:adminOwner')->group(function () {
     //menu-portofolio
     Route::post('/admin/auth/logout', [AuthController::class, 'logout'])->name('admin.auth.logout');
     Route::post('/admin/auth/refresh', [AuthController::class, 'refresh'])->name('admin.auth.refresh');
@@ -185,10 +186,12 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/admin/proses/import/tempatpkl', [adminProsesController::class, 'importTempatpkl']);
     Route::post('/admin/proses/import/pembimbinglapangan', [adminProsesController::class, 'importPembimbinglapangan']);
     Route::post('/admin/proses/import/guru', [adminProsesController::class, 'importGuru']);
-});
 
-Route::get('/admin/pkl/absen/siswa/{siswa}', [adminAbsensiController::class, 'getDataAbsensi']);
-Route::post('/admin/pkl/absen/konfirmasi/{absensi}', [adminAbsensiController::class, 'doKonfirmasiAbsen']);
-Route::delete('/admin/pkl/absen/konfirmasi/{absensi}', [adminAbsensiController::class, 'doKonfirmasiAbsenDelete']);
-Route::post('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnal']);
-Route::delete('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnalDelete']);
+    Route::get('/admin/pkl/absen/siswa/{siswa}', [adminAbsensiController::class, 'getDataAbsensi']);
+    Route::post('/admin/pkl/absen/konfirmasi/{absensi}', [adminAbsensiController::class, 'doKonfirmasiAbsen']);
+    Route::delete('/admin/pkl/absen/konfirmasi/{absensi}', [adminAbsensiController::class, 'doKonfirmasiAbsenDelete']);
+    Route::post('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnal']);
+    Route::delete('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnalDelete']);
+    Route::get('/admin/pkl/nilaiakhir/siswa/{siswa}', [adminHasilController::class, 'getHasil']);
+    Route::get('/admin/pkl/nilaiakhir/siswa/{siswa}/cetak', [adminHasilController::class, 'getHasilCetak']);
+});
