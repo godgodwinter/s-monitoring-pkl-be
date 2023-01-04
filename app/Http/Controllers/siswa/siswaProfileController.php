@@ -19,7 +19,7 @@ class siswaProfileController extends Controller
 {
     public function index(Request $request)
     {
-        $items = Siswa::with('kelasdetail')
+        $items = Siswa::with('kelasdetail')->with('tagihan')
             ->where('id', $this->guard()->user()->id)
             ->whereHas('kelasdetail', function ($query) {
                 $query->whereHas('kelas', function ($query) {
@@ -28,9 +28,17 @@ class siswaProfileController extends Controller
             })
             ->orderBy('updated_at', 'desc')
             ->first();
+        if ($items->tagihan) {
+            $items->pembayaran_jml = $items->tagihan->pembayaran ? $items->tagihan->pembayaran->count() : 0;
+            $items->pembayaran_total = $items->tagihan->pembayaran ? $items->tagihan->pembayaran->sum('nominal_bayar') : 0;
+            $items->pembayaran_persen = $items->tagihan->pembayaran->sum('nominal_bayar') < $items->tagihan->total_tagihan  ? ($items->tagihan->pembayaran ? number_format($items->tagihan->pembayaran->sum('nominal_bayar') / $items->tagihan->total_tagihan * 100) : 0) : 100;
+            $items->pembayaran_persen_kurang = number_format(100 - $items->pembayaran_persen, 2);
+        }
         // dd($dataAuth);
         return response()->json([
             'success'    => true,
+            'pembayaran_persen' => $items->tagihan ? $items->pembayaran_persen : 0,
+            'minimum' => Fungsi::app_min_pembayaran(),
             'data'    => $items,
             // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);

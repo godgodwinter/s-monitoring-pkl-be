@@ -62,14 +62,6 @@ Route::middleware('babeng:adminOwner')->group(function () {
     Route::put('/admin/kelas/{item}', [adminKelasController::class, 'update'])->name('admin.kelas.update');
     Route::delete('/admin/kelas/{item}', [adminKelasController::class, 'destroy'])->name('admin.kelas.destroy');
 
-    Route::get('/admin/siswa', [adminSiswaController::class, 'index'])->name('admin.siswa');
-    Route::post('/admin/siswa/store', [adminSiswaController::class, 'store'])->name('admin.siswa.store');
-    Route::get('/admin/siswa/{item}', [adminSiswaController::class, 'edit'])->name('admin.siswa.edit');
-    Route::put('/admin/siswa/{item}', [adminSiswaController::class, 'update'])->name('admin.siswa.update');
-    Route::delete('/admin/siswa/{item}', [adminSiswaController::class, 'destroy'])->name('admin.siswa.destroy');
-    Route::put('/admin/siswa/{item}/generatepassword', [adminSiswaController::class, 'generatepassword'])->name('admin.siswa.generatepassword');
-    Route::post('/admin/siswa/generatepasswordall', [adminSiswaController::class, 'generatepasswordall'])->name('admin.siswa.generatepasswordall');
-    Route::get('/admin/datasiswa/profile/{item}', [adminSiswaController::class, 'profile'])->name('admin.siswa.profile');
 
     Route::get('/admin/siswa/getall', [adminSiswaController::class, 'getall'])->name('admin.siswa.getall');
     Route::post('/admin/siswa/{item}/addtotapelaktif', [adminSiswaController::class, 'addtotapelaktif'])->name('admin.siswa.addtotapelaktif');
@@ -192,7 +184,16 @@ Route::middleware('babeng:adminOwner')->group(function () {
     Route::delete('/admin/pkl/absen/konfirmasi/{absensi}', [adminAbsensiController::class, 'doKonfirmasiAbsenDelete']);
     Route::post('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnal']);
     Route::delete('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnalDelete']);
-    Route::get('/admin/pkl/nilaiakhir/siswa/{siswa}', [adminHasilController::class, 'getHasil']);
 });
 
+Route::get('/admin/pkl/nilaiakhir/siswa/{siswa}', [adminHasilController::class, 'getHasil']);
 Route::get('/admin/pkl/nilaiakhir/siswa/{siswa}/cetak', [adminHasilController::class, 'getHasilCetak']);
+
+Route::get('/admin/siswa', [adminSiswaController::class, 'index'])->name('admin.siswa');
+Route::post('/admin/siswa/store', [adminSiswaController::class, 'store'])->name('admin.siswa.store');
+Route::get('/admin/siswa/{item}', [adminSiswaController::class, 'edit'])->name('admin.siswa.edit');
+Route::put('/admin/siswa/{item}', [adminSiswaController::class, 'update'])->name('admin.siswa.update');
+Route::delete('/admin/siswa/{item}', [adminSiswaController::class, 'destroy'])->name('admin.siswa.destroy');
+Route::put('/admin/siswa/{item}/generatepassword', [adminSiswaController::class, 'generatepassword'])->name('admin.siswa.generatepassword');
+Route::post('/admin/siswa/generatepasswordall', [adminSiswaController::class, 'generatepasswordall'])->name('admin.siswa.generatepasswordall');
+Route::get('/admin/datasiswa/profile/{item}', [adminSiswaController::class, 'profile'])->name('admin.siswa.profile');

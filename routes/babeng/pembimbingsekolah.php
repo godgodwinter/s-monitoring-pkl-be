@@ -66,12 +66,6 @@ Route::middleware('auth:pembimbingsekolah')->group(function () {
 
 
 
-    Route::get('/guru/tempatpkl', [adminTempatPklController::class, 'index'])->name('admin.tempatpkl');
-
-    Route::get('/guru/siswa/{item}', [adminSiswaController::class, 'edit'])->name('admin.siswa.edit');
-    Route::get('/guru/datasiswa/profile/{item}', [adminSiswaController::class, 'profile'])->name('admin.siswa.profile');
-
-
 
     //pendaftaranprakerin List
     Route::get('/guru/pendaftaranpkl/list/periksaidbaru/{siswa_id}', [adminPendaftaranPrakerinListController::class, 'periksaidbaru'])->name('admin.pendaftaranprakerin.list.periksaid');
@@ -99,10 +93,16 @@ Route::middleware('auth:pembimbingsekolah')->group(function () {
     Route::get('/guru/pendaftaranpkl/list/subsidebardata', [adminPendaftaranPrakerinListController::class, 'subsidebardata'])->name('admin.pendaftaranprakerin.list.subsidebardata');
 
     Route::get('/guru/pendaftaranpkl/list/getpilihanlankah2', [adminPendaftaranPrakerinListController::class, 'getpilihanlankah2'])->name('admin.pendaftaranprakerin.list.getpilihanlankah2');
-
-
-    Route::get('/guru/penilai/siswadetail/{item}', [guruSiswaController::class, 'siswadetail']);
-    Route::post('/guru/penilai/siswadetail/{item}/absensi', [guruSiswaController::class, 'store_nilai_absensi']);
-    Route::post('/guru/penilai/siswadetail/{item}/jurnal', [guruSiswaController::class, 'store_nilai_jurnal']);
-    Route::post('/guru/penilai/siswadetail/{item}/penilaian_guru', [guruSiswaController::class, 'store_nilai_penilaian_guru']);
 });
+
+
+
+Route::get('/guru/tempatpkl', [adminTempatPklController::class, 'index'])->name('admin.tempatpkl');
+
+Route::get('/guru/siswa/{item}', [adminSiswaController::class, 'edit'])->name('admin.siswa.edit');
+Route::get('/guru/datasiswa/profile/{item}', [adminSiswaController::class, 'profile'])->name('admin.siswa.profile');
+
+Route::get('/guru/penilai/siswadetail/{item}', [guruSiswaController::class, 'siswadetail']);
+Route::post('/guru/penilai/siswadetail/{item}/absensi', [guruSiswaController::class, 'store_nilai_absensi']);
+Route::post('/guru/penilai/siswadetail/{item}/jurnal', [guruSiswaController::class, 'store_nilai_jurnal']);
+Route::post('/guru/penilai/siswadetail/{item}/penilaian_guru', [guruSiswaController::class, 'store_nilai_penilaian_guru']);

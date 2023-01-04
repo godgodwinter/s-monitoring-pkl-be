@@ -229,8 +229,9 @@
                 <th width="50%" align="center">
                     <center>
                         Mengetahui <br>
-                        Pimpinan YPMT
-                        <br><br><br><br>
+                        Kepala Sekolah
+                        {{-- <br> SMK DHARMA WANITA KROMENGAN --}}
+                        <br><br><br><br><br>
 
                         Drs. Kepsek
                         <center>
