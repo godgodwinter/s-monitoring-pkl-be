@@ -82,27 +82,44 @@ class kaprodiPendaftaranController extends Controller
     {
         $result = collect([]);
 
-        // $items = pendaftaranprakerin::with('siswa')->where('status', 'Proses Pengajuan Tempat PKL')
-        //     ->orderBy('created_at', 'desc')
-        //     ->where('tapel_id', Fungsi::app_tapel_aktif())
-        //     ->get();
+        $sorted = $result;
+        $getDataProses = pendaftaranprakerin::with('siswa')->where('status', 'Proses Pengajuan Tempat PKL')
+            ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->get();
+        foreach ($getDataProses as $data) {
+            $jurusan = $data->siswa ? $data->siswa->kelasdetail->kelas->jurusan_table : null;
+            $jurusan_id = $jurusan ? $jurusan->id : null;
+            if ($jurusan_id == $this->me->jurusan->id) {
+                $result[] = $data;
+            }
+            $sorted = $result;
+        }
         return response()->json([
             'success'    => true,
-            // 'data'    => $sorted,
+            'data'    => $sorted,
         ], 200);
     }
 
     public function list_penempatan(Request $request)
     {
         $result = collect([]);
-
-        // $items = pendaftaranprakerin::with('siswa')->where('status', 'Proses Penempatan PKL')
-        //     ->orderBy('created_at', 'desc')
-        //     ->where('tapel_id', Fungsi::app_tapel_aktif())
-        //     ->get();
+        $sorted = $result;
+        $getDataProses = pendaftaranprakerin::with('siswa')->where('status', 'Proses Penempatan PKL')
+            ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->get();
+        foreach ($getDataProses as $data) {
+            $jurusan = $data->siswa ? $data->siswa->kelasdetail->kelas->jurusan_table : null;
+            $jurusan_id = $jurusan ? $jurusan->id : null;
+            if ($jurusan_id == $this->me->jurusan->id) {
+                $result[] = $data;
+            }
+            $sorted = $result;
+        }
         return response()->json([
             'success'    => true,
-            // 'data'    => $sorted,
+            'data'    => $sorted,
         ], 200);
     }
 
