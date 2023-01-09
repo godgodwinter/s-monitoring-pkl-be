@@ -79,4 +79,28 @@ class kaprodiDataController extends Controller
             'data'    => $sorted,
         ], 200);
     }
+    public function kelas(Request $request)
+    {
+        $result = collect([]);
+        $getKelas = kelasdetail::with('kelas')
+            ->with('siswa')
+            ->whereHas('kelas', function ($query) {
+                $query->where('kelas.jurusan', $this->me->jurusan->id)
+                    ->where('tapel_id', Fungsi::app_tapel_aktif());
+            })
+            ->get();
+        foreach ($getKelas as $kelas) {
+            $kelas->kelas->kelas_nama = $kelas->kelas ? ($kelas->kelas->tingkatan . " " . $kelas->kelas->jurusan_table->nama . " " . $kelas->kelas->suffix) : null;
+            // dd($kelas->kelas);
+            $dataKelas = $kelas->kelas ? $kelas->kelas : null;
+            if ($dataKelas) {
+                $result[] = $dataKelas;
+            }
+        }
+        $sorted = $result->sortBy('nama');
+        return response()->json([
+            'success'    => true,
+            'data'    => $sorted,
+        ], 200);
+    }
 }
