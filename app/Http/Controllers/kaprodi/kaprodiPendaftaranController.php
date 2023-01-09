@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class kaprodiPendaftaranController extends Controller
 {
     // constuct
+    protected $siswa_id;
     protected $guru_id;
     protected $me;
     public function __construct()
@@ -152,31 +153,40 @@ class kaprodiPendaftaranController extends Controller
     public function list_disetujui(Request $request)
     {
         $result = collect([]);
+        $sorted = $result;
 
-        // $items = pendaftaranprakerin::with('siswa')->where('status', 'Disetujui')
-        //     ->orderBy('created_at', 'desc')
-        //     ->where('tapel_id', Fungsi::app_tapel_aktif())
-        //     ->get();
-        // foreach ($items as $item) {
-        //     $this->siswa_id = $item->siswa_id;
-        //     // $getpendaftaranprakerin_prosesdetailId = pendaftaranprakerin_prosesdetail::where('siswa_id', $item->siswa_id)->first();
-        //     // $getpendaftaranprakerin_prosesId = pendaftaranprakerin_proses::first();
-        //     $getpendaftaranprakerin_prosesId = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')
-        //         ->with('pembimbingsekolah')
-        //         ->with('penilai')
-        //         ->whereHas('pendaftaranprakerin_prosesdetail', function ($query) {
-        //             $query->where('siswa_id', $this->siswa_id);
-        //         })
-        //         ->first();
-        //     $item->pembimbingsekolah = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->pembimbingsekolah : null;
-        //     $item->pembimbingsekolah_nama = $item->pembimbingsekolah ? $item->pembimbingsekolah->nama : null;
-        //     $item->pendaftaranprakerin_proses_id = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->id : null;
-        //     $item->penilai = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->penilai : null;
-        //     $item->penilai_nama = $item->penilai ? $item->penilai->nama : null;
-        // }
+        $getDataProses = pendaftaranprakerin::with('siswa')->where('status', 'Disetujui')
+            ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->get();
+        foreach ($getDataProses as $item) {
+            $this->siswa_id = $item->siswa_id;
+            // $getpendaftaranprakerin_prosesdetailId = pendaftaranprakerin_prosesdetail::where('siswa_id', $item->siswa_id)->first();
+            // $getpendaftaranprakerin_prosesId = pendaftaranprakerin_proses::first();
+            $getpendaftaranprakerin_prosesId = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')
+                ->with('pembimbingsekolah')
+                ->with('penilai')
+                ->whereHas('pendaftaranprakerin_prosesdetail', function ($query) {
+                    $query->where('siswa_id', $this->siswa_id);
+                })
+                ->first();
+            $item->pembimbingsekolah = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->pembimbingsekolah : null;
+            $item->pembimbingsekolah_nama = $item->pembimbingsekolah ? $item->pembimbingsekolah->nama : null;
+            $item->pendaftaranprakerin_proses_id = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->id : null;
+            $item->penilai = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->penilai : null;
+            $item->penilai_nama = $item->penilai ? $item->penilai->nama : null;
+
+
+            $jurusan = $item->siswa ? $item->siswa->kelasdetail->kelas->jurusan_table : null;
+            $jurusan_id = $jurusan ? $jurusan->id : null;
+            if ($jurusan_id == $this->me->jurusan->id) {
+                $result[] = $item;
+            }
+            $sorted = $result;
+        }
         return response()->json([
             'success'    => true,
-            // 'data'    => $sorted,
+            'data'    => $sorted,
         ], 200);
     }
 }
