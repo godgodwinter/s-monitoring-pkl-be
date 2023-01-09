@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTempatPklController;
 use App\Http\Controllers\AuthPembimbingSekolah;
 use App\Http\Controllers\guru\guruSiswaController;
+use App\Http\Controllers\kaprodi\kaprodiDataController;
 use App\Http\Controllers\pembimbingsekolah\guruDatakuController;
 use App\Http\Controllers\pembimbingsekolah\guruPenilaianController;
 use App\Http\Controllers\pembimbingsekolah\guruPenilaianGuruController;
@@ -93,6 +94,15 @@ Route::middleware('auth:pembimbingsekolah')->group(function () {
     Route::get('/guru/pendaftaranpkl/list/subsidebardata', [adminPendaftaranPrakerinListController::class, 'subsidebardata'])->name('admin.pendaftaranprakerin.list.subsidebardata');
 
     Route::get('/guru/pendaftaranpkl/list/getpilihanlankah2', [adminPendaftaranPrakerinListController::class, 'getpilihanlankah2'])->name('admin.pendaftaranprakerin.list.getpilihanlankah2');
+
+
+    // menu untuk pendaftaran
+    Route::get('/kaprodi/siswa', [kaprodiDataController::class, 'siswa']);
+    Route::get('/kaprodi/tempatpkl', [kaprodiDataController::class, 'tempatpkl']);
+    Route::get('/kaprodi/kelas', [kaprodiDataController::class, 'kelas']);
+
+
+    Route::get('/kaprodi/pendaftaran', [kaprodiDataController::class, 'index']);
 });
 
 
