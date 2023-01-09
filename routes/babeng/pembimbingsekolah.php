@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\adminTempatPklController;
 use App\Http\Controllers\AuthPembimbingSekolah;
 use App\Http\Controllers\guru\guruSiswaController;
 use App\Http\Controllers\kaprodi\kaprodiDataController;
+use App\Http\Controllers\kaprodi\kaprodiPendaftaranController;
 use App\Http\Controllers\pembimbingsekolah\guruDatakuController;
 use App\Http\Controllers\pembimbingsekolah\guruPenilaianController;
 use App\Http\Controllers\pembimbingsekolah\guruPenilaianGuruController;
@@ -100,6 +101,14 @@ Route::middleware('auth:pembimbingsekolah')->group(function () {
     Route::get('/kaprodi/siswa', [kaprodiDataController::class, 'siswa']);
     Route::get('/kaprodi/tempatpkl', [kaprodiDataController::class, 'tempatpkl']);
     Route::get('/kaprodi/kelas', [kaprodiDataController::class, 'kelas']);
+
+    //proses pendaftaran
+    Route::get('/kaprodi/pendaftaran/list/belumdaftar', [kaprodiPendaftaranController::class, 'list_belumdaftar']);
+    Route::get('/kaprodi/pendaftaran/list/pengajuan', [kaprodiPendaftaranController::class, 'list_pengajuan']);
+    Route::get('/kaprodi/pendaftaran/list/penempatan', [kaprodiPendaftaranController::class, 'list_penempatan']);
+    Route::get('/kaprodi/pendaftaran/list/pemberkasan', [kaprodiPendaftaranController::class, 'list_pemberkasan']);
+    Route::get('/kaprodi/pendaftaran/list/persetujuan', [kaprodiPendaftaranController::class, 'list_persetujuan']);
+    Route::get('/kaprodi/pendaftaran/list/disetujui', [kaprodiPendaftaranController::class, 'list_disetujui']);
 
 
     Route::get('/kaprodi/pendaftaran', [kaprodiDataController::class, 'index']);
