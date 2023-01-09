@@ -108,6 +108,7 @@ class kaprodiPendaftaranController extends Controller
     public function list_pemberkasan(Request $request)
     {
         $result = collect([]);
+        $sorted = $result;
         $getDataProses = pendaftaranprakerin::with('siswa')->where('status', 'Proses Pemberkasan')
             ->orderBy('created_at', 'desc')
             ->where('tapel_id', Fungsi::app_tapel_aktif())
@@ -129,15 +130,22 @@ class kaprodiPendaftaranController extends Controller
     public function list_persetujuan(Request $request)
     {
         $result = collect([]);
-
-
-        // $items = pendaftaranprakerin::with('siswa')->where('status', 'Proses Persetujuan')
-        //     ->orderBy('created_at', 'desc')
-        //     ->where('tapel_id', Fungsi::app_tapel_aktif())
-        //     ->get();
+        $sorted = $result;
+        $getDataProses   = pendaftaranprakerin::with('siswa')->where('status', 'Proses Persetujuan')
+            ->orderBy('created_at', 'desc')
+            ->where('tapel_id', Fungsi::app_tapel_aktif())
+            ->get();
+        foreach ($getDataProses as $data) {
+            $jurusan = $data->siswa ? $data->siswa->kelasdetail->kelas->jurusan_table : null;
+            $jurusan_id = $jurusan ? $jurusan->id : null;
+            if ($jurusan_id == $this->me->jurusan->id) {
+                $result[] = $data;
+            }
+            $sorted = $result;
+        }
         return response()->json([
             'success'    => true,
-            // 'data'    => $sorted,
+            'data'    => $sorted,
         ], 200);
     }
 
