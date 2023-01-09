@@ -63,15 +63,32 @@ class kaprodiPendaftaranController extends Controller
     {
         $result = collect([]);
 
-        $result = Siswa::with('pendaftaranprakerin')
+        $sorted = $result;
+        $getDataProses = Siswa::with('pendaftaranprakerin')
             ->whereHas('kelasdetail', function ($query) {
                 $query->whereHas('kelas', function ($query) {
-                    $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif())->where('kelas.jurusan', $this->me->jurusan->id);
+                    $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
                 });
             })
             ->whereDoesntHave('pendaftaranprakerin')
             ->get();
-        $sorted = $result->sortBy('nama');
+        foreach ($getDataProses as $data) {
+            $jurusan = $data ? $data->kelasdetail->kelas->jurusan_table : null;
+            $jurusan_id = $jurusan ? $jurusan->id : null;
+            if ($jurusan_id == $this->me->jurusan->id) {
+                $result[] = $data;
+            }
+            $sorted = $result;
+        }
+        // $result = Siswa::with('pendaftaranprakerin')
+        //     ->whereHas('kelasdetail', function ($query) {
+        //         $query->whereHas('kelas', function ($query) {
+        //             $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif())->where('kelas.jurusan', $this->me->jurusan->id);
+        //         });
+        //     })
+        //     ->whereDoesntHave('pendaftaranprakerin')
+        //     ->get();
+        // $sorted = $result->sortBy('nama');
         return response()->json([
             'success'    => true,
             'data'    => $sorted,
