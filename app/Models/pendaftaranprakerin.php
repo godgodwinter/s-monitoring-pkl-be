@@ -32,7 +32,7 @@ class pendaftaranprakerin extends Model
 
     public function siswa()
     {
-        return $this->belongsTo('App\Models\Siswa');
+        return $this->belongsTo('App\Models\Siswa')->with('kelasdetail');
     }
 
     public function tapel()
