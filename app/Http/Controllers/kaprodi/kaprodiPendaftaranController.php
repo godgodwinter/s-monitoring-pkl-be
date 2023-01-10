@@ -5,6 +5,7 @@ namespace App\Http\Controllers\kaprodi;
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\jurusan;
+use App\Models\kelasdetail;
 use App\Models\pendaftaranprakerin;
 use App\Models\pendaftaranprakerin_proses;
 use App\Models\Siswa;
@@ -243,8 +244,24 @@ class kaprodiPendaftaranController extends Controller
 
     public function listSubsidebardata(Request $request)
     {
+
+        $result = collect([]);
+        $getSiswa = kelasdetail::with('kelas')
+            ->with('siswa')
+            ->whereHas('kelas', function ($query) {
+                $query->where('kelas.jurusan', $this->me->jurusan->id)
+                    ->where('tapel_id', Fungsi::app_tapel_aktif());
+            })
+            ->get();
+        foreach ($getSiswa as $siswa) {
+            $dataSiswa = $siswa->siswa ? $siswa->siswa : null;
+            if ($dataSiswa) {
+                $result[] = $dataSiswa;
+            }
+        }
+        $sorted = $result->sortBy('nama');
         $items = [
-            'siswa' => 0,
+            'siswa' => $sorted ? $sorted->count() : 0,
             'belumdaftar' => $this->fn_belumdaftar() ? ($this->fn_belumdaftar())->count() : 0,
             'pengajuan' => $this->fn_pengajuan() ? ($this->fn_pengajuan())->count() : 0,
             'penempatan' => $this->fn_penempatan() ? ($this->fn_penempatan())->count() : 0,
