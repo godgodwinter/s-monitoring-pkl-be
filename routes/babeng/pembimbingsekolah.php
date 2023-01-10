@@ -103,6 +103,7 @@ Route::middleware('auth:pembimbingsekolah')->group(function () {
     Route::get('/kaprodi/kelas', [kaprodiDataController::class, 'kelas']);
 
     //proses pendaftaran
+    Route::get('/kaprodi/pendaftaran/list/getall', [kaprodiPendaftaranController::class, 'list_getall']);
     Route::get('/kaprodi/pendaftaran/list/belumdaftar', [kaprodiPendaftaranController::class, 'list_belumdaftar']);
     Route::get('/kaprodi/pendaftaran/list/pengajuan', [kaprodiPendaftaranController::class, 'list_pengajuan']);
     Route::get('/kaprodi/pendaftaran/list/penempatan', [kaprodiPendaftaranController::class, 'list_penempatan']);

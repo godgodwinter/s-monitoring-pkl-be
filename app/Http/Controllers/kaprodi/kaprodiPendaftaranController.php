@@ -102,6 +102,8 @@ class kaprodiPendaftaranController extends Controller
             ->where('tapel_id', Fungsi::app_tapel_aktif())
             ->get();
         foreach ($getDataProses as $data) {
+            $data->nama = $data->siswa ? $data->siswa->nama : null;
+            $data->nomeridentitas = $data->siswa ? $data->siswa->nomeridentitas : null;
             $jurusan = $data->siswa ? $data->siswa->kelasdetail->kelas->jurusan_table : null;
             $jurusan_id = $jurusan ? $jurusan->id : null;
             if ($jurusan_id == $this->me->jurusan->id) {
@@ -128,6 +130,8 @@ class kaprodiPendaftaranController extends Controller
             ->where('tapel_id', Fungsi::app_tapel_aktif())
             ->get();
         foreach ($getDataProses as $data) {
+            $data->nama = $data->siswa ? $data->siswa->nama : null;
+            $data->nomeridentitas = $data->siswa ? $data->siswa->nomeridentitas : null;
             $jurusan = $data->siswa ? $data->siswa->kelasdetail->kelas->jurusan_table : null;
             $jurusan_id = $jurusan ? $jurusan->id : null;
             if ($jurusan_id == $this->me->jurusan->id) {
@@ -154,6 +158,8 @@ class kaprodiPendaftaranController extends Controller
             ->where('tapel_id', Fungsi::app_tapel_aktif())
             ->get();
         foreach ($getDataProses as $data) {
+            $data->nama = $data->siswa ? $data->siswa->nama : null;
+            $data->nomeridentitas = $data->siswa ? $data->siswa->nomeridentitas : null;
             $jurusan = $data->siswa ? $data->siswa->kelasdetail->kelas->jurusan_table : null;
             $jurusan_id = $jurusan ? $jurusan->id : null;
             if ($jurusan_id == $this->me->jurusan->id) {
@@ -180,6 +186,8 @@ class kaprodiPendaftaranController extends Controller
             ->where('tapel_id', Fungsi::app_tapel_aktif())
             ->get();
         foreach ($getDataProses as $data) {
+            $data->nama = $data->siswa ? $data->siswa->nama : null;
+            $data->nomeridentitas = $data->siswa ? $data->siswa->nomeridentitas : null;
             $jurusan = $data->siswa ? $data->siswa->kelasdetail->kelas->jurusan_table : null;
             $jurusan_id = $jurusan ? $jurusan->id : null;
             if ($jurusan_id == $this->me->jurusan->id) {
@@ -208,6 +216,8 @@ class kaprodiPendaftaranController extends Controller
             ->get();
         foreach ($getDataProses as $item) {
             $this->siswa_id = $item->siswa_id;
+            $item->nama = $item->siswa ? $item->siswa->nama : null;
+            $item->nomeridentitas = $item->siswa ? $item->siswa->nomeridentitas : null;
             // $getpendaftaranprakerin_prosesdetailId = pendaftaranprakerin_prosesdetail::where('siswa_id', $item->siswa_id)->first();
             // $getpendaftaranprakerin_prosesId = pendaftaranprakerin_proses::first();
             $getpendaftaranprakerin_prosesId = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')
@@ -238,6 +248,30 @@ class kaprodiPendaftaranController extends Controller
         return response()->json([
             'success'    => true,
             'data'    => $this->fn_disetujui(),
+        ], 200);
+    }
+    public function list_getall(Request $request)
+    {
+        $result = collect([]);
+        $sorted = $result;
+        $getDataProses = Siswa::with('pendaftaranprakerin')
+            ->whereHas('kelasdetail', function ($query) {
+                $query->whereHas('kelas', function ($query) {
+                    $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif());
+                });
+            })
+            ->get();
+        foreach ($getDataProses as $data) {
+            $jurusan = $data ? $data->kelasdetail->kelas->jurusan_table : null;
+            $jurusan_id = $jurusan ? $jurusan->id : null;
+            if ($jurusan_id == $this->me->jurusan->id) {
+                $result[] = $data;
+            }
+            $sorted = $result;
+        }
+        return response()->json([
+            'success'    => true,
+            'data'    => $sorted,
         ], 200);
     }
 
