@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\jurusan;
 use App\Models\kelasdetail;
 use App\Models\pendaftaranprakerin;
+use App\Models\pendaftaranprakerin_pengajuansiswa;
 use App\Models\pendaftaranprakerin_proses;
+use App\Models\pendaftaranprakerin_prosesdetail;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,12 +17,13 @@ use Illuminate\Support\Facades\Auth;
 class kaprodiPendaftaranController extends Controller
 {
     // constuct
+    protected $tempatpkl_id;
     protected $siswa_id;
     protected $guru_id;
     protected $me;
     public function __construct()
     {
-        $this->guru_id =  $this->guard()->user()->id;
+        $this->guru_id =  $this->guard()->user() ? $this->guard()->user()->id : 0;
         $this->me =  $this->me();
     }
     public function me()
@@ -309,6 +312,94 @@ class kaprodiPendaftaranController extends Controller
         return response()->json([
             'success'    => true,
             'data'    => $items,
+        ], 200);
+    }
+
+
+    public function getDataSiswa(Request $request)
+    {
+        $cari = $request->cari;
+        $this->tempatpkl_id = $request->tempatpkl_id;
+        $items = collect([]);
+        $result = collect([]);
+        $tersedia = $request->tersedia; //Semua Data atau Tersedia atau Tidak Tersedia
+        // $tempItems = siswa::with('kelasdetail')->where('nama', 'like', "%" . $cari . "%")
+        //     ->get();
+        // dd($)
+        $getSiswa = kelasdetail::with('kelas')
+            ->with('siswa')
+            ->whereHas('kelas', function ($query) {
+                $query->where('kelas.jurusan', $this->me->jurusan->id)
+                    ->where('tapel_id', Fungsi::app_tapel_aktif());
+            })
+            ->get();
+        foreach ($getSiswa as $siswa) {
+            $dataSiswa = $siswa->siswa ? $siswa->siswa : null;
+            if ($dataSiswa) {
+                $getKelas = kelasdetail::with('kelas')
+                    ->with('siswa')
+                    ->where('siswa_id', $dataSiswa->id)
+                    ->whereHas('kelas', function ($query) {
+                        $query->where('kelas.jurusan', $this->me->jurusan->id)
+                            ->where('tapel_id', Fungsi::app_tapel_aktif());
+                    })
+                    ->first();
+                $dataSiswa->kelas_nama = $getKelas ? $getKelas->kelas->tingkatan . " " . $getKelas->kelas->jurusan_table->nama . " " . $getKelas->kelas->suffix : null;
+                // dd($dataSiswa);
+                $result[] = $dataSiswa;
+            }
+        }
+        $items = $result->sortBy('nama');
+        $data = [];
+        foreach ($items as $item) {
+            $this->siswa_id = $item->id;
+            $periksa = pendaftaranprakerin_pengajuansiswa::with('pendaftaranprakerin')
+                ->whereHas('pendaftaranprakerin', function ($query) {
+                    $query->where('tapel_id', Fungsi::app_tapel_aktif())->where('siswa_id', $this->siswa_id);
+                })
+                ->where('tempatpkl_id', $this->tempatpkl_id)
+                ->count();
+            if ($tersedia == 'Memilih Tempat Ini') {
+                // $data = 'Memilih Tempat Ini';
+                if ($periksa > 0) {
+                    // periksa apakah sudah terdaftar di tempat pkl lain jika sudah maka skip
+                    $periksaTerdaftar = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')->whereHas('pendaftaranprakerin_proses', function ($query) {
+                        $query->where('tapel_id', Fungsi::app_tapel_aktif())->whereNot('status', 'Ditolak');
+                        // $query->where('status', NULL);
+                    })
+                        ->where('siswa_id', $this->siswa_id)->count();
+                    if ($periksaTerdaftar == 0) {
+                        $periksaPemberkasanSetuju = pendaftaranprakerin::where('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Disetujui')
+                            ->orWhere('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Proses Pemberkasan')
+                            ->orWhere('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Proses Persetujuan');
+                        if ($periksaPemberkasanSetuju->count() == 0) {
+                            array_push($data, $item);
+                        }
+                    }
+                }
+            } else {
+                // periksa apakah sudah terdaftar di tempat pkl lain jika sudah maka skip
+                $periksaTerdaftar = pendaftaranprakerin_prosesdetail::with('pendaftaranprakerin_proses')->whereHas('pendaftaranprakerin_proses', function ($query) {
+                    $query->where('tapel_id', Fungsi::app_tapel_aktif())->whereNot('status', 'Ditolak');
+                    // $query->where('status', NULL);
+                })
+                    ->where('siswa_id', $this->siswa_id)->count();
+                if ($periksaTerdaftar == 0) {
+                    // array_push($data, $item);
+                    $periksaPemberkasanSetuju = pendaftaranprakerin::where('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Disetujui')
+                        ->orWhere('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Proses Pemberkasan')
+                        ->orWhere('siswa_id', $item->id)->where('tapel_id', Fungsi::app_tapel_aktif())->where('status', 'Proses Persetujuan');
+                    if ($periksaPemberkasanSetuju->count() == 0) {
+                        array_push($data, $item);
+                    }
+                }
+            }
+        }
+        // get identitas tempat pkl dan teman yang berada di tempat pkl yang sama serta status pengajuan diacc/ditolak
+        return response()->json([
+            'success'    => true,
+            'data'    => $data,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
         ], 200);
     }
 }

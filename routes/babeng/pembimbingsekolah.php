@@ -114,6 +114,10 @@ Route::middleware('auth:pembimbingsekolah')->group(function () {
 
 
     Route::get('/kaprodi/pendaftaran', [kaprodiDataController::class, 'index']);
+
+
+    // Route::get('/kaprodi/pendaftaranpkl/getdatatempatpkl', [kaprodiPendaftaranController::class, 'getDataTempatPKL']);
+    Route::get('/kaprodi/pendaftaranpkl/getdatasiswa', [kaprodiPendaftaranController::class, 'getDataSiswa']);
 });
 
 
