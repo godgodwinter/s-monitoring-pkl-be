@@ -59,7 +59,7 @@ class kaprodiPendaftaranController extends Controller
         return Auth::guard('pembimbingsekolah');
     }
 
-    public function list_belumdaftar(Request $request)
+    public function fn_belumdaftar()
     {
         $result = collect([]);
 
@@ -80,22 +80,18 @@ class kaprodiPendaftaranController extends Controller
             }
             $sorted = $result;
         }
-        // $result = Siswa::with('pendaftaranprakerin')
-        //     ->whereHas('kelasdetail', function ($query) {
-        //         $query->whereHas('kelas', function ($query) {
-        //             $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif())->where('kelas.jurusan', $this->me->jurusan->id);
-        //         });
-        //     })
-        //     ->whereDoesntHave('pendaftaranprakerin')
-        //     ->get();
-        // $sorted = $result->sortBy('nama');
+        return $sorted;
+    }
+    public function list_belumdaftar(Request $request)
+    {
+
         return response()->json([
             'success'    => true,
-            'data'    => $sorted,
+            'data'    => $this->fn_belumdaftar(),
         ], 200);
     }
 
-    public function list_pengajuan(Request $request)
+    public function fn_pengajuan()
     {
         $result = collect([]);
 
@@ -112,13 +108,17 @@ class kaprodiPendaftaranController extends Controller
             }
             $sorted = $result;
         }
+        return $sorted;
+    }
+    public function list_pengajuan(Request $request)
+    {
         return response()->json([
             'success'    => true,
-            'data'    => $sorted,
+            'data'    => $this->fn_pengajuan(),
         ], 200);
     }
 
-    public function list_penempatan(Request $request)
+    public function fn_penempatan()
     {
         $result = collect([]);
         $sorted = $result;
@@ -134,13 +134,17 @@ class kaprodiPendaftaranController extends Controller
             }
             $sorted = $result;
         }
+        return $sorted;
+    }
+    public function list_penempatan(Request $request)
+    {
         return response()->json([
             'success'    => true,
-            'data'    => $sorted,
+            'data'    => $this->fn_penempatan(),
         ], 200);
     }
 
-    public function list_pemberkasan(Request $request)
+    public function fn_pemberkasan()
     {
         $result = collect([]);
         $sorted = $result;
@@ -156,13 +160,17 @@ class kaprodiPendaftaranController extends Controller
             }
             $sorted = $result;
         }
+        return $sorted;
+    }
+    public function list_pemberkasan(Request $request)
+    {
         return response()->json([
             'success'    => true,
-            'data'    => $sorted,
+            'data'    => $this->fn_pemberkasan(),
         ], 200);
     }
 
-    public function list_persetujuan(Request $request)
+    public function fn_persetujuan()
     {
         $result = collect([]);
         $sorted = $result;
@@ -178,13 +186,17 @@ class kaprodiPendaftaranController extends Controller
             }
             $sorted = $result;
         }
+        return $sorted;
+    }
+    public function list_persetujuan(Request $request)
+    {
         return response()->json([
             'success'    => true,
-            'data'    => $sorted,
+            'data'    => $this->fn_persetujuan(),
         ], 200);
     }
 
-    public function list_disetujui(Request $request)
+    public function fn_disetujui()
     {
         $result = collect([]);
         $sorted = $result;
@@ -218,9 +230,34 @@ class kaprodiPendaftaranController extends Controller
             }
             $sorted = $result;
         }
+        return $sorted;
+    }
+    public function list_disetujui(Request $request)
+    {
         return response()->json([
             'success'    => true,
-            'data'    => $sorted,
+            'data'    => $this->fn_disetujui(),
+        ], 200);
+    }
+
+
+    public function listSubsidebardata(Request $request)
+    {
+        $items = [
+            'siswa' => 0,
+            'belumdaftar' => $this->fn_belumdaftar() ? ($this->fn_belumdaftar())->count() : 0,
+            'pengajuan' => $this->fn_pengajuan() ? ($this->fn_pengajuan())->count() : 0,
+            'penempatan' => $this->fn_penempatan() ? ($this->fn_penempatan())->count() : 0,
+            'pemberkasan' => $this->fn_pemberkasan() ? ($this->fn_pemberkasan())->count() : 0,
+            'persetujuan' => $this->fn_persetujuan() ? ($this->fn_persetujuan())->count() : 0,
+            'disetujui' => $this->fn_disetujui() ? ($this->fn_disetujui())->count() : 0,
+            'ditolak' => $this->fn_belumdaftar() ? ($this->fn_belumdaftar())->count() : 0,
+            'sedangpkl' =>  0,
+            'telahselesai' => 0,
+        ];
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
         ], 200);
     }
 }
