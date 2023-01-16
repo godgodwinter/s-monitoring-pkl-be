@@ -390,18 +390,26 @@ class adminPendaftaranPrakerinController extends Controller
                             'updated_at' =>   Carbon::now(),
                         ]);
 
-                    pendaftaranprakerin_proses::where('tempatpkl_id', $tempatpkl->id)->where('status', null)->where('tapel_id', Fungsi::app_tapel_aktif())
-                        ->update([
-                            'status'     =>   'Ditolak',
-                            'ket' => $request->keterangan,
-                            'updated_at' =>   Carbon::now(),
-                        ]);
-
-
                     tempatpkl::where('id', $tempatpkl->id)->update([
                         'status' => 'Tersedia',
                         'updated_at' =>   Carbon::now(),
                     ]);
+
+                    $getData = pendaftaranprakerin_proses::where('tempatpkl_id', $tempatpkl->id)->where('status', null)->where('tapel_id', Fungsi::app_tapel_aktif());
+                    $getData_list = $getData->first();
+                    if ($getData_list) {
+                        pendaftaranprakerin_prosesdetail::where("pendaftaranprakerin_proses_id", $getData_list->id)->forceDelete();
+                    }
+                    $getData->forceDelete();
+
+                    // pendaftaranprakerin_proses::where('tempatpkl_id', $tempatpkl->id)->where('status', null)->where('tapel_id', Fungsi::app_tapel_aktif())
+                    //     ->update([
+                    //         'status'     =>   'Ditolak',
+                    //         'ket' => $request->keterangan,
+                    //         'updated_at' =>   Carbon::now(),
+                    //     ]);
+
+
                     $items = 'Proses ditolak berhasil!';
                 }
             }
