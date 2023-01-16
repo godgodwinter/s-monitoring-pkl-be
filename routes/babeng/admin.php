@@ -136,15 +136,6 @@ Route::middleware('babeng:adminOwner')->group(function () {
     Route::post('/admin/pendaftaranpkl/list/disetujui/addpembimbingsekolah/{pendaftaranprakerin_proses}', [adminPendaftaranPrakerinListController::class, 'addpembimbingsekolah']);
     Route::get('/admin/pendaftaranpkl/list/ditolak', [adminPendaftaranPrakerinListController::class, 'getDitolak']);
 
-    Route::get('/admin/pendaftaranpkl/getdatatempatpkl', [adminPendaftaranPrakerinListController::class, 'getDataTempatPKL']);
-    Route::get('/admin/pendaftaranpkl/getdatasiswa', [adminPendaftaranPrakerinListController::class, 'getDataSiswa']);
-    // Route::get('/admin/pendaftaranpkl/list/prosesdaftar', [adminPendaftaranPrakerinListController::class, 'prosesdaftar'])->name('admin.pendaftaranprakerin.list.prosesdaftar');
-    // Route::get('/admin/pendaftaranpkl/list/menunggu', [adminPendaftaranPrakerinListController::class, 'menunggu'])->name('admin.pendaftaranprakerin.list.menunggu');
-    // Route::get('/admin/pendaftaranpkl/list/belumdaftar', [adminPendaftaranPrakerinListController::class, 'belumdaftar'])->name('admin.pendaftaranprakerin.list.belumdaftar');
-    // Route::get('/admin/pendaftaranpkl/list/disetujui', [adminPendaftaranPrakerinListController::class, 'disetujui'])->name('admin.pendaftaranprakerin.list.disetujui');
-    Route::get('/admin/pendaftaranpkl/list/subsidebardata', [adminPendaftaranPrakerinListController::class, 'subsidebardata'])->name('admin.pendaftaranprakerin.list.subsidebardata');
-
-    Route::get('/admin/pendaftaranpkl/list/getpilihanlankah2', [adminPendaftaranPrakerinListController::class, 'getpilihanlankah2'])->name('admin.pendaftaranprakerin.list.getpilihanlankah2');
 
 
     Route::get('/admin/penilaian', [AdminPenilaianController::class, 'index']);
@@ -185,6 +176,20 @@ Route::middleware('babeng:adminOwner')->group(function () {
     Route::post('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnal']);
     Route::delete('/admin/pkl/jurnal/konfirmasi/{jurnal}', [adminAbsensiController::class, 'doKonfirmasiJurnalDelete']);
 });
+
+//PROSES
+Route::get('/admin/pendaftaranpkl/getdatatempatpkl', [adminPendaftaranPrakerinListController::class, 'getDataTempatPKL']);
+Route::get('/admin/pendaftaranpkl/getdatasiswa', [adminPendaftaranPrakerinListController::class, 'getDataSiswa']);
+// Route::get('/admin/pendaftaranpkl/list/prosesdaftar', [adminPendaftaranPrakerinListController::class, 'prosesdaftar'])->name('admin.pendaftaranprakerin.list.prosesdaftar');
+// Route::get('/admin/pendaftaranpkl/list/menunggu', [adminPendaftaranPrakerinListController::class, 'menunggu'])->name('admin.pendaftaranprakerin.list.menunggu');
+// Route::get('/admin/pendaftaranpkl/list/belumdaftar', [adminPendaftaranPrakerinListController::class, 'belumdaftar'])->name('admin.pendaftaranprakerin.list.belumdaftar');
+// Route::get('/admin/pendaftaranpkl/list/disetujui', [adminPendaftaranPrakerinListController::class, 'disetujui'])->name('admin.pendaftaranprakerin.list.disetujui');
+Route::get('/admin/pendaftaranpkl/list/subsidebardata', [adminPendaftaranPrakerinListController::class, 'subsidebardata'])->name('admin.pendaftaranprakerin.list.subsidebardata');
+
+Route::get('/admin/pendaftaranpkl/list/getpilihanlankah2', [adminPendaftaranPrakerinListController::class, 'getpilihanlankah2'])->name('admin.pendaftaranprakerin.list.getpilihanlankah2');
+
+//PROSES
+
 
 Route::get('/admin/pkl/nilaiakhir/siswa/{siswa}', [adminHasilController::class, 'getHasil']);
 Route::get('/admin/pkl/nilaiakhir/siswa/{siswa}/cetak', [adminHasilController::class, 'getHasilCetak']);

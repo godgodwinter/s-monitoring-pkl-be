@@ -137,6 +137,13 @@ class kaprodiPendaftaranController extends Controller
             $data->nomeridentitas = $data->siswa ? $data->siswa->nomeridentitas : null;
             $jurusan = $data->siswa ? $data->siswa->kelasdetail->kelas->jurusan_table : null;
             $jurusan_id = $jurusan ? $jurusan->id : null;
+            $data->tempatpkl_1 = null;
+            $data->tempatpkl_2 = null;
+            $getTempatpkl = pendaftaranprakerin_pengajuansiswa::where('pendaftaranprakerin_id', $data->id)->with('tempatpkl')->get();
+            if ($getTempatpkl->count() > 0) {
+                $data->tempatpkl_1 = $getTempatpkl[0] ? $getTempatpkl[0]->tempatpkl->nama : null;
+                $data->tempatpkl_2 = $getTempatpkl[1] ? $getTempatpkl[1]->tempatpkl->nama : null;
+            }
             if ($jurusan_id == $this->me->jurusan->id) {
                 $result[] = $data;
             }
@@ -165,6 +172,14 @@ class kaprodiPendaftaranController extends Controller
             $data->nomeridentitas = $data->siswa ? $data->siswa->nomeridentitas : null;
             $jurusan = $data->siswa ? $data->siswa->kelasdetail->kelas->jurusan_table : null;
             $jurusan_id = $jurusan ? $jurusan->id : null;
+            $data->tempatpkl_nama = null;
+            $this->siswa_id = $data->siswa ? $data->siswa->id : null;
+            $getTempatpkl = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->with('tempatpkl')
+                ->whereHas('pendaftaranprakerin_prosesdetail', function ($query) {
+                    $query->where('siswa_id', $this->siswa_id);
+                })
+                ->first();
+            $data->tempatpkl_nama = $getTempatpkl->count() > 0 ? $getTempatpkl->tempatpkl->nama : null;
             if ($jurusan_id == $this->me->jurusan->id) {
                 $result[] = $data;
             }
@@ -193,6 +208,14 @@ class kaprodiPendaftaranController extends Controller
             $data->nomeridentitas = $data->siswa ? $data->siswa->nomeridentitas : null;
             $jurusan = $data->siswa ? $data->siswa->kelasdetail->kelas->jurusan_table : null;
             $jurusan_id = $jurusan ? $jurusan->id : null;
+            $data->tempatpkl_nama = null;
+            $this->siswa_id = $data->siswa ? $data->siswa->id : null;
+            $getTempatpkl = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->with('tempatpkl')
+                ->whereHas('pendaftaranprakerin_prosesdetail', function ($query) {
+                    $query->where('siswa_id', $this->siswa_id);
+                })
+                ->first();
+            $data->tempatpkl_nama = $getTempatpkl->count() > 0 ? $getTempatpkl->tempatpkl->nama : null;
             if ($jurusan_id == $this->me->jurusan->id) {
                 $result[] = $data;
             }
@@ -235,6 +258,15 @@ class kaprodiPendaftaranController extends Controller
             $item->pendaftaranprakerin_proses_id = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->id : null;
             $item->penilai = $getpendaftaranprakerin_prosesId ? $getpendaftaranprakerin_prosesId->penilai : null;
             $item->penilai_nama = $item->penilai ? $item->penilai->nama : null;
+
+            $item->tempatpkl_nama = null;
+            $this->siswa_id = $item->siswa ? $item->siswa->id : null;
+            $getTempatpkl = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->with('tempatpkl')
+                ->whereHas('pendaftaranprakerin_prosesdetail', function ($query) {
+                    $query->where('siswa_id', $this->siswa_id);
+                })
+                ->first();
+            $item->tempatpkl_nama = $getTempatpkl->count() > 0 ? $getTempatpkl->tempatpkl->nama : null;
 
 
             $jurusan = $item->siswa ? $item->siswa->kelasdetail->kelas->jurusan_table : null;
@@ -283,22 +315,34 @@ class kaprodiPendaftaranController extends Controller
     {
 
         $result = collect([]);
-        $getSiswa = kelasdetail::with('kelas')
-            ->with('siswa')
-            ->whereHas('kelas', function ($query) {
-                $query->where('kelas.jurusan', $this->me->jurusan->id)
-                    ->where('tapel_id', Fungsi::app_tapel_aktif());
+        // $getSiswa = kelasdetail::with('kelas')
+        //     ->with('siswa')
+        //     ->whereHas('kelas', function ($query) {
+        //         $query->where('kelas.jurusan', $this->me->jurusan->id)
+        //             ->where('tapel_id', Fungsi::app_tapel_aktif());
+        //     })
+        //     ->get();
+        // return response()->json([
+        //     'success'    => true,
+        //     'data'    => $getSiswa,
+        // ], 200);
+        // // dd($getSiswa);
+        // foreach ($getSiswa as $siswa) {
+        //     $dataSiswa = $siswa->siswa ? $siswa->siswa : null;
+        //     if ($dataSiswa) {
+        //         $result[] = $dataSiswa;
+        //     }
+        // }
+        // $sorted = $result->sortBy('nama');
+        $getSiswa = Siswa::with('pendaftaranprakerin')
+            ->whereHas('kelasdetail', function ($query) {
+                $query->whereHas('kelas', function ($query) {
+                    $query->where('kelas.tapel_id', Fungsi::app_tapel_aktif())->where('kelas.jurusan', $this->me->jurusan->id);
+                });
             })
             ->get();
-        foreach ($getSiswa as $siswa) {
-            $dataSiswa = $siswa->siswa ? $siswa->siswa : null;
-            if ($dataSiswa) {
-                $result[] = $dataSiswa;
-            }
-        }
-        $sorted = $result->sortBy('nama');
         $items = [
-            'siswa' => $sorted ? $sorted->count() : 0,
+            'siswa' => $getSiswa ? $getSiswa->count() : 0,
             'belumdaftar' => $this->fn_belumdaftar() ? ($this->fn_belumdaftar())->count() : 0,
             'pengajuan' => $this->fn_pengajuan() ? ($this->fn_pengajuan())->count() : 0,
             'penempatan' => $this->fn_penempatan() ? ($this->fn_penempatan())->count() : 0,

@@ -128,8 +128,8 @@ class siswaProfileController extends Controller
                     $objAnggota['nama'] = $ga->siswa->nama;
                     $objAnggota['jk'] = $ga->siswa->jk;
                     $objAnggota['alamat'] = $ga->siswa->alamat;
-                    $objAnggota['jurusan'] = "{$ga->siswa->kelasdetail->kelas->jurusan}";
-                    $objAnggota['kelas'] = "{$ga->siswa->kelasdetail->kelas->tingkatan} {$ga->siswa->kelasdetail->kelas->jurusan} {$ga->siswa->kelasdetail->kelas->suffix}";
+                    $objAnggota['jurusan'] = "{$ga->siswa->kelasdetail->kelas->jurusan_table->nama}";
+                    $objAnggota['kelas'] = "{$ga->siswa->kelasdetail->kelas->tingkatan} {$ga->siswa->kelasdetail->kelas->jurusan_table->nama} {$ga->siswa->kelasdetail->kelas->suffix}";
                     // $objAnggota['kelas'] = $ga->siswa->kelas->tingkatan + ' ' + $ga->siswa->kelas->jurusan + ' ' + $ga->siswa->kelas->suffix;
                     // $objAnggota['nama'] = $ga->pendaftaranprakerin_prosesdetail->siswa;
                     // array push
@@ -137,7 +137,11 @@ class siswaProfileController extends Controller
                 }
             }
         }
-
+        if ($tempatpkl) {
+            $getPembimbinglapangan = $tempatpkl ? $tempatpkl->pembimbinglapangan : null;
+            $getPembimbingSekolah = pendaftaranprakerin_proses::with('pembimbingsekolah')->where('tempatpkl_id', $tempatpkl->id)->where('tapel_id', Fungsi::app_tapel_aktif())->first();
+            $getPembimbingSekolah = $getPembimbingSekolah ? $getPembimbingSekolah->pembimbingsekolah : null;
+        }
         return response()->json([
             'success'    => true,
             'id'    => $id,
