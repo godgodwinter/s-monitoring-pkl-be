@@ -50,6 +50,7 @@ class importTempatpkl implements ToCollection, WithCalculatedFormulas
                             'tgl_mulai' => $row[7],
                             'tgl_selesai' => $row[8],
                             'kuota' => $row[6],
+                            'desc' => $row[9],
                             'updated_at' => date("Y-m-d H:i:s")
                         ]);
                         $jmlDiSkip++;
@@ -64,6 +65,7 @@ class importTempatpkl implements ToCollection, WithCalculatedFormulas
                                 'kuota' => $row[6],
                                 'tgl_mulai' => $row[7],
                                 'tgl_selesai' => $row[8],
+                                'desc' => $row[9],
                                 'tapel_id' => $tapel_id,
                                 'deleted_at' => null,
                                 'created_at' => date("Y-m-d H:i:s"),

@@ -47,6 +47,7 @@ class adminTempatPklController extends Controller
                 'kuota'     =>   $request->kuota,
                 'tgl_mulai'     =>   $request->tgl_mulai,
                 'tgl_selesai'     =>   $request->tgl_selesai,
+                'desc'     =>   $request->desc,
                 'tapel_id'     =>   Fungsi::app_tapel_aktif(),
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s")
@@ -89,6 +90,7 @@ class adminTempatPklController extends Controller
                 'kuota'     =>   $request->kuota,
                 'tgl_mulai'     =>   $request->tgl_mulai,
                 'tgl_selesai'     =>   $request->tgl_selesai,
+                'desc'     =>   $request->desc,
                 'updated_at' => date("Y-m-d H:i:s")
             ]);
 

@@ -7,7 +7,9 @@ use App\Models\apiprobk;
 use App\Models\buletinpsikologi;
 use App\Models\kelasdetail;
 use App\Models\klasifikasiakademis;
+use App\Models\pembayaran;
 use App\Models\Siswa;
+use App\Models\tagihan;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -26,6 +28,58 @@ class importSiswa implements ToCollection, WithCalculatedFormulas
 
     protected $id;
 
+
+    public function fnInsertTagihan(int $siswa_id, int $total_tagihan, int $pembayaran_pertama)
+    {
+        # code...
+        $tapel_id = Fungsi::app_tapel_aktif();
+
+        $periksa = tagihan::where('siswa_id', $siswa_id)->where('tapel_id', $tapel_id);
+        if ($periksa->count() > 0) {
+            //update
+            $periksa->update([
+                'siswa_id' => $siswa_id,
+                'total_tagihan' => $total_tagihan,
+                'updated_at' => date("Y-m-d H:i:s")
+            ]);
+            $getTagihan = $periksa->first();
+            $tagihan_id = $getTagihan->id;
+        } else {
+            $tagihan_id = tagihan::insertGetId(
+                array(
+                    'siswa_id' => $siswa_id,
+                    'total_tagihan' => $total_tagihan,
+                    'tgl' => date("Y-m-d H:i:s"),
+                    'tapel_id' => $tapel_id,
+                    'deleted_at' => null,
+                    'created_at' => date("Y-m-d H:i:s"),
+                    'updated_at' => date("Y-m-d H:i:s")
+                )
+            );
+        }
+
+
+        $periksaPembayaran = pembayaran::where('tagihan_id', $tagihan_id);
+        if ($periksaPembayaran->count() > 0) {
+            //update
+            $periksaPembayaran->update([
+                'nominal_bayar' => $pembayaran_pertama,
+                'tgl' => date("Y-m-d H:i:s"),
+                'updated_at' => date("Y-m-d H:i:s")
+            ]);
+        } else {
+            $pembayaran_id = pembayaran::insertGetId(
+                array(
+                    'tagihan_id' => $tagihan_id,
+                    'nominal_bayar' => $pembayaran_pertama,
+                    'tgl' => date("Y-m-d H:i:s"),
+                    'deleted_at' => null,
+                    'created_at' => date("Y-m-d H:i:s"),
+                    'updated_at' => date("Y-m-d H:i:s")
+                )
+            );
+        }
+    }
     public function collection(Collection $rows, $calculateFormulas = false)
     {
         $jmlTerUpload = 0;
@@ -53,6 +107,10 @@ class importSiswa implements ToCollection, WithCalculatedFormulas
                             'telp' => $row[10],
                             'updated_at' => date("Y-m-d H:i:s")
                         ]);
+                        if ($row[12]) {
+                            $siswa = $periksa->first();
+                            $this->fnInsertTagihan($siswa->id, $row[12], $row[13]);
+                        }
                         $jmlDiSkip++;
                     } else {
                         $siswa = Siswa::insertGetId(
@@ -83,6 +141,10 @@ class importSiswa implements ToCollection, WithCalculatedFormulas
                                 'updated_at' => date("Y-m-d H:i:s")
                             )
                         );
+
+                        if ($row[12]) {
+                            $this->fnInsertTagihan($siswa, $row[12], $row[13]);
+                        }
                         $jmlTerUpload++;
                     }
                 }
