@@ -46,8 +46,9 @@ class exportNilaiSiswaPerkelas implements FromCollection, WithHeadings, ShouldAu
             'no',
             'NIS',
             'nama',
-            'Nilai Pembimbing Sekolah',
-            'Nilai Pembimbing Lapangan',
+            'kelas',
+            'Penilaian Guru',
+            'Penilaian DUDI',
             'Nilai Absensi',
             'Nilai Jurnal',
             'Nilai Akhir',
@@ -68,6 +69,7 @@ class exportNilaiSiswaPerkelas implements FromCollection, WithHeadings, ShouldAu
             $tempSiswa->id = $i;
             $tempSiswa->nomeridentitas = $data->nomeridentitas;
             $tempSiswa->nama = $data->nama;
+            $tempSiswa->nama_kelas = $data->kelasdetail->kelas ? $data->kelasdetail->kelas->tingkatan . " " . $data->kelasdetail->kelas->jurusan_table->nama . " " . $data->kelasdetail->kelas->suffix : "-";
             $tempSiswa->nilai_pembimbingsekolah = $data->nilai_pembimbingsekolah;
             $tempSiswa->nilai_pembimbinglapangan = $data->nilai_pembimbinglapangan;
             $tempSiswa->nilai_absensi = $data->nilai_absensi;
