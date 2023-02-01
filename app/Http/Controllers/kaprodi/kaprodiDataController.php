@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\kaprodi;
 
+use App\Exports\exportNilaiSiswaPerkelas;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Helpers\Fungsi;
 use App\Http\Controllers\Controller;
 use App\Models\jurusan;
@@ -125,7 +127,7 @@ class kaprodiDataController extends Controller
             $siswa->nilai_absensi = 0;
             $siswa->nilai_jurnal = 0;
             $siswa->nilai_akhir = 0;
-            $getSettingsPenilaian = penilaian::where('jurusan_id', $kelas->jurusan)->first();
+            $getSettingsPenilaian = penilaian::where('jurusan_id', $siswa->kelasdetail->kelas->jurusan)->first();
 
 
             if ($getSettingsPenilaian) {
@@ -154,4 +156,25 @@ class kaprodiDataController extends Controller
             'data'    => $getSiswa,
         ], 200);
     }
+    // public function exportDataSiswaPerkelas($kelas_id, Request $request)
+    // {
+    //     $req = $kelas_id;
+    //     $datenow = base64_decode($request->token); //tanggal untuk random kode harian
+    //     $current_time = Carbon::now()->toDayDateTimeString();
+    //     // Carbon::parse($dateTime)->format('D, d M \'y, H:i')
+    //     // dd($datenow, date('Y-m-d'), $current_time);
+    //     $kelas = base64_decode($req);
+    //     $getKelas = kelas::where('id', $kelas)->first();
+    //     $items = null;
+    //     if ($datenow == date('Y-m-d')) {
+    //         // dd($kelas);
+    //         // return Excel::download(new exportSiswaPerkelas, 'data-' . $datenow . '.xlsx');
+    //         // $tgl = date("YmdHis");
+    //         // return Excel::download(new exportSiswaPerkelas, 'data-' . $tgl . '.xlsx');
+    //         $tgl = date("YmdHis");
+    //         return Excel::download(new exportSiswaPerkelasBaru($kelas), 'dataKelas-' . $getKelas->nama . '-' . $tgl . '.xlsx');
+    //     } else {
+    //         echo 'Token Invalid!';
+    //     }
+    // }
 }

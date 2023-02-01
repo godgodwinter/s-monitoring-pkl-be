@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\adminPendaftaranPrakerinListController;
 use App\Http\Controllers\admin\AdminPenilaianController;
+use App\Http\Controllers\admin\adminProsesController;
 use App\Http\Controllers\admin\adminSiswaController;
 use App\Http\Controllers\admin\adminTempatPklController;
 use App\Http\Controllers\AuthPembimbingSekolah;
@@ -41,6 +42,8 @@ Route::middleware('auth:pembimbingsekolah')->group(function () {
 
     Route::get('/guru/dataku/penilai/tempatpkl', [guruDatakuController::class, 'penilai_tempatpkl']);
     Route::get('/guru/dataku/penilai/siswa', [guruDatakuController::class, 'penilai_siswa']);
+    Route::get('/guru/dataku/penilai/siswa/detailnilai', [guruDatakuController::class, 'penilai_siswa_detailnilai']);
+
 
 
     // MENU KEPALA JURUSAN
@@ -122,6 +125,8 @@ Route::middleware('auth:pembimbingsekolah')->group(function () {
 });
 
 
+
+Route::get('/kaprodi/datakelas/nilai/{kelas}/export', [adminProsesController::class, 'getNilaiPerkelasExport']);
 
 Route::get('/guru/tempatpkl', [adminTempatPklController::class, 'index'])->name('admin.tempatpkl');
 

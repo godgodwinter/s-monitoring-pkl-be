@@ -15,7 +15,7 @@
   width: 15rem;
   height: 6rem;
   text-align: center; */
-            font: 10px "Helvetica", sans-serif;
+            font: 12px "Helvetica", sans-serif;
             margin: 1px 1px 1px 1px;
             font-weight: 100;
             /* margin: 0px 0px 0px 0px */
@@ -26,7 +26,7 @@
         }
 
         h4 {
-            font: 10px "Helvetica", sans-serif;
+            font: 14px "Helvetica", sans-serif;
             font-weight: 00;
             margin: 1px 1px 1px 1px;
         }
