@@ -109,7 +109,9 @@ class AuthPembimbingSekolah extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken($this->guard()->refresh());
+        $result = $this->respondWithToken($this->guard()->refresh());
+        // $result->jurusan = '-';
+        return $result;
 
         // return $dataRefresh;
     }
