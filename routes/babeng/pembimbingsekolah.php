@@ -40,6 +40,8 @@ Route::middleware('auth:pembimbingsekolah')->group(function () {
     Route::get('/guru/dataku/siswa', [guruDatakuController::class, 'siswa']);
     Route::get('/guru/dataku/penilaian', [guruDatakuController::class, 'index']);
 
+    Route::get('/guru/dataku/pembimbing/siswa/detailnilai', [guruDatakuController::class, 'pembimbing_siswa_detailnilai']);
+
     Route::get('/guru/dataku/penilai/tempatpkl', [guruDatakuController::class, 'penilai_tempatpkl']);
     Route::get('/guru/dataku/penilai/siswa', [guruDatakuController::class, 'penilai_siswa']);
     Route::get('/guru/dataku/penilai/siswa/detailnilai', [guruDatakuController::class, 'penilai_siswa_detailnilai']);

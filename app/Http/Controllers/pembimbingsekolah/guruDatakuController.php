@@ -244,4 +244,51 @@ class guruDatakuController extends guruController
     //         'data'    => $getSiswa,
     //     ], 200);
     // }
+
+
+    public function pembimbing_siswa_detailnilai(Request $request)
+    {
+        // $this->periksaAuth();
+        // $items = Siswa::orderBy('id', 'asc')
+        //     // ->where('tapel_id', Fungsi::app_tapel_aktif())
+        //     // ->where('jurusan_id', $this->jurusan->id)
+        //     ->get();
+        // dd($this->me->id);
+        $getProsesPkl = pendaftaranprakerin_proses::with('pendaftaranprakerin_prosesdetail')->with('tempatpkl')->where('pembimbingsekolah_id', $this->me->id)->get();
+        $items = collect([]);
+
+        foreach ($getProsesPkl as $proses) {
+            foreach ($proses->pendaftaranprakerin_prosesdetail as $detail) {
+                if ($detail->siswa) {
+                    $detail->siswa->tempatpkl_id = $proses->id;
+                    $detail->siswa->tempatpkl_nama = $proses->tempatpkl ? $proses->tempatpkl->nama : null;
+
+                    $detail->siswa->nilai_pembimbingsekolah = 0;
+                    $detail->siswa->nilai_pembimbinglapangan = 0;
+                    $detail->siswa->nilai_absensi = 0;
+                    $detail->siswa->nilai_jurnal = 0;
+                    $detail->siswa->nilai_akhir = 0;
+                    $getSettingsPenilaian = penilaian::where('jurusan_id',  $detail->siswa->kelasdetail->kelas->jurusan)->first();
+
+
+                    if ($getSettingsPenilaian) {
+                        $detail->siswa->nilai_pembimbingsekolah = penilaian_guru_detail::where('siswa_id',  $detail->siswa->id)->avg('nilai') ? number_format(penilaian_guru_detail::where('siswa_id',  $detail->siswa->id)->avg('nilai') * $getSettingsPenilaian->penilaian_guru / 100, 2) : 0;
+                        $detail->siswa->nilai_pembimbinglapangan = penilaian_pembimbinglapangan_detail::where('siswa_id',  $detail->siswa->id)->avg('nilai') ? number_format(penilaian_pembimbinglapangan_detail::where('siswa_id',  $detail->siswa->id)->avg('nilai') * $getSettingsPenilaian->penilaian_pembimbinglapangan / 100, 2) : 0;
+                        $getAbsensi = penilaian_absensi_dan_jurnal::where('siswa_id',  $detail->siswa->id)->where('prefix', 'absensi')->first();
+                        $detail->siswa->nilai_absensi = $getAbsensi ? number_format($getAbsensi->nilai * $getSettingsPenilaian->absensi / 100, 2) : 0;
+                        $getJurnal = penilaian_absensi_dan_jurnal::where('siswa_id',  $detail->siswa->id)->where('prefix', 'jurnal')->first();
+                        $detail->siswa->nilai_jurnal = $getJurnal ? number_format($getJurnal->nilai * $getSettingsPenilaian->jurnal / 100, 2) : 0;
+                        $getNilaiAkhir = number_format($detail->siswa->nilai_pembimbingsekolah +  $detail->siswa->nilai_pembimbinglapangan +  $detail->siswa->nilai_absensi +  $detail->siswa->nilai_jurnal, 2);
+                        $detail->siswa->nilai_akhir = $getSettingsPenilaian ? number_format($getNilaiAkhir, 2) : 0;
+                    }
+                    $items[] = $detail->siswa;
+                }
+            }
+        }
+        return response()->json([
+            'success'    => true,
+            'data'    => $items,
+            // 'tapel_id'    => Fungsi::app_tapel_aktif(),
+        ], 200);
+    }
 }
